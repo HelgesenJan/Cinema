@@ -7,5 +7,6 @@ public class GUI {
         System.out.println("Hello World");
         System.out.println("Ny test");
         System.out.println("Joakim er søt");
+        System.out.println("Dickface");
     }
 }
