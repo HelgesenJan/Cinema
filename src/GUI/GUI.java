@@ -13,5 +13,6 @@ public class GUI {
         System.out.println("fitte");
         System.out.println("tryne");
         System.out.println("murfitte");
+        System.out.println("jansinførstegitstring");
     }
 }
