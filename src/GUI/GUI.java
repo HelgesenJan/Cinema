@@ -10,8 +10,7 @@ public class GUI {
         System.out.println("Dickface");
         System.out.println("Tull");
         System.out.println("antirealist");
-        System.out.println("fitte");
-        System.out.println("tryne");
+        System.out.println("Halla på'ræ!");
         System.out.println("murfitte");
         System.out.println("jansinførstegitstring");
     }
