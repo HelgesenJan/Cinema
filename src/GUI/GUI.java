@@ -9,7 +9,9 @@ public class GUI {
         System.out.println("Joakim er søt");
         System.out.println("Dickface");
         System.out.println("Tull");
+        System.out.println("antirealist");
         System.out.println("fitte");
         System.out.println("tryne");
+        System.out.println("murfitte");
     }
 }
