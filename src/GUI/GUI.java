@@ -14,5 +14,6 @@ public class GUI {
         System.out.println("murfitte");
         System.out.println("jansinførstegitstring");
         System.out.println("Mamman din");
+        System.out.println("Fucking shite");
     }
 }
