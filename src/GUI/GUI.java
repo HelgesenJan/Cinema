@@ -10,5 +10,6 @@ public class GUI {
         System.out.println("Dickface");
         System.out.println("Tull");
         System.out.println("fitte");
+        System.out.println("tryne");
     }
 }
