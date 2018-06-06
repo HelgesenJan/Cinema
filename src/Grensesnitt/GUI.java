@@ -6,6 +6,8 @@ package Grensesnitt;
  * and open the template in the editor.
  */
 
+import Kontroll.Kontroll;
+
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
@@ -1782,6 +1784,9 @@ public class GUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+
+        Kontroll kontroll =  Kontroll.getInstance();
+        kontroll.opprettDBForbindelse();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

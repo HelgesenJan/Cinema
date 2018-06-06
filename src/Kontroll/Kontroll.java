@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 public class Kontroll {
 
+    //Singleton
+    private static  Kontroll INSTANSE = null;
+
     //Database konfigurasjon
     private String db_navn = "kino";
     private String db_bruker = "Case";
@@ -18,9 +21,7 @@ public class Kontroll {
     private ResultSet resultat;
     private Statement stmt;
 
-    private static  Kontroll INSTANSE = null;
-
-    //ArrayList
+    //Lister med objekter
     private ArrayList<Kinosal> kinosaler = new ArrayList<>();
     private ArrayList<Film> filmer = new ArrayList<>();
     private ArrayList<Visning> visninger = new ArrayList<Visning>();
@@ -35,6 +36,7 @@ public class Kontroll {
             db = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db_navn,db_bruker,db_passord);
             //Set autocommit false, slik at vi kan commite manuelt når alle spørringene er utført
             db.setAutoCommit(false);
+            System.out.println("Dabase er koblet til!");
         } catch(Exception e) {
             //Klarte ikke å åpne
             System.out.println(e); //debug
