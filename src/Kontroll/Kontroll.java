@@ -37,6 +37,7 @@ public class Kontroll {
 
         Kino kino = finnKino("Tiara");
         System.out.println(kino);
+        sortering = 1;
         ArrayList<Visning> visninger = filtrerVisninger(kino);
         System.out.println(visninger.size());
         for(Visning v : visninger) {
@@ -179,7 +180,7 @@ public class Kontroll {
             int filmnr = visninger.getInt("v_filmnr");
             int kinosalnr = visninger.getInt("v_kinosalnr");
             Date dato = visninger.getDate("v_dato");
-            Date starttid = visninger.getDate("v_starttid");
+            Time starttid = visninger.getTime("v_starttid");
             double pris = visninger.getDouble("v_pris");
 
             Film film = finnFilm(filmnr);

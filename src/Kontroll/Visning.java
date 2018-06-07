@@ -1,6 +1,7 @@
 package Kontroll;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.text.Collator;
 import java.util.ArrayList;
 
@@ -10,7 +11,7 @@ public class Visning implements Comparable<Visning> {
     private Film film;
     private Kinosal kinosal;
     private Date dato;
-    private Date startTid;
+    private Time startTid;
     private double pris;
 
     private final static Collator kollator = Collator.getInstance();
@@ -21,7 +22,7 @@ public class Visning implements Comparable<Visning> {
         this.visningsNr = visningsNr;
     }
 
-    public Visning(int visningsNr, Film film, Kinosal kinosal, Date dato, Date startTid, double pris) {
+    public Visning(int visningsNr, Film film, Kinosal kinosal, Date dato, Time startTid, double pris) {
         this.visningsNr = visningsNr;
         this.film = film;
         this.kinosal = kinosal;
@@ -76,11 +77,11 @@ public class Visning implements Comparable<Visning> {
         this.dato = dato;
     }
 
-    public Date getStartTid() {
+    public Time getStartTid() {
         return startTid;
     }
 
-    public void setStartTid(Date startTid) {
+    public void setStartTid(Time startTid) {
         this.startTid = startTid;
     }
 
@@ -112,7 +113,7 @@ public class Visning implements Comparable<Visning> {
                 return kollator.compare(this.film.getFilmnavn(), o.getFilm().getFilmnavn());
             case 1:
                 //Sorter etter tid
-                return kollator.compare(this.startTid, o.getStartTid());
+                return this.startTid.compareTo(o.getStartTid());
             default:
                 if(this.visningsNr < o.getVisningsNr()) {
                     return -1;
