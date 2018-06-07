@@ -29,24 +29,31 @@ public class Kinosal implements Comparable<Kinosal> {
 
 
     public int getKinosalnr() {
-        return kinosalnr;
+        return this.kinosalnr;
     }
 
     public String getKinosalnavn() {
-        return kinosalnavn;
+        return this.kinosalnavn;
     }
 
     public String getKinonavn() {
-        return kinonavn;
+        return this.kinonavn;
     }
 
     @Override
     public String toString() {
+
+        String plass_liste = "[";
+        for(Plass plass: plasser) {
+            plass_liste += plass.toString() + ",";
+        }
+        plass_liste+="]";
+
         return "Kinosal{" +
-                "kinosalnr=" + kinosalnr +
-                ", kinosalnavn='" + kinosalnavn + '\'' +
-                ", kinonavn='" + kinonavn + '\'' +
-                ", plasser=" + plasser +
+                "kinosalnr=" + this.kinosalnr +
+                ", kinosalnavn='" + this.kinosalnavn + '\'' +
+                ", kinonavn='" + this.kinonavn + '\'' +
+                ", plasser=" + plass_liste +
                 '}';
     }
 

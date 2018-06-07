@@ -23,4 +23,12 @@ public class Plass {
     public Kinosal getKinosal() {
         return kinosal;
     }
+
+    @Override
+    public String toString() {
+        return "Plass{" +
+                "radnr=" + radnr +
+                ", setenr=" + setenr +
+                '}';
+    }
 }
