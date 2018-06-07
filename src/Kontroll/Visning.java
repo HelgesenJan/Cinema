@@ -1,11 +1,13 @@
 package Kontroll;
 
+import javax.swing.text.html.HTMLDocument;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Visning implements Comparable<Visning> {
 
@@ -102,6 +104,20 @@ public class Visning implements Comparable<Visning> {
         return " Kl: " + time + ":" + minutter + " - " + dag + "." + mnd + "." + år;
     }
 
+    public ArrayList<Plass> finnLedigePlasser() {
+        ArrayList<Plass> plasser = kinosal.getPlasser();
+        for(Plass plass:plasser) {
+            for(Billett billett:this.billetter) {
+                if(billett.harPlass(plass)) {
+                    plasser.remove(plass);
+                }
+            }
+        }
+        return plasser;
+    }
+
+
+
     @Override
     public String toString() {
         return "Visning{" +
@@ -115,13 +131,20 @@ public class Visning implements Comparable<Visning> {
 
     @Override
     public int compareTo(Visning o) {
-        switch (Kontroll.sortering) {
+        //Hent ut sortering
+        Sortering sort = Kontroll.sortering;
+        //Detekter at en dummy visning er brukt, bytt til verdi modus for binær søk.
+        if(o.getFilm() == null) {
+            sort = Sortering.VERDI;
+        }
+        switch (sort) {
             case ALFABETISK:
                 //Sortere alfabetisk
                 return kollator.compare(this.film.getFilmnavn(), o.getFilm().getFilmnavn());
             case TID:
                 //Sorter etter tid
                 return this.dato.compareTo(o.getDato());
+                //Sortere etter visningsnummer (dummy visning)
             case VERDI:
                 if(this.visningsNr < o.getVisningsNr()) {
                     return -1;

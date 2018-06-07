@@ -10,6 +10,8 @@ import Kontroll.*;
 
 import java.sql.SQLException;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
@@ -201,6 +203,15 @@ public class GUI extends javax.swing.JFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldReserveTicketPriceActionPerformed(evt);
             }
+        });
+
+        reserveMovieTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                reserveMovieTableSelected(e);
+            }
+
+
         });
 
         reserveMovieTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -1537,7 +1548,7 @@ public class GUI extends javax.swing.JFrame {
 
         Object[][] tabellInnhold = kontroll.lagVisningTabellListe(kino);
 
-        Object[] kolonnenavn = {"Film", "Tid", "Sal"};
+        Object[] kolonnenavn = {"Film", "Tid", "Sal", "Pris", "#"};
         reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
         staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
@@ -1798,6 +1809,17 @@ public class GUI extends javax.swing.JFrame {
 
     private void cinemaChoiceActionPerformed(java.awt.event.ActionEvent evt) {
         fyllTabell();
+    }
+
+    public void reserveMovieTableSelected(ListSelectionEvent e) {
+        int visningsnr = -1;
+        visningsnr = (int) reserveMovieTable.getValueAt( reserveMovieTable.getSelectedRow(), 4);
+        if(visningsnr != -1) {
+            Visning visning = kontroll.finnVisning(visningsnr);
+            for(Plass p: visning.finnLedigePlasser()) {
+                System.out.println(p.toString());
+            }
+        }
     }
 
     /**

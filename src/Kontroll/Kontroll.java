@@ -53,24 +53,36 @@ public class Kontroll {
     public Kino finnKino(String kinonavn) {
         Kino dummy = new Kino(kinonavn);
         int indeks = Collections.binarySearch(kinoer, dummy);
+        if(indeks < 0) {
+            return null;
+        }
         return kinoer.get(indeks);
     }
 
     public Kinosal finnKinosal(int kinosalnr) {
         Kinosal dummy = new Kinosal(kinosalnr);
         int indeks = Collections.binarySearch(kinosaler,dummy);
+        if(indeks < 0) {
+            return null;
+        }
         return kinosaler.get(indeks);
     }
 
     public Film finnFilm(int filmnr) {
         Film dummy =new Film(filmnr);
         int indeks = Collections.binarySearch(filmer, dummy);
+        if(indeks < 0) {
+            return null;
+        }
         return filmer.get(indeks);
     }
 
     public Visning finnVisning(int visningsnr) {
         Visning dummy = new Visning(visningsnr);
         int indeks = Collections.binarySearch(visninger, dummy);
+        if(indeks < 0) {
+            return null;
+        }
         return visninger.get(indeks);
     }
 
