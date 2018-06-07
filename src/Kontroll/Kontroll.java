@@ -70,6 +70,7 @@ public class Kontroll {
 
     public void leggTilKino(int kinosalnr, String salnr, String kinonavn) {
         // kinosaler.add(new Kinosal(k))
+        //
     }
 
 
