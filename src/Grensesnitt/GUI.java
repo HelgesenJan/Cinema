@@ -10,6 +10,7 @@ import Kontroll.Kontroll;
 
 import java.sql.SQLException;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 import static javax.swing.JOptionPane.YES_NO_OPTION;
@@ -1517,7 +1518,14 @@ public class GUI extends javax.swing.JFrame {
     private void openTicketReservationActionPerformed(java.awt.event.ActionEvent evt) {
         ticketReservation.setVisible(true);
         ticketReservation.pack();
+        fyllVisningsTabell();
+    }
 
+    private void fyllVisningsTabell() {
+        Object[][] tabellInnhold = kontroll.lagVisningTabellListe();
+        Object[] kolonnetitler = {"Film", "Tid", "Sal"};
+        reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnetitler));
+        staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnetitler));
     }
 
 
@@ -1529,6 +1537,7 @@ public class GUI extends javax.swing.JFrame {
     private void openAttendantActionPerformed(java.awt.event.ActionEvent evt) {
         login.setVisible(true);
         login.pack();
+        fyllVisningsTabell();
     }
 
     private void reserveAddTicketActionPerformed(java.awt.event.ActionEvent evt) {
