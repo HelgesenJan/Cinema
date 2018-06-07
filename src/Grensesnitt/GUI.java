@@ -21,7 +21,7 @@ import static javax.swing.JOptionPane.showConfirmDialog;
  * @author Jan Helge
  */
 public class GUI extends javax.swing.JFrame {
-    Kontroll kontroll =  Kontroll.getInstance();
+    private static Kontroll kontroll = null;
 
     /**
      * Creates new form GUI
@@ -1780,7 +1780,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     /**
-     * Metode for å hente og fylle ut kino-dropdown
+     * Metode for å hente kinoliste og kino-dropdown med den
      */
     public void hentKino() {
         for (int i = 0; i < kontroll.getKinoer().size(); i++){
@@ -1822,8 +1822,8 @@ public class GUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             GUI gui = new GUI();
-            public void run() {
-                Kontroll kontroll =  Kontroll.getInstance();
+            public void run(){
+                kontroll =  Kontroll.getInstance();
                 kontroll.opprettDBForbindelse();
                 try {
                     kontroll.lastDatabase();
