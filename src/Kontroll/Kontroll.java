@@ -22,6 +22,7 @@ public class Kontroll {
 
     //Lister med objekter
     private ArrayList<Kinosal> kinosaler = new ArrayList<>();
+    private ArrayList<Bruker> brukere = new ArrayList<>();
     private ArrayList<Film> filmer = new ArrayList<>();
     private ArrayList<Visning> visninger = new ArrayList<Visning>();
 
@@ -49,6 +50,20 @@ public class Kontroll {
 
 
     public void lastDatabase() throws SQLException {
+
+        //Hent ut brukere
+        ResultSet brukere =  runDBQuery("SELECT l_brukernavn, l_pinkode, l_erPlanlegger FROM tbllogin");
+        System.out.println("test");
+        while(brukere.next()) {
+            String brukernavn = brukere.getString("l_brukernavn");
+            int pinkode = brukere.getInt("l_pinkode");
+            boolean erPlanlegger = brukere.getBoolean("l_erPlanlegger");
+
+            Bruker bruker = new Bruker(brukernavn,pinkode,erPlanlegger);
+            System.out.println(bruker.toString());
+            this.brukere.add(bruker);
+        }
+
        //Hent ut kinosal result set
        ResultSet kinosaler =  runDBQuery("SELECT k_kinosalnr, k_kinonavn, k_kinosalnavn FROM tblkinosal");
 
@@ -78,9 +93,17 @@ public class Kontroll {
            sal.leggTilPlass(radnr, setenr);
        }
 
-       for(Kinosal sal: this.kinosaler) {
-           System.out.println(sal.toString());
-       }
+       //Hent ut filmene
+        ResultSet filmer =  runDBQuery("SELECT f_filmnr, f_filmnavn FROM tblfilm");
+        while (filmer.next()) {
+
+            int filmnr = filmer.getInt("f_filmnr");
+            String filmnavn = filmer.getString("f_filmnavn");
+
+            Film film = new Film(filmnr, filmnavn);
+            System.out.println(film.toString());
+            this.filmer.add(film);
+        }
 
 
     }
@@ -92,6 +115,7 @@ public class Kontroll {
             stmt = db.createStatement();
             return  stmt.executeQuery(sql);
         } catch(Exception e){
+            System.out.println(e);
             return null;
         }
     }

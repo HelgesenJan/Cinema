@@ -23,4 +23,13 @@ public class Bruker {
     public boolean erPlanlegger() {
         return erPlanlegger;
     }
+
+    @Override
+    public String toString() {
+        return "Bruker{" +
+                "brukernavn='" + brukernavn + '\'' +
+                ", pin=" + pin +
+                ", erPlanlegger=" + erPlanlegger +
+                '}';
+    }
 }
