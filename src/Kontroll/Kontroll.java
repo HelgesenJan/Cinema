@@ -1,10 +1,7 @@
 package Kontroll;
 
 import java.sql.*;
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 public class Kontroll {
 
@@ -202,6 +199,34 @@ public class Kontroll {
         if(INSTANSE == null) INSTANSE = new Kontroll(); //Opprett ny instanse
         return INSTANSE;
     }
+
+    /**
+     * Genererer en tilfeldig billettkode
+     * @return
+     */
+    public String genererBillettkode() {
+        // Bruker et random-objekt for å trekke en tilfeldig posisjon fra bokstaver- og siffer-listene.
+        // Bygger dermed en billettkode bestående av fire karakterer og to sifre
+
+        char[] bokstaver = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        char[] siffer = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+        Random tilfeldigPosisjon = new Random();
+        String billettKode = "";
+
+        for(int b=0; b<4; b++) {
+            int posisjon = tilfeldigPosisjon.nextInt(25) + 0;
+            billettKode = billettKode + bokstaver[posisjon];
+        }
+
+        for(int s=0; s<2; s++) {
+            int posisjon = tilfeldigPosisjon.nextInt(9) + 0;
+            billettKode = billettKode + siffer[posisjon];
+        }
+
+        return billettKode;
+    }
+
 
     /**
      * Legger til en Film i Kontroll sin ArrayListe over Filmer
