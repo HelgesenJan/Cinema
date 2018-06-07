@@ -88,6 +88,8 @@ public class Visning implements Comparable<Visning> {
         this.pris = pris;
     }
 
+
+
     public String getStartTid() {
 
         //Gi kalender dato
@@ -131,7 +133,7 @@ public class Visning implements Comparable<Visning> {
 
     @Override
     public int compareTo(Visning o) {
-        //Hent ut sortering
+        //Hent ut sortering fra kontroll
         Sortering sort = Kontroll.sortering;
         //Detekter at en dummy visning er brukt, bytt til verdi modus for binær søk.
         if(o.getFilm() == null) {
