@@ -1,7 +1,8 @@
 package Kontroll;
 
+import java.sql.Date;
+import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Visning implements Comparable<Visning> {
 
@@ -11,6 +12,8 @@ public class Visning implements Comparable<Visning> {
     private Date dato;
     private Date startTid;
     private double pris;
+
+    private final static Collator kollator = Collator.getInstance();
 
     private ArrayList<Billett> billetter = new ArrayList<>();
 
@@ -90,13 +93,34 @@ public class Visning implements Comparable<Visning> {
     }
 
     @Override
+    public String toString() {
+        return "Visning{" +
+                "visningsNr=" + visningsNr +
+                ", film=" + film.getFilmnavn() +
+                ", kinosal=" + kinosal.getKinosalnavn() +
+                ", dato=" + dato +
+                ", startTid=" + startTid +
+                ", pris=" + pris +
+                '}';
+    }
+
+    @Override
     public int compareTo(Visning o) {
-        if(this.visningsNr < o.getVisningsNr()) {
-            return -1;
-        } else if(this.visningsNr > o.getVisningsNr()) {
-            return 1;
-        } else {
-            return 0;
+        switch (Kontroll.sortering) {
+            case 0:
+                //Sortere alfabetisk
+                return kollator.compare(this.film.getFilmnavn(), o.getFilm().getFilmnavn());
+            case 1:
+                //Sorter etter tid
+                return kollator.compare(this.startTid, o.getStartTid());
+            default:
+                if(this.visningsNr < o.getVisningsNr()) {
+                    return -1;
+                } else if(this.visningsNr > o.getVisningsNr()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
         }
     }
 }
