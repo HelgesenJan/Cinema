@@ -3,6 +3,8 @@ package Kontroll;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Kontroll {
 
@@ -176,6 +178,7 @@ public class Kontroll {
 
             Film film = finnFilm(filmnr);
             Kinosal kinosal = finnKinosal(kinosalnr);
+
             Visning visning = new Visning(visningsnr, film, kinosal, dato,starttid,pris);
 
             film.leggTilVisning(visning);
@@ -333,5 +336,7 @@ public class Kontroll {
         brukere.add(new Bruker(brukernavn, pin, erPlanlegger));
     }
 
-
+    public ArrayList<Bruker> getBrukere() {
+        return brukere;
+    }
 }

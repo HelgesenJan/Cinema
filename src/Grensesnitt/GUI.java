@@ -12,17 +12,16 @@ import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 
-import static javax.swing.JOptionPane.YES_NO_OPTION;
-import static javax.swing.JOptionPane.YES_OPTION;
-import static javax.swing.JOptionPane.showConfirmDialog;
+import static javax.swing.JOptionPane.*;
 
 /**
  *
  * @author Jan Helge
  */
 public class GUI extends javax.swing.JFrame {
-    private static Kontroll kontroll = null;
+    Kontroll kontroll =  Kontroll.getInstance();
 
     /**
      * Creates new form GUI
@@ -296,7 +295,6 @@ public class GUI extends javax.swing.JFrame {
         jLabel22.setText("Velg kino:");
 
         cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ringen", "Tiara"}));
-        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tiara", "Ringen"}));
         cinemaChoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cinemaChoiceActionPerformed(evt);
@@ -1544,6 +1542,7 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }
 
+    // Login knapp
     private void commitLoginActionPerformed(java.awt.event.ActionEvent evt) {
         login.setVisible(false);
 
@@ -1666,6 +1665,7 @@ public class GUI extends javax.swing.JFrame {
 
     private String login_opphav = null;
 
+    // Admin mus
     private void openAdminMouseClicked(java.awt.event.MouseEvent evt) {
         JButton button = (JButton) evt.getSource();
         login_opphav = button.getActionCommand();
@@ -1796,13 +1796,40 @@ public class GUI extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
         try {
-            kontroll = Kontroll.getInstance();
-            new GUI().setVisible(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Klarte ikke å koble til database: " + e.getMessage());
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+
+
+        /* Create and display the form */
+        GUI gui = new GUI();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                gui.setVisible(true);
+                Kontroll kontroll = Kontroll.getInstance();
+                kontroll.opprettDBForbindelse();
+                try {
+                    kontroll.lastDatabase();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     // Variables declaration - do not modify
@@ -1936,4 +1963,20 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField titleTxt;
     private javax.swing.JTextField totalTxt;
     // End of variables declaration
+
+    public void loginBruker(){
+
+        String brukernavn = fieldUsername.getText();
+        int pin = fieldPassword.getColumns();
+        boolean erPlanlegger = true;
+        ArrayList brukere = kontroll.getBrukere();
+        if(){
+            adminPlanner.setVisible(true);
+            adminPlanner.pack();
+            login.setVisible(false);
+        }else{
+            System.out.println("Ikke admin");
+        }
+    }
+
 }
