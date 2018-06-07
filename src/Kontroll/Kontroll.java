@@ -1,8 +1,10 @@
 package Kontroll;
 
 import java.sql.*;
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 
 public class Kontroll {
 
@@ -178,12 +180,16 @@ public class Kontroll {
             int filmnr = visninger.getInt("v_filmnr");
             int kinosalnr = visninger.getInt("v_kinosalnr");
             Date dato = visninger.getDate("v_dato");
-            Time starttid = visninger.getTime("v_starttid");
             double pris = visninger.getDouble("v_pris");
+
+            //Bygg dato objekt for både dato og starttid
+            String dato_str = visninger.getString("v_dato") + " " + visninger.getString("v_starttid");
+            SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
             Film film = finnFilm(filmnr);
             Kinosal kinosal = finnKinosal(kinosalnr);
-            Visning visning = new Visning(visningsnr, film, kinosal, dato,starttid,pris);
+            Visning visning = new Visning(visningsnr, film, kinosal, null,pris);
 
             film.leggTilVisning(visning);
             this.visninger.add(visning);
