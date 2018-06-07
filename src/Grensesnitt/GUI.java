@@ -8,7 +8,8 @@ package Grensesnitt;
 
 import Kontroll.Kontroll;
 
-import java.sql.SQLException;
+import javax.swing.*;
+import java.awt.*;
 
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
@@ -19,6 +20,7 @@ import static javax.swing.JOptionPane.showConfirmDialog;
  * @author Jan Helge
  */
 public class GUI extends javax.swing.JFrame {
+    Kontroll kontroll =  Kontroll.getInstance();
 
     /**
      * Creates new form GUI
@@ -275,7 +277,7 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel13.setText("Sete:");
 
-        dropdownSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alfabetisk", "Tidspunkt"}));
+        dropdownSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         dropdownSort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dropdownSortActionPerformed(evt);
@@ -291,7 +293,7 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel22.setText("Velg kino:");
 
-        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ringen", "Tiara"}));
+        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tiara", "Ringen"}));
         cinemaChoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cinemaChoiceActionPerformed(evt);
@@ -1506,14 +1508,9 @@ public class GUI extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * Vindu for kundens billettbestilling
-     * @param evt
-     */
     private void openTicketReservationActionPerformed(java.awt.event.ActionEvent evt) {
         ticketReservation.setVisible(true);
         ticketReservation.pack();
-
     }
 
 
@@ -1532,12 +1529,16 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void commitLoginActionPerformed(java.awt.event.ActionEvent evt) {
-        cinemaStaff.setVisible(true);
-        cinemaStaff.pack();
-        adminPlanner.setVisible(true);
-        adminPlanner.pack();
         login.setVisible(false);
 
+        if(login_opphav.equals("Planleggingsadmin")){
+            adminPlanner.setVisible(true);
+            adminPlanner.pack();
+        }else{
+            cinemaStaff.setVisible(true);
+            cinemaStaff.pack();
+
+        }
     }
 
     private void staffAddPlacementActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1647,12 +1648,16 @@ public class GUI extends javax.swing.JFrame {
         statistics.setVisible(false);
     }
 
-    private void openAdminMouseClicked(java.awt.event.MouseEvent evt) {
+    private String login_opphav = null;
 
+    private void openAdminMouseClicked(java.awt.event.MouseEvent evt) {
+        JButton button = (JButton) evt.getSource();
+        login_opphav = button.getActionCommand();
     }
 
     private void openAttendantMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
+        JButton button = (JButton) evt.getSource();
+        login_opphav = button.getActionCommand();
     }
 
     private void ticketCodeTxtActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1762,8 +1767,14 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void cinemaChoiceActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        if(cinemaChoice.equals("Tiara")){
+            kontroll.getKinosaler();
+
+        }else{
+
+        }
     }
+
 
     /**
      * @param args the command line arguments
@@ -1792,20 +1803,16 @@ public class GUI extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+        GUI gui = new GUI();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                gui.setVisible(true);
                 Kontroll kontroll =  Kontroll.getInstance();
                 kontroll.opprettDBForbindelse();
-                try {
-                    kontroll.lastDatabase();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-                new GUI().setVisible(true);
             }
+
         });
     }
 

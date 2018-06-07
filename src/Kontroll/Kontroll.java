@@ -5,6 +5,7 @@ import java.util.*;
 
 public class Kontroll {
 
+
     //Singleton
     private static  Kontroll INSTANSE = null;
 
@@ -194,6 +195,20 @@ public class Kontroll {
 
         }
     }
+
+    public ArrayList<Kinosal> getKinosaler() {
+        return kinosaler;
+    }
+
+    public ArrayList<Film> getFilmer() {
+        return filmer;
+    }
+
+    public ArrayList<Visning> getVisninger() {
+        return visninger;
+    }
+
+
 
     public static Kontroll getInstance() {
         if(INSTANSE == null) INSTANSE = new Kontroll(); //Opprett ny instanse
