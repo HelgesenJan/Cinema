@@ -1817,26 +1817,17 @@ public class GUI extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            GUI gui = new GUI();
-            public void run(){
-                kontroll =  Kontroll.getInstance();
-                kontroll.opprettDBForbindelse();
                 try {
-                    kontroll.lastDatabase();
+                    kontroll =  Kontroll.getInstance();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
 
+                GUI gui = new GUI();
+
                 gui.setVisible(true);
                 gui.hentKino();
 
-            }
-
-        });
     }
 
     // Variables declaration - do not modify
