@@ -1,16 +1,23 @@
 package Kontroll;
 
+import java.text.Collator;
 import java.util.ArrayList;
 
-public class Billett {
+public class Billett implements Comparable<Billett>{
 
-    private int billettkode;
+    private final static Collator kollator = Collator.getInstance();
+
+    private String billettkode;
     private Visning visning;
     private boolean erBetalt;
 
     private ArrayList<Plass> plasser = new ArrayList<>();
 
-    public Billett(int billettkode, Visning visning, boolean erBetalt) {
+    public Billett(String billettkode) {
+        this.billettkode = billettkode;
+    }
+
+    public Billett(String billettkode, Visning visning, boolean erBetalt) {
         this.billettkode = billettkode;
         this.visning = visning;
         this.erBetalt = erBetalt;
@@ -24,11 +31,11 @@ public class Billett {
         plasser.add(plassen);
     }
 
-    public int getBillettkode() {
+    public String getBillettkode() {
         return billettkode;
     }
 
-    public void setBillettkode(int billettkode) {
+    public void setBillettkode(String billettkode) {
         this.billettkode = billettkode;
     }
 
@@ -46,5 +53,10 @@ public class Billett {
 
     public void setErBetalt(boolean erBetalt) {
         this.erBetalt = erBetalt;
+    }
+
+    @Override
+    public int compareTo(Billett o) {
+        return kollator.compare(this.billettkode, o.getBillettkode());
     }
 }

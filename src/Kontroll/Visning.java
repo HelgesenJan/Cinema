@@ -3,7 +3,7 @@ package Kontroll;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Visning {
+public class Visning implements Comparable<Visning> {
 
     private int visningsNr;
     private Film film;
@@ -13,6 +13,10 @@ public class Visning {
     private double pris;
 
     private ArrayList<Billett> billetter = new ArrayList<>();
+
+    public Visning(int visningsNr) {
+        this.visningsNr = visningsNr;
+    }
 
     public Visning(int visningsNr, Film film, Kinosal kinosal, Date dato, Date startTid, double pris) {
         this.visningsNr = visningsNr;
@@ -28,8 +32,12 @@ public class Visning {
      * @param billettkode
      * @param erBetalt
      */
-    public void leggTilBillett(int billettkode, boolean erBetalt) {
+    public void leggTilBillett(String billettkode, boolean erBetalt) {
         billetter.add(new Billett(billettkode, this, erBetalt));
+    }
+
+    public void leggTilBillett(Billett billett) {
+        billetter.add(billett);
     }
 
 
@@ -79,5 +87,16 @@ public class Visning {
 
     public void setPris(double pris) {
         this.pris = pris;
+    }
+
+    @Override
+    public int compareTo(Visning o) {
+        if(this.visningsNr < o.getVisningsNr()) {
+            return -1;
+        } else if(this.visningsNr > o.getVisningsNr()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

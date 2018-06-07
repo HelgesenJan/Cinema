@@ -3,11 +3,15 @@ package Kontroll;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Film {
+public class Film implements Comparable<Film>{
 
     private int filmnr;
     private String filmnavn;
     private ArrayList<Visning> visninger = new ArrayList<>();
+
+    public Film(int filmnr) {
+        this.filmnr = filmnr;
+    }
 
     public Film(int filmnr, String filmnavn) {
         this.filmnr = filmnr;
@@ -28,11 +32,26 @@ public class Film {
         visninger.add(new Visning(visningsNr, filmen, kinosalen, dato, startTid, pris));
     }
 
+    public void leggTilVisning(Visning visning) {
+        visninger.add(visning);
+    }
+
     public int getFilmnr() {
         return filmnr;
     }
 
     public String getFilmnavn() {
         return filmnavn;
+    }
+
+    @Override
+    public int compareTo(Film o) {
+        if(this.filmnr < o.getFilmnr()) {
+            return -1;
+        } else if(this.filmnr > o.getFilmnr()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

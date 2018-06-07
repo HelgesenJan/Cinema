@@ -1,11 +1,10 @@
 package Kontroll;
 
-import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Kinosal implements Comparable<Kinosal> {
 
-    private final static Collator kollator = Collator.getInstance();
 
     private int kinosalnr;
     private String kinosalnavn;
@@ -21,6 +20,17 @@ public class Kinosal implements Comparable<Kinosal> {
         this.kinosalnr = kinosalnr;
         this.kinosalnavn = kinosalnavn;
         this.kinonavn = kinonavn;
+    }
+
+    public Plass finnPlass(int radnr, int setenr) {
+        Iterator itr = plasser.iterator();
+        while (itr.hasNext()) {
+            Plass plass = (Plass )itr.next();
+            if(plass.getRadnr() == radnr && plass.getSetenr() == setenr) {
+                return plass;
+            }
+        }
+        return null;
     }
 
     public void leggTilPlass(int radnr, int setenr) {
@@ -59,9 +69,9 @@ public class Kinosal implements Comparable<Kinosal> {
 
     @Override
     public int compareTo(Kinosal o) {
-        if(this.kinosalnr < o.kinosalnr) {
+        if(this.kinosalnr < o.getKinosalnr()) {
             return -1;
-        } else if(this.kinosalnr > o.kinosalnr) {
+        } else if(this.kinosalnr > o.getKinosalnr()) {
             return 1;
         } else {
             return 0;

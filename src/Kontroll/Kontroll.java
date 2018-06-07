@@ -1,6 +1,7 @@
 package Kontroll;
 
 import java.sql.*;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,10 +23,10 @@ public class Kontroll {
 
     //Lister med objekter
     private ArrayList<Kinosal> kinosaler = new ArrayList<>();
-    private ArrayList<Bruker> brukere = new ArrayList<>();
     private ArrayList<Film> filmer = new ArrayList<>();
     private ArrayList<Bruker> brukere = new ArrayList<>();
-
+    private ArrayList<Visning> visninger = new ArrayList<>();
+    private ArrayList<Billett> billetter = new ArrayList<>();
 
 
     public Kontroll() {
@@ -36,6 +37,27 @@ public class Kontroll {
         Kinosal dummy = new Kinosal(kinosalnr);
         int indeks = Collections.binarySearch(kinosaler,dummy);
         return kinosaler.get(indeks);
+    }
+
+    public Film finnFilm(int filmnr) {
+        Film dummy =new Film(filmnr);
+        int indeks = Collections.binarySearch(filmer, dummy);
+        return filmer.get(indeks);
+    }
+
+    public Visning finnVisning(int visningsnr) {
+        Visning dummy = new Visning(visningsnr);
+        int indeks = Collections.binarySearch(visninger, dummy);
+        return visninger.get(indeks);
+    }
+
+    public Billett finnBillett(String billettkode) {
+        Billett dummy = new Billett(billettkode);
+        int indeks = Collections.binarySearch(billetter, dummy);
+        if(indeks < 0) {
+            return null;
+        }
+        return billetter.get(indeks);
     }
 
 
@@ -95,6 +117,56 @@ public class Kontroll {
             this.filmer.add(film);
         }
 
+        //Hent ut visningene
+        ResultSet visninger =  runDBQuery("SELECT v_visningnr, v_filmnr,v_kinosalnr, v_dato,v_starttid, v_pris  FROM tblvisning");
+
+        while(visninger.next()) {
+            int visningsnr = visninger.getInt("v_visningnr");
+            int filmnr = visninger.getInt("v_filmnr");
+            int kinosalnr = visninger.getInt("v_kinosalnr");
+            Date dato = visninger.getDate("v_dato");
+            Date starttid = visninger.getDate("v_starttid");
+            double pris = visninger.getDouble("v_pris");
+
+            Film film = finnFilm(filmnr);
+            Kinosal kinosal = finnKinosal(kinosalnr);
+
+            Visning visning = new Visning(visningsnr, film, kinosal, dato,starttid,pris);
+
+            film.leggTilVisning(visning);
+            this.visninger.add(visning);
+        }
+
+        //Hent ut billetter
+        ResultSet billetter =  runDBQuery("SELECT b_billettkode, b_visningsnr, b_erBetalt  FROM tblbillett");
+
+        while(billetter.next()) {
+            String billettkode = billetter.getString("b_billettkode");
+            int visningsnr = billetter.getInt("b_visningsnr");
+            boolean erBetalt = billetter.getBoolean("b_erBetalt");
+
+            Visning visning = finnVisning(visningsnr);
+            Billett billett = new Billett(billettkode,visning,erBetalt);
+            System.out.println(billett.toString());
+            visning.leggTilBillett(billett);
+            this.billetter.add(billett);
+        }
+
+        //Hent ut plassene til billettene
+        ResultSet plassbillett =  runDBQuery("SELECT pb_radnr, pb_setenr, pb_kinosalnr, pb_billettkode  FROM tblplassbillett");
+
+        while (plassbillett.next()) {
+            int radnr = plassbillett.getInt("pb_radnr");
+            int setenr = plassbillett.getInt("pb_setenr");
+            int kinosalnr = plassbillett.getInt("pb_kinosalnr");
+            String billettkode = plassbillett.getString("pb_billettkode");
+
+            Kinosal kinosal = finnKinosal(kinosalnr);
+            Billett billett  = finnBillett(billettkode);
+            Plass plass = kinosal.finnPlass(radnr, setenr);
+            //Legg til plass
+            billett.leggTilPlass(plass);
+        }
 
     }
 
