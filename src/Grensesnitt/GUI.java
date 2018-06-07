@@ -8,6 +8,8 @@ package Grensesnitt;
 
 import Kontroll.Kontroll;
 
+import java.sql.SQLException;
+
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
@@ -273,7 +275,7 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel13.setText("Sete:");
 
-        dropdownSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        dropdownSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alfabetisk", "Tidspunkt"}));
         dropdownSort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dropdownSortActionPerformed(evt);
@@ -289,7 +291,7 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel22.setText("Velg kino:");
 
-        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ringen", "Tiara"}));
         cinemaChoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cinemaChoiceActionPerformed(evt);
@@ -1504,9 +1506,14 @@ public class GUI extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Vindu for kundens billettbestilling
+     * @param evt
+     */
     private void openTicketReservationActionPerformed(java.awt.event.ActionEvent evt) {
         ticketReservation.setVisible(true);
         ticketReservation.pack();
+
     }
 
 
@@ -1785,12 +1792,18 @@ public class GUI extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        Kontroll kontroll =  Kontroll.getInstance();
-        kontroll.opprettDBForbindelse();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                Kontroll kontroll =  Kontroll.getInstance();
+                kontroll.opprettDBForbindelse();
+                try {
+                    kontroll.lastDatabase();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
                 new GUI().setVisible(true);
             }
         });
