@@ -23,6 +23,16 @@ public class Visning {
         this.pris = pris;
     }
 
+    /**
+     * Legger til en Billett i Visning sin ArrayList over Billetter
+     * @param billettkode
+     * @param erBetalt
+     */
+    public void leggTilBillett(int billettkode, boolean erBetalt) {
+        billetter.add(new Billett(billettkode, this, erBetalt));
+    }
+
+
     public int getVisningsNr() {
         return visningsNr;
     }
