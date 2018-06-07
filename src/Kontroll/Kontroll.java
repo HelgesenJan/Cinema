@@ -24,21 +24,11 @@ public class Kontroll {
     private ArrayList<Kinosal> kinosaler = new ArrayList<>();
     private ArrayList<Bruker> brukere = new ArrayList<>();
     private ArrayList<Film> filmer = new ArrayList<>();
-    private ArrayList<Visning> visninger = new ArrayList<Visning>();
+    private ArrayList<Bruker> brukere = new ArrayList<>();
 
 
 
     public Kontroll() {
-
-        // PLACEHOLDER LISTER FOR TESTDATA
-        ArrayList<Film> filmer = new ArrayList<Film>();
-        filmer.add(new Film(1,"Rosen"));
-        filmer.add(new Film(2,"Tulipanen"));
-        filmer.add(new Film(3,"Solsikken"));
-
-        ArrayList<Kinosal> kinosaler = new ArrayList<Kinosal>();
-        ArrayList<Visning> visninger = new ArrayList<Visning>();
-
     }
 
 
@@ -150,9 +140,26 @@ public class Kontroll {
         filmer.add(new Film(filmnr, filmNavn));
     }
 
-    public void leggTilKino(int kinosalnr, String salnr, String kinonavn) {
-        // kinosaler.add(new Kinosal(k))
-        //
+    /**
+     * Legger til en Kinoasal i Kontroll sin ArrayList over Kinosaler
+     * @param kinosalnr
+     * @param kinosalnavn
+     * @param kinonavn
+     */
+    public void leggTilKinosal(int kinosalnr, String kinosalnavn, String kinonavn) {
+        kinosaler.add(new Kinosal(kinosalnr, kinosalnavn, kinonavn));
+
+    }
+
+
+    /**
+     * Legger til en Bruker i Kontroll sin ArrayList over brukere
+     * @param brukernavn
+     * @param pin
+     * @param erPlanlegger
+     */
+    public void leggTilBruker(String brukernavn, int pin, boolean erPlanlegger) {
+        brukere.add(new Bruker(brukernavn, pin, erPlanlegger));
     }
 
 

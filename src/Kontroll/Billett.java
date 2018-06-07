@@ -16,6 +16,14 @@ public class Billett {
         this.erBetalt = erBetalt;
     }
 
+    /**
+     * Legger til en Plass i Billett sin ArrayList over Plasser
+     * @param plassen
+     */
+    public void leggTilPlass(Plass plassen) {
+        plasser.add(plassen);
+    }
+
     public int getBillettkode() {
         return billettkode;
     }
