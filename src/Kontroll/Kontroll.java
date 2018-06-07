@@ -40,11 +40,13 @@ public class Kontroll {
         Kino kino = finnKino("Tiara");
         System.out.println(kino);
         sortering = 1;
+        /*
         ArrayList<Visning> visninger = filtrerVisninger(kino);
         System.out.println(visninger.size());
         for(Visning v : visninger) {
             System.out.println(v.toString());
         }
+        */
     }
 
 
