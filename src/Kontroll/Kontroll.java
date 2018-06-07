@@ -30,6 +30,14 @@ public class Kontroll {
 
     public Kontroll() throws SQLException {
         lastDatabase();
+
+        Kino kino = finnKino("Tiara");
+        System.out.println(kino);
+        ArrayList<Visning> visninger = filtrerVisninger(kino);
+        System.out.println(visninger.size());
+        for(Visning v : visninger) {
+            System.out.println(v.toString());
+        }
     }
 
 
@@ -66,6 +74,18 @@ public class Kontroll {
         return billetter.get(indeks);
     }
 
+    public ArrayList<Visning> filtrerVisninger(Kino kino) {
+        ArrayList<Visning> visninger = new ArrayList<>();
+
+        Iterator itr = visninger.iterator();
+        while (itr.hasNext()) {
+            Visning visning = (Visning) itr.next();
+            if(visning.getKinosal().getKino().equals(kino)) {
+                visninger.add(visning);
+            }
+        }
+        return visninger;
+    }
 
 
 
@@ -156,7 +176,6 @@ public class Kontroll {
 
             Film film = finnFilm(filmnr);
             Kinosal kinosal = finnKinosal(kinosalnr);
-
             Visning visning = new Visning(visningsnr, film, kinosal, dato,starttid,pris);
 
             film.leggTilVisning(visning);

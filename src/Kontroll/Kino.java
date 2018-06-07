@@ -30,4 +30,12 @@ public class Kino implements Comparable<Kino>{
     public int compareTo(Kino o) {
         return kollator.compare(this.kinonavn, o.getKinonavn());
     }
+
+    @Override
+    public String toString() {
+        return "Kino{" +
+                "kinonavn='" + kinonavn + '\'' +
+                ", kinosaler=" + kinosaler +
+                '}';
+    }
 }

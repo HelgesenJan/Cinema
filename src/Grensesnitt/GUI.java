@@ -1792,6 +1792,7 @@ public class GUI extends javax.swing.JFrame {
             new GUI().setVisible(true);
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Klarte ikke å koble til database: " + e.getMessage());
         }
     }
 
