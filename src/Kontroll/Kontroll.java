@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
+import static java.util.Collections.sort;
+
 public class Kontroll {
 
     public static int sortering = 0;
@@ -240,7 +242,29 @@ public class Kontroll {
         }
     }
 
+    public ArrayList<Kino> getKinoer() {
+        return kinoer;
+    }
 
+    public ArrayList<Kinosal> getKinosaler() {
+        return kinosaler;
+    }
+
+    public ArrayList<Film> getFilmer() {
+        return filmer;
+    }
+
+    public ArrayList<Bruker> getBrukere() {
+        return brukere;
+    }
+
+    public ArrayList<Visning> getVisninger() {
+        return visninger;
+    }
+
+    public ArrayList<Billett> getBilletter() {
+        return billetter;
+    }
 
     public void opprettDBForbindelse() {
 
