@@ -22,6 +22,10 @@ public class Kino implements Comparable<Kino>{
         return kinonavn;
     }
 
+    public ArrayList<Kinosal> getKinosaler() {
+        return kinosaler;
+    }
+
     @Override
     public int compareTo(Kino o) {
         return kollator.compare(this.kinonavn, o.getKinonavn());

@@ -28,7 +28,8 @@ public class Kontroll {
     private ArrayList<Billett> billetter = new ArrayList<>();
 
 
-    public Kontroll() {
+    public Kontroll() throws SQLException {
+        lastDatabase();
     }
 
 
@@ -70,6 +71,9 @@ public class Kontroll {
 
     public void lastDatabase() throws SQLException {
 
+        //Opprett forbindelse til database
+        opprettDBForbindelse();
+
         //Hent ut brukere
         ResultSet brukere =  runDBQuery("SELECT l_brukernavn, l_pinkode, l_erPlanlegger FROM tbllogin");
         System.out.println("test");
@@ -93,6 +97,7 @@ public class Kontroll {
         while (kinoer.next()) {
             String kinonavn = kinoer.getString("k_kinonavn");
             Kino kino = new Kino(kinonavn);
+            System.out.println(kino.toString());
             this.kinoer.add(kino);
         }
 
@@ -191,6 +196,7 @@ public class Kontroll {
 
         for(Visning v:this.visninger) {
             System.out.println(v.toString());
+
         }
 
     }
@@ -223,7 +229,7 @@ public class Kontroll {
         }
     }
 
-    public static Kontroll getInstance() {
+    public static Kontroll getInstance() throws SQLException {
         if(INSTANSE == null) INSTANSE = new Kontroll(); //Opprett ny instanse
         return INSTANSE;
     }
