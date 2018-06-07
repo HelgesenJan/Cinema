@@ -8,12 +8,12 @@ package Grensesnitt;
 
 import Kontroll.Kontroll;
 
-import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.ArrayList;
+import java.sql.SQLException;
 
+import static javax.swing.JOptionPane.*;
+import java.util.ArrayList;
 import static javax.swing.JOptionPane.*;
 
 /**
@@ -294,7 +294,9 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel22.setText("Velg kino:");
 
-        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ringen", "Tiara"}));
+        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
+        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>());
+
         cinemaChoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cinemaChoiceActionPerformed(evt);
@@ -1516,14 +1518,14 @@ public class GUI extends javax.swing.JFrame {
     private void openTicketReservationActionPerformed(java.awt.event.ActionEvent evt) {
         ticketReservation.setVisible(true);
         ticketReservation.pack();
-        fyllVisningsTabell();
+        fyllTabell();
     }
 
-    private void fyllVisningsTabell() {
+    private void fyllTabell() {
         Object[][] tabellInnhold = kontroll.lagVisningTabellListe();
-        Object[] kolonnetitler = {"Film", "Tid", "Sal"};
-        reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnetitler));
-        staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnetitler));
+        Object[] kolonnenavn = {"Film", "Tid", "Sal"};
+        reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+        staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
 
 
@@ -1535,14 +1537,13 @@ public class GUI extends javax.swing.JFrame {
     private void openAttendantActionPerformed(java.awt.event.ActionEvent evt) {
         login.setVisible(true);
         login.pack();
-        fyllVisningsTabell();
+        fyllTabell();
     }
 
     private void reserveAddTicketActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     }
 
-    // Login knapp
     private void commitLoginActionPerformed(java.awt.event.ActionEvent evt) {
         login.setVisible(false);
 
@@ -1665,7 +1666,6 @@ public class GUI extends javax.swing.JFrame {
 
     private String login_opphav = null;
 
-    // Admin mus
     private void openAdminMouseClicked(java.awt.event.MouseEvent evt) {
         JButton button = (JButton) evt.getSource();
         login_opphav = button.getActionCommand();
@@ -1783,21 +1783,60 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void cinemaChoiceActionPerformed(java.awt.event.ActionEvent evt) {
-        if(cinemaChoice.equals("Tiara")){
-            //kontroll.getKinosaler();
+           // kontroll.hentKino();
 
-        }else{
+    }
 
+    /**
+     * Metode for å hente kinoliste og kino-dropdown med den
+     */
+    public void hentKino() {
+        for (int i = 0; i < kontroll.getKinoer().size(); i++){
+            cinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
         }
     }
+
 
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
 
         try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+                try {
+                    kontroll =  Kontroll.getInstance();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                GUI gui = new GUI();
+
+                gui.setVisible(true);
+                gui.hentKino();
+
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -1964,19 +2003,5 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField totalTxt;
     // End of variables declaration
 
-    public void loginBruker(){
-
-        String brukernavn = fieldUsername.getText();
-        int pin = fieldPassword.getColumns();
-        boolean erPlanlegger = true;
-        ArrayList brukere = kontroll.getBrukere();
-        if(){
-            adminPlanner.setVisible(true);
-            adminPlanner.pack();
-            login.setVisible(false);
-        }else{
-            System.out.println("Ikke admin");
-        }
-    }
 
 }

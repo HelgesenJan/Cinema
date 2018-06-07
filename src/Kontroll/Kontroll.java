@@ -1,12 +1,13 @@
 package Kontroll;
 
 import java.sql.*;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Date;
 
 public class Kontroll {
+
+    public static int sortering = 0;
 
     //Singleton
     private static  Kontroll INSTANSE = null;
@@ -35,11 +36,14 @@ public class Kontroll {
 
         Kino kino = finnKino("Tiara");
         System.out.println(kino);
+        sortering = 1;
+        /*
         ArrayList<Visning> visninger = filtrerVisninger(kino);
         System.out.println(visninger.size());
         for(Visning v : visninger) {
             System.out.println(v.toString());
         }
+        */
     }
 
 
@@ -79,20 +83,24 @@ public class Kontroll {
     public ArrayList<Visning> filtrerVisninger(Kino kino) {
         ArrayList<Visning> visninger = new ArrayList<>();
 
-        Iterator itr = visninger.iterator();
+        Iterator itr = this.visninger.iterator();
         while (itr.hasNext()) {
             Visning visning = (Visning) itr.next();
-            if(visning.getKinosal().getKino().equals(kino)) {
+
+            if(visning.getKinosal().getKino().getKinonavn().equals(kino.getKinonavn())) {
                 visninger.add(visning);
             }
         }
-        return visninger;
+
+       Collections.sort(visninger);
+       return visninger;
     }
 
 
 
     public void lastDatabase() throws SQLException {
 
+        sortering = -1;
         //Opprett forbindelse til database
         opprettDBForbindelse();
 
@@ -176,10 +184,14 @@ public class Kontroll {
             Date starttid = visninger.getDate("v_starttid");
             double pris = visninger.getDouble("v_pris");
 
+            //Bygg dato objekt for både dato og starttid
+            String dato_str = visninger.getString("v_dato") + " " + visninger.getString("v_starttid");
+            SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
             Film film = finnFilm(filmnr);
             Kinosal kinosal = finnKinosal(kinosalnr);
-
-            Visning visning = new Visning(visningsnr, film, kinosal, dato,starttid,pris);
+            Visning visning = new Visning(visningsnr, film, kinosal, null,pris);
 
             film.leggTilVisning(visning);
             this.visninger.add(visning);
@@ -215,12 +227,7 @@ public class Kontroll {
             //Legg til plass
             billett.leggTilPlass(plass);
         }
-
-        for(Visning v:this.visninger) {
-            System.out.println(v.toString());
-
-        }
-
+        sortering = 0;
     }
 
     public ResultSet runDBQuery(String sql) {
@@ -235,7 +242,29 @@ public class Kontroll {
         }
     }
 
+    public ArrayList<Kino> getKinoer() {
+        return kinoer;
+    }
 
+    public ArrayList<Kinosal> getKinosaler() {
+        return kinosaler;
+    }
+
+    public ArrayList<Film> getFilmer() {
+        return filmer;
+    }
+
+    public ArrayList<Bruker> getBrukere() {
+        return brukere;
+    }
+
+    public ArrayList<Visning> getVisninger() {
+        return visninger;
+    }
+
+    public ArrayList<Billett> getBilletter() {
+        return billetter;
+    }
 
     public void opprettDBForbindelse() {
 

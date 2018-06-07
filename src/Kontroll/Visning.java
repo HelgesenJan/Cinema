@@ -1,7 +1,8 @@
 package Kontroll;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.text.Collator;
+import java.util.ArrayList;
 
 public class Visning implements Comparable<Visning> {
 
@@ -9,8 +10,9 @@ public class Visning implements Comparable<Visning> {
     private Film film;
     private Kinosal kinosal;
     private Date dato;
-    private Date startTid;
     private double pris;
+
+    private final static Collator kollator = Collator.getInstance();
 
     private ArrayList<Billett> billetter = new ArrayList<>();
 
@@ -18,12 +20,11 @@ public class Visning implements Comparable<Visning> {
         this.visningsNr = visningsNr;
     }
 
-    public Visning(int visningsNr, Film film, Kinosal kinosal, Date dato, Date startTid, double pris) {
+    public Visning(int visningsNr, Film film, Kinosal kinosal, Date dato, double pris) {
         this.visningsNr = visningsNr;
         this.film = film;
         this.kinosal = kinosal;
         this.dato = dato;
-        this.startTid = startTid;
         this.pris = pris;
     }
 
@@ -73,14 +74,6 @@ public class Visning implements Comparable<Visning> {
         this.dato = dato;
     }
 
-    public Date getStartTid() {
-        return startTid;
-    }
-
-    public void setStartTid(Date startTid) {
-        this.startTid = startTid;
-    }
-
     public double getPris() {
         return pris;
     }
@@ -89,14 +82,38 @@ public class Visning implements Comparable<Visning> {
         this.pris = pris;
     }
 
+    public Date getStartTid() {
+        return dato;
+    }
+
+    @Override
+    public String toString() {
+        return "Visning{" +
+                "visningsNr=" + visningsNr +
+                ", film=" + film.getFilmnavn() +
+                ", kinosal=" + kinosal.getKinosalnavn() +
+                ", dato=" + dato +
+                ", pris=" + pris +
+                '}';
+    }
+
     @Override
     public int compareTo(Visning o) {
-        if(this.visningsNr < o.getVisningsNr()) {
-            return -1;
-        } else if(this.visningsNr > o.getVisningsNr()) {
-            return 1;
-        } else {
-            return 0;
+        switch (Kontroll.sortering) {
+            case 0:
+                //Sortere alfabetisk
+                return kollator.compare(this.film.getFilmnavn(), o.getFilm().getFilmnavn());
+            case 1:
+                //Sorter etter tid
+                return this.dato.compareTo(o.getDato());
+            default:
+                if(this.visningsNr < o.getVisningsNr()) {
+                    return -1;
+                } else if(this.visningsNr > o.getVisningsNr()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
         }
     }
 }
