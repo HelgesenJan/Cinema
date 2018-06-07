@@ -7,7 +7,7 @@ public class Kinosal implements Comparable<Kinosal> {
 
 
     private int kinosalnr;
-    private String kinosalnavn;
+    private Kino kino;
     private String kinonavn;
 
     private ArrayList<Plass> plasser = new ArrayList<>();
@@ -16,9 +16,9 @@ public class Kinosal implements Comparable<Kinosal> {
         this.kinosalnr = kinosalnr;
     }
 
-    public Kinosal(int kinosalnr, String kinosalnavn, String kinonavn) {
+    public Kinosal(int kinosalnr, Kino kino, String kinonavn) {
         this.kinosalnr = kinosalnr;
-        this.kinosalnavn = kinosalnavn;
+        this.kino = kino;
         this.kinonavn = kinonavn;
     }
 
@@ -42,8 +42,8 @@ public class Kinosal implements Comparable<Kinosal> {
         return this.kinosalnr;
     }
 
-    public String getKinosalnavn() {
-        return this.kinosalnavn;
+    public Kino getKino() {
+        return this.kino;
     }
 
     public String getKinonavn() {
@@ -61,7 +61,7 @@ public class Kinosal implements Comparable<Kinosal> {
 
         return "Kinosal{" +
                 "kinosalnr=" + this.kinosalnr +
-                ", kinosalnavn='" + this.kinosalnavn + '\'' +
+                ", kino='" + this.kino + '\'' +
                 ", kinonavn='" + this.kinonavn + '\'' +
                 ", plasser=" + plass_liste +
                 '}';

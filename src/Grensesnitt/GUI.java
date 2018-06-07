@@ -1775,7 +1775,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void cinemaChoiceActionPerformed(java.awt.event.ActionEvent evt) {
         if(cinemaChoice.equals("Tiara")){
-            kontroll.getKinosaler();
+            //kontroll.getKinosaler();
 
         }else{
 

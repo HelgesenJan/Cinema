@@ -20,6 +20,7 @@ public class Kontroll {
     private Statement stmt;
 
     //Lister med objekter
+    private  ArrayList<Kino> kinoer = new ArrayList<>();
     private ArrayList<Kinosal> kinosaler = new ArrayList<>();
     private ArrayList<Film> filmer = new ArrayList<>();
     private ArrayList<Bruker> brukere = new ArrayList<>();
@@ -30,6 +31,12 @@ public class Kontroll {
     public Kontroll() {
     }
 
+
+    public Kino finnKino(String kinonavn) {
+        Kino dummy = new Kino(kinonavn);
+        int indeks = Collections.binarySearch(kinoer, dummy);
+        return kinoer.get(indeks);
+    }
 
     public Kinosal finnKinosal(int kinosalnr) {
         Kinosal dummy = new Kinosal(kinosalnr);
@@ -76,6 +83,19 @@ public class Kontroll {
             this.brukere.add(bruker);
         }
 
+       //Hent ut kinoer
+       /*
+
+        */
+
+        ResultSet kinoer = runDBQuery("SELECT k_kinonavn FROM kino.tblkinosal GROUP BY k_kinonavn");
+
+        while (kinoer.next()) {
+            String kinonavn = kinoer.getString("k_kinonavn");
+            Kino kino = new Kino(kinonavn);
+            this.kinoer.add(kino);
+        }
+
        //Hent ut kinosal result set
        ResultSet kinosaler =  runDBQuery("SELECT k_kinosalnr, k_kinonavn, k_kinosalnavn FROM tblkinosal");
 
@@ -87,8 +107,9 @@ public class Kontroll {
            String kinonavn = kinosaler.getString("k_kinonavn");
            String kinosalnavn = kinosaler.getString("k_kinosalnavn");
 
-           Kinosal sal = new Kinosal(salnr, kinonavn, kinosalnavn);
-
+           Kino kino = finnKino(kinonavn);
+           Kinosal sal = new Kinosal(salnr, kino, kinosalnavn);
+           kino.leggTilKinosal(sal);
            //Legg til sal
            this.kinosaler.add(sal);
        }
@@ -166,6 +187,10 @@ public class Kontroll {
             Plass plass = kinosal.finnPlass(radnr, setenr);
             //Legg til plass
             billett.leggTilPlass(plass);
+        }
+
+        for(Visning v:this.visninger) {
+            System.out.println(v.toString());
         }
 
     }
@@ -246,10 +271,10 @@ public class Kontroll {
      * @param kinosalnavn
      * @param kinonavn
      */
-    public void leggTilKinosal(int kinosalnr, String kinosalnavn, String kinonavn) {
-        kinosaler.add(new Kinosal(kinosalnr, kinosalnavn, kinonavn));
+    //public void leggTilKinosal(int kinosalnr, Kontroll.Kino kinosalnavn, String kinonavn) {
+      //  kinosaler.add(new Kinosal(kinosalnr, kinosalnavn, kinonavn));
 
-    }
+    //}
 
 
     /**
