@@ -8,6 +8,8 @@ package Grensesnitt;
 
 import Kontroll.Kontroll;
 
+import java.sql.SQLException;
+
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
@@ -1785,12 +1787,18 @@ public class GUI extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        Kontroll kontroll =  Kontroll.getInstance();
-        kontroll.opprettDBForbindelse();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                Kontroll kontroll =  Kontroll.getInstance();
+                kontroll.opprettDBForbindelse();
+                try {
+                    kontroll.lastDatabase();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
                 new GUI().setVisible(true);
             }
         });
