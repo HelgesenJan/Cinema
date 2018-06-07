@@ -8,7 +8,7 @@ public class Kinosal implements Comparable<Kinosal> {
 
     private int kinosalnr;
     private Kino kino;
-    private String kinonavn;
+    private String kinosalnavn;
 
     private ArrayList<Plass> plasser = new ArrayList<>();
 
@@ -19,7 +19,7 @@ public class Kinosal implements Comparable<Kinosal> {
     public Kinosal(int kinosalnr, Kino kino, String kinonavn) {
         this.kinosalnr = kinosalnr;
         this.kino = kino;
-        this.kinonavn = kinonavn;
+        this.kinosalnavn = kinonavn;
     }
 
     public Plass finnPlass(int radnr, int setenr) {
@@ -46,8 +46,8 @@ public class Kinosal implements Comparable<Kinosal> {
         return this.kino;
     }
 
-    public String getKinonavn() {
-        return this.kinonavn;
+    public String getKinosalnavn() {
+        return this.kinosalnavn;
     }
 
     @Override
@@ -61,8 +61,7 @@ public class Kinosal implements Comparable<Kinosal> {
 
         return "Kinosal{" +
                 "kinosalnr=" + this.kinosalnr +
-                ", kino='" + this.kino + '\'' +
-                ", kinonavn='" + this.kinonavn + '\'' +
+                ", kino='" + this.kino.getKinonavn() + '\'' +
                 ", plasser=" + plass_liste +
                 '}';
     }

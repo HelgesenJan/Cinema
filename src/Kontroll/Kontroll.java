@@ -30,7 +30,16 @@ public class Kontroll {
     private ArrayList<Billett> billetter = new ArrayList<>();
 
 
-    public Kontroll() {
+    public Kontroll() throws SQLException {
+        lastDatabase();
+
+        Kino kino = finnKino("Tiara");
+        System.out.println(kino);
+        ArrayList<Visning> visninger = filtrerVisninger(kino);
+        System.out.println(visninger.size());
+        for(Visning v : visninger) {
+            System.out.println(v.toString());
+        }
     }
 
 
@@ -67,10 +76,25 @@ public class Kontroll {
         return billetter.get(indeks);
     }
 
+    public ArrayList<Visning> filtrerVisninger(Kino kino) {
+        ArrayList<Visning> visninger = new ArrayList<>();
+
+        Iterator itr = visninger.iterator();
+        while (itr.hasNext()) {
+            Visning visning = (Visning) itr.next();
+            if(visning.getKinosal().getKino().equals(kino)) {
+                visninger.add(visning);
+            }
+        }
+        return visninger;
+    }
 
 
 
     public void lastDatabase() throws SQLException {
+
+        //Opprett forbindelse til database
+        opprettDBForbindelse();
 
         //Hent ut brukere
         ResultSet brukere =  runDBQuery("SELECT l_brukernavn, l_pinkode, l_erPlanlegger FROM tbllogin");
@@ -95,6 +119,7 @@ public class Kontroll {
         while (kinoer.next()) {
             String kinonavn = kinoer.getString("k_kinonavn");
             Kino kino = new Kino(kinonavn);
+            System.out.println(kino.toString());
             this.kinoer.add(kino);
         }
 
@@ -153,7 +178,6 @@ public class Kontroll {
 
             Film film = finnFilm(filmnr);
             Kinosal kinosal = finnKinosal(kinosalnr);
-
             Visning visning = new Visning(visningsnr, film, kinosal, dato,starttid,pris);
 
             film.leggTilVisning(visning);
@@ -193,6 +217,7 @@ public class Kontroll {
 
         for(Visning v:this.visninger) {
             System.out.println(v.toString());
+
         }
 
     }
@@ -247,9 +272,28 @@ public class Kontroll {
         }
     }
 
-    public static Kontroll getInstance() {
+    public static Kontroll getInstance() throws SQLException {
         if(INSTANSE == null) INSTANSE = new Kontroll(); //Opprett ny instanse
         return INSTANSE;
+    }
+
+    /**
+     * Lager en Object-liste over Visninger, som skal vises i tabellen for billettbestilling
+     * @return
+     */
+    public Object[][] lagVisningTabellListe() {
+        int rader = visninger.size();
+        int teller = 0;
+        Object[][] tabellInnhold = new Object[rader][5];
+        for(int i=0; i<visninger.size(); i++) {
+            tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
+            tabellInnhold[teller][1] = (visninger.get(i).getDato() + ", " + visninger.get(i).getStartTid());
+            tabellInnhold[teller][2] = visninger.get(i).getKinosal().getKinosalnavn();
+            tabellInnhold[teller][3] = visninger.get(i).getPris();
+            tabellInnhold[teller][4] = visninger.get(i).getVisningsNr();
+            teller++;
+        }
+        return tabellInnhold;
     }
 
     /**
@@ -278,6 +322,8 @@ public class Kontroll {
 
         return billettKode;
     }
+
+
 
 
     /**
