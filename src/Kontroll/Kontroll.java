@@ -4,6 +4,8 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
+import static java.util.Collections.sort;
+
 public class Kontroll {
 
     //Singleton
@@ -207,7 +209,29 @@ public class Kontroll {
         }
     }
 
+    public ArrayList<Kino> getKinoer() {
+        return kinoer;
+    }
 
+    public ArrayList<Kinosal> getKinosaler() {
+        return kinosaler;
+    }
+
+    public ArrayList<Film> getFilmer() {
+        return filmer;
+    }
+
+    public ArrayList<Bruker> getBrukere() {
+        return brukere;
+    }
+
+    public ArrayList<Visning> getVisninger() {
+        return visninger;
+    }
+
+    public ArrayList<Billett> getBilletter() {
+        return billetter;
+    }
 
     public void opprettDBForbindelse() {
 

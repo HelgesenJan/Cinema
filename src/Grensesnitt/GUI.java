@@ -294,8 +294,9 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel22.setText("Velg kino:");
 
-        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ringen", "Tiara"}));
-        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tiara", "Ringen"}));
+        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
+        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>());
+
         cinemaChoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cinemaChoiceActionPerformed(evt);
@@ -1774,13 +1775,19 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void cinemaChoiceActionPerformed(java.awt.event.ActionEvent evt) {
-        if(cinemaChoice.equals("Tiara")){
-            //kontroll.getKinosaler();
+           // kontroll.hentKino();
 
-        }else{
+    }
 
+    /**
+     * Metode for å hente og fylle ut kino-dropdown
+     */
+    public void hentKino() {
+        for (int i = 0; i < kontroll.getKinoer().size(); i++){
+            cinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
         }
     }
+
 
 
     /**
@@ -1810,9 +1817,11 @@ public class GUI extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        GUI gui = new GUI();
+
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            GUI gui = new GUI();
             public void run() {
                 Kontroll kontroll =  Kontroll.getInstance();
                 kontroll.opprettDBForbindelse();
@@ -1822,8 +1831,9 @@ public class GUI extends javax.swing.JFrame {
                     e.printStackTrace();
                 }
 
-                new GUI().setVisible(true);
                 gui.setVisible(true);
+                gui.hentKino();
+
             }
 
         });
