@@ -1,7 +1,7 @@
 package Kontroll;
 
 import java.util.ArrayList;
-import java.util.Date;
+
 
 public class Film implements Comparable<Film>{
 
@@ -28,9 +28,9 @@ public class Film implements Comparable<Film>{
      * @param startTid
      * @param pris
      */
-    public void leggTilVisning(int visningsNr, Film filmen, Kinosal kinosalen, Date dato, Date startTid, Double pris) {
-        visninger.add(new Visning(visningsNr, filmen, kinosalen, dato, startTid, pris));
-    }
+  //  public void leggTilVisning(int visningsNr, Film filmen, Kinosal kinosalen, Date dato, Date startTid, Double pris) {
+     //   visninger.add(new Visning(visningsNr, filmen, kinosalen, dato, startTid, pris));
+//    }
 
     public void leggTilVisning(Visning visning) {
         visninger.add(visning);

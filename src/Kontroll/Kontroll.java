@@ -6,6 +6,8 @@ import java.util.*;
 
 public class Kontroll {
 
+    public static int sortering = 0;
+
     //Singleton
     private static  Kontroll INSTANSE = null;
 
@@ -77,20 +79,24 @@ public class Kontroll {
     public ArrayList<Visning> filtrerVisninger(Kino kino) {
         ArrayList<Visning> visninger = new ArrayList<>();
 
-        Iterator itr = visninger.iterator();
+        Iterator itr = this.visninger.iterator();
         while (itr.hasNext()) {
             Visning visning = (Visning) itr.next();
-            if(visning.getKinosal().getKino().equals(kino)) {
+
+            if(visning.getKinosal().getKino().getKinonavn().equals(kino.getKinonavn())) {
                 visninger.add(visning);
             }
         }
-        return visninger;
+
+       Collections.sort(visninger);
+       return visninger;
     }
 
 
 
     public void lastDatabase() throws SQLException {
 
+        sortering = -1;
         //Opprett forbindelse til database
         opprettDBForbindelse();
 
@@ -212,12 +218,7 @@ public class Kontroll {
             //Legg til plass
             billett.leggTilPlass(plass);
         }
-
-        for(Visning v:this.visninger) {
-            System.out.println(v.toString());
-
-        }
-
+        sortering = 0;
     }
 
     public ResultSet runDBQuery(String sql) {
