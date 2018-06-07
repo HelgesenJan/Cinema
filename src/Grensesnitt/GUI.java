@@ -1525,6 +1525,7 @@ public class GUI extends javax.swing.JFrame {
         Object[][] tabellInnhold = kontroll.lagVisningTabellListe();
         Object[] kolonnetitler = {"Film", "Tid", "Sal"};
         reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnetitler));
+        staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnetitler));
     }
 
 
@@ -1536,6 +1537,7 @@ public class GUI extends javax.swing.JFrame {
     private void openAttendantActionPerformed(java.awt.event.ActionEvent evt) {
         login.setVisible(true);
         login.pack();
+        fyllVisningsTabell();
     }
 
     private void reserveAddTicketActionPerformed(java.awt.event.ActionEvent evt) {

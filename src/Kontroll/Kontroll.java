@@ -300,6 +300,8 @@ public class Kontroll {
     }
 
 
+
+
     /**
      * Legger til en Film i Kontroll sin ArrayListe over Filmer
      * @param filmnr
