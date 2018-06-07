@@ -100,13 +100,13 @@ public class Visning implements Comparable<Visning> {
     @Override
     public int compareTo(Visning o) {
         switch (Kontroll.sortering) {
-            case 0:
+            case ALFABETISK:
                 //Sortere alfabetisk
                 return kollator.compare(this.film.getFilmnavn(), o.getFilm().getFilmnavn());
-            case 1:
+            case TID:
                 //Sorter etter tid
                 return this.dato.compareTo(o.getDato());
-            default:
+            case VERDI:
                 if(this.visningsNr < o.getVisningsNr()) {
                     return -1;
                 } else if(this.visningsNr > o.getVisningsNr()) {
@@ -114,6 +114,8 @@ public class Visning implements Comparable<Visning> {
                 } else {
                     return 0;
                 }
+            default:
+                return 0;
         }
     }
 }

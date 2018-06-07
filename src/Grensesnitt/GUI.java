@@ -1524,6 +1524,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void fyllTabell() {
         Object[][] tabellInnhold = kontroll.lagVisningTabellListe();
+
         Object[] kolonnenavn = {"Film", "Tid", "Sal"};
         reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
         staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));

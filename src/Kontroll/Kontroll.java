@@ -6,11 +6,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
-import static java.util.Collections.sort;
 
 public class Kontroll {
 
-    public static int sortering = 0;
+    public static Sortering sortering = Sortering.VERDI;
 
     //Singleton
     private static  Kontroll INSTANSE = null;
@@ -39,14 +38,14 @@ public class Kontroll {
 
         Kino kino = finnKino("Tiara");
         System.out.println(kino);
-        sortering = 1;
-        /*
+        sortering = Sortering.ALFABETISK;
+
         ArrayList<Visning> visninger = filtrerVisninger(kino);
         System.out.println(visninger.size());
         for(Visning v : visninger) {
             System.out.println(v.toString());
         }
-        */
+
     }
 
 
@@ -103,7 +102,7 @@ public class Kontroll {
 
     public void lastDatabase() throws SQLException {
 
-        sortering = -1;
+        sortering = Sortering.VERDI;
         //Opprett forbindelse til database
         opprettDBForbindelse();
 
@@ -183,17 +182,25 @@ public class Kontroll {
             int visningsnr = visninger.getInt("v_visningnr");
             int filmnr = visninger.getInt("v_filmnr");
             int kinosalnr = visninger.getInt("v_kinosalnr");
-            Date dato = visninger.getDate("v_dato");
+            //Date dato = visninger.getDate("v_dato");
             double pris = visninger.getDouble("v_pris");
 
             //Bygg dato objekt for både dato og starttid
             String dato_str = visninger.getString("v_dato") + " " + visninger.getString("v_starttid");
             SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+            Date dato = null;
+
+            try {
+                dato = datoFormat.parse(dato_str);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
 
             Film film = finnFilm(filmnr);
             Kinosal kinosal = finnKinosal(kinosalnr);
-            Visning visning = new Visning(visningsnr, film, kinosal, null,pris);
+            Visning visning = new Visning(visningsnr, film, kinosal, dato,pris);
 
             film.leggTilVisning(visning);
             this.visninger.add(visning);
@@ -229,7 +236,7 @@ public class Kontroll {
             //Legg til plass
             billett.leggTilPlass(plass);
         }
-        sortering = 0;
+        sortering = Sortering.TID;
     }
 
     public ResultSet runDBQuery(String sql) {
