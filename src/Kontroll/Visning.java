@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Visning {
 
+    private int visningsNr;
     private Film film;
     private Kinosal kinosal;
     private Date dato;
@@ -13,12 +14,21 @@ public class Visning {
 
     private ArrayList<Billett> billetter = new ArrayList<>();
 
-    public Visning(Film film, Kinosal kinosal, Date dato, Date startTid, double pris) {
+    public Visning(int visningsNr, Film film, Kinosal kinosal, Date dato, Date startTid, double pris) {
+        this.visningsNr = visningsNr;
         this.film = film;
         this.kinosal = kinosal;
         this.dato = dato;
         this.startTid = startTid;
         this.pris = pris;
+    }
+
+    public int getVisningsNr() {
+        return visningsNr;
+    }
+
+    public void setVisningsNr(int visningsNr) {
+        this.visningsNr = visningsNr;
     }
 
     public Film getFilm() {

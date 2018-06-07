@@ -28,6 +28,16 @@ public class Kontroll {
 
 
     public Kontroll() {
+
+        // PLACEHOLDER LISTER FOR TESTDATA
+        ArrayList<Film> filmer = new ArrayList<Film>();
+        filmer.add(new Film(1,"Rosen"));
+        filmer.add(new Film(2,"Tulipanen"));
+        filmer.add(new Film(3,"Solsikken"));
+
+        ArrayList<Kinosal> kinosaler = new ArrayList<Kinosal>();
+        ArrayList<Visning> visninger = new ArrayList<Visning>();
+
     }
 
 
@@ -106,5 +116,20 @@ public class Kontroll {
         if(INSTANSE == null) INSTANSE = new Kontroll(); //Opprett ny instanse
         return INSTANSE;
     }
+
+    /**
+     * Legger til en Film i Kontroll sin ArrayListe over Filmer
+     * @param filmnr
+     * @param filmNavn
+     */
+    public void leggTilFilm(int filmnr, String filmNavn) {
+        filmer.add(new Film(filmnr, filmNavn));
+    }
+
+    public void leggTilKino(int kinosalnr, String salnr, String kinonavn) {
+        // kinosaler.add(new Kinosal(k))
+        //
+    }
+
 
 }
