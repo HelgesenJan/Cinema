@@ -40,11 +40,12 @@ public class Kontroll {
         System.out.println(kino);
         sortering = Sortering.ALFABETISK;
 
-        ArrayList<Visning> visninger = filtrerVisninger(kino);
+        /*
         System.out.println(visninger.size());
         for(Visning v : visninger) {
             System.out.println(v.toString());
         }
+        */
 
     }
 
@@ -298,13 +299,16 @@ public class Kontroll {
      * Lager en Object-liste over Visninger, som skal vises i tabellen for billettbestilling
      * @return
      */
-    public Object[][] lagVisningTabellListe() {
+    public Object[][] lagVisningTabellListe(Kino kino) {
+        ArrayList<Visning> visninger = filtrerVisninger(kino);
         int rader = visninger.size();
         int teller = 0;
         Object[][] tabellInnhold = new Object[rader][5];
         for(int i=0; i<visninger.size(); i++) {
+
+
             tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
-            tabellInnhold[teller][1] = (visninger.get(i).getDato() + ", " + visninger.get(i).getStartTid());
+            tabellInnhold[teller][1] = visninger.get(i).getStartTid();
             tabellInnhold[teller][2] = visninger.get(i).getKinosal().getKinosalnavn();
             tabellInnhold[teller][3] = visninger.get(i).getPris();
             tabellInnhold[teller][4] = visninger.get(i).getVisningsNr();

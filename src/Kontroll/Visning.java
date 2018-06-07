@@ -1,5 +1,8 @@
 package Kontroll;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -12,6 +15,7 @@ public class Visning implements Comparable<Visning> {
     private Date dato;
     private double pris;
 
+    private final static Calendar kalender = Calendar.getInstance();
     private final static Collator kollator = Collator.getInstance();
 
     private ArrayList<Billett> billetter = new ArrayList<>();
@@ -82,8 +86,20 @@ public class Visning implements Comparable<Visning> {
         this.pris = pris;
     }
 
-    public Date getStartTid() {
-        return dato;
+    public String getStartTid() {
+
+        //Gi kalender dato
+        kalender.setTime(this.dato);
+
+        //Hent ut dag, mnd, tid og minutter
+        int dag =  kalender.get(Calendar.DAY_OF_MONTH);
+        int mnd = kalender.get(Calendar.MONTH);
+        int år = kalender.get(Calendar.YEAR);
+
+        int time = kalender.get(Calendar.HOUR_OF_DAY);
+        int minutter = kalender.get(Calendar.MINUTE);
+
+        return " Kl: " + time + ":" + minutter + " - " + dag + "." + mnd + "." + år;
     }
 
     @Override

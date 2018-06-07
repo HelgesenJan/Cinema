@@ -6,7 +6,7 @@ package Grensesnitt;
  * and open the template in the editor.
  */
 
-import Kontroll.Kontroll;
+import Kontroll.*;
 
 import java.sql.SQLException;
 import javax.swing.*;
@@ -1523,7 +1523,19 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void fyllTabell() {
-        Object[][] tabellInnhold = kontroll.lagVisningTabellListe();
+
+        Kino kino = kontroll.finnKino((String) cinemaChoice.getSelectedItem());
+        String sort = (String) dropdownSort.getSelectedItem();
+
+        if(sort.equals("Alfabetisk")) {
+            kontroll.sortering = Sortering.ALFABETISK;
+        } else if(sort.equals("Tidspunkt")) {
+            kontroll.sortering = Sortering.TID;
+        }
+
+        System.out.println(sort);
+
+        Object[][] tabellInnhold = kontroll.lagVisningTabellListe(kino);
 
         Object[] kolonnenavn = {"Film", "Tid", "Sal"};
         reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
@@ -1781,12 +1793,11 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void dropdownSortActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        fyllTabell();
     }
 
     private void cinemaChoiceActionPerformed(java.awt.event.ActionEvent evt) {
-           // kontroll.hentKino();
-
+        fyllTabell();
     }
 
     /**
