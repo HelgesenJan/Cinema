@@ -17,10 +17,10 @@ import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
-import static javax.swing.JOptionPane.YES_NO_OPTION;
-import static javax.swing.JOptionPane.YES_OPTION;
-import static javax.swing.JOptionPane.showConfirmDialog;
+import static javax.swing.JOptionPane.*;
 
 /**
  *
@@ -648,6 +648,16 @@ public class GUI extends javax.swing.JFrame {
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(141, 141, 141)
                                 .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 1040, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                .addGap(576, 576, 576)
+                                .addComponent(jLabel14)
+                                .addGap(5, 5, 5)
+                                .addComponent(staffDropdownSeat, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4)
+                                .addComponent(staffAddPlacement))
                         .addGroup(cinemaStaffLayout.createSequentialGroup()
                                 .addGap(11, 11, 11)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1535,6 +1545,7 @@ public class GUI extends javax.swing.JFrame {
             model.removeRow(i);
         }
 
+
         int visningsnr = -1;
         try {
             visningsnr = (int) reserveMovieTable.getValueAt(reserveMovieTable.getSelectedRow(), 4);
@@ -1729,6 +1740,8 @@ public class GUI extends javax.swing.JFrame {
     private void commitReserveTicketOrderActionPerformed(java.awt.event.ActionEvent evt) {
         titleTxt.setText(_VISNING.getFilm().getFilmnavn());
 
+
+
         dateTxt.setText(_VISNING.getDagMnd());
         timeTxt.setText(_VISNING.getStartKlokkeslett());
         seatCountTxt.setText(reserveTicketTable.getRowCount() + "");
@@ -1903,7 +1916,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void adminAddMovieActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        opprettFilm();
     }
 
     private void adminCinemaDropdownActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2000,6 +2013,23 @@ public class GUI extends javax.swing.JFrame {
         fyllTabell();
     }
 
+    public void opprettFilm() {
+        int filmNr = kontroll.getFilmer().size();
+        String filmNavn = adminMovieTxt.getText();
+        boolean funnet = false;
+        for (int i = 0; i < kontroll.getFilmer().size(); i++) {
+            if (filmNavn.equals(kontroll.getFilmer().get(i).getFilmnavn())) {
+                System.out.println("Filmen finnes fra før");
+                funnet = true;
+            }
+        }
+        if (funnet == false) {
+            filmNr++;
+            kontroll.leggTilFilm(filmNr, filmNavn);
+            System.out.println(filmNr + ", " + filmNavn + " er lagt til");
+        }
+        System.out.println(kontroll.getFilmer());
+    }
 
 
 
@@ -2153,6 +2183,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField seatsTxt;
     private javax.swing.JButton staffAddPlacement;
     private javax.swing.JTable staffAddPlacementTable;
+    private javax.swing.JComboBox<String> staffCinemaChoice;
     private javax.swing.JButton staffClose;
     private javax.swing.JButton staffConfirmPayment;
     private javax.swing.JButton staffConfirmPlacement;
