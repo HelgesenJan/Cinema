@@ -8,18 +8,14 @@ package Grensesnitt;
 
 import Kontroll.*;
 
-import java.awt.event.ActionEvent;
-import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
-import java.util.Date;
+import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
-import static javax.swing.JOptionPane.YES_NO_OPTION;
-import static javax.swing.JOptionPane.YES_OPTION;
-import static javax.swing.JOptionPane.showConfirmDialog;
+import static javax.swing.JOptionPane.*;
 
 /**
  *
@@ -1873,7 +1869,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void adminAddMovieActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        opprettFilm();
     }
 
     private void adminCinemaDropdownActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1968,6 +1964,23 @@ public class GUI extends javax.swing.JFrame {
         fyllTabell();
     }
 
+    public void opprettFilm() {
+        int filmNr = kontroll.getFilmer().size();
+        String filmNavn = adminMovieTxt.getText();
+        boolean funnet = false;
+        for (int i = 0; i < kontroll.getFilmer().size(); i++) {
+            if (filmNavn.equals(kontroll.getFilmer().get(i).getFilmnavn())) {
+                System.out.println("Filmen finnes fra før");
+                funnet = true;
+            }
+        }
+        if (funnet == false) {
+            filmNr++;
+            kontroll.leggTilFilm(filmNr, filmNavn);
+            System.out.println(filmNr + ", " + filmNavn + " er lagt til");
+        }
+        System.out.println(kontroll.getFilmer());
+    }
 
 
 
