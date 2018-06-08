@@ -1009,6 +1009,8 @@ public class GUI extends javax.swing.JFrame {
         jLabel26.setText("Antall plasser");
 
         seatsTxt.setEditable(false);
+        seatsTxt.setVisible(false);
+        jLabel25.setVisible(false);
         seatsTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 seatsTxtActionPerformed(evt);

@@ -46,10 +46,6 @@ public class Kontroll {
         System.out.println(kino);
         sortering = Sortering.ALFABETISK;
 
-
-        for(Billett billett: this.billetter) {
-            System.out.println(billett.toString());
-        }
         /*
         System.out.println(visninger.size());
         for(Visning v : visninger) {
@@ -85,9 +81,6 @@ public class Kontroll {
         for(Billett billett: fjernes) {
             this.billetter.remove(billett);
         }
-
-
-
         //Steng fil
         fil.close();
     }
