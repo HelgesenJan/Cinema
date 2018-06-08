@@ -363,6 +363,7 @@ public class Kontroll {
         return tabellInnhold;
     }
 
+
     /**
      * Lager en Object-liste over statistikker i rapporter
      */
@@ -406,6 +407,21 @@ public class Kontroll {
         return billettKode;
     }
 
+    public int visningsNrIncrement(){
+        int visningsNr;
+        for(visningsNr = 0; visningsNr < getVisninger().size(); visningsNr++){
+            visningsNr++;
+        }
+        return visningsNr;
+    }
+
+    public int filmNrIncrement(){
+        int filmNr;
+        for(filmNr = 0; filmNr < getVisninger().size(); filmNr++){
+            filmNr++;
+        }
+        return filmNr;
+    }
 
 
 
@@ -421,13 +437,30 @@ public class Kontroll {
     /**
      * Legger til en Kinoasal i Kontroll sin ArrayList over Kinosaler
      * @param kinosalnr
-     * @param kinosalnavn
+     * @param kino
      * @param kinonavn
      */
-    //public void leggTilKinosal(int kinosalnr, Kontroll.Kino kinosalnavn, String kinonavn) {
-      //  kinosaler.add(new Kinosal(kinosalnr, kinosalnavn, kinonavn));
+    public void leggTilKinosal(int kinosalnr, Kino kino, String kinonavn) {
+        kinosaler.add(new Kinosal(kinosalnr, kino, kinonavn));
 
-    //}
+    }
+
+    /**
+     * Legger til en Visning i Kontroll sin ArrayList over Visninger
+     */
+    public void leggTilVisning(int visningsnr, Film film, Kinosal kinosal, Date dato, double pris) {
+        visninger.add(new Visning(visningsnr, film, kinosal, dato, pris));
+    }
+
+
+    /**
+     * Legger til en Kino i Kontroll sin ArrayList over Kinoer
+     */
+
+    public void leggTilKino(String kinonavn) {
+        kinoer.add(new Kino(kinonavn));
+    }
+
 
 
     /**

@@ -42,9 +42,6 @@ public class Kinosal implements Comparable<Kinosal> {
         return this.kinosalnr;
     }
 
-    public ArrayList<Plass> getPlasser() {
-        return this.plasser;
-    }
 
     public Kino getKino() {
         return this.kino;
