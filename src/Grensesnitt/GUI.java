@@ -6,10 +6,12 @@ package Grensesnitt;
  * and open the template in the editor.
  */
 
-import Kontroll.Kontroll;
+import Kontroll.*;
 
 import java.sql.SQLException;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
@@ -202,6 +204,15 @@ public class GUI extends javax.swing.JFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fieldReserveTicketPriceActionPerformed(evt);
             }
+        });
+
+        reserveMovieTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                reserveMovieTableSelected(e);
+            }
+
+
         });
 
         reserveMovieTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -1527,8 +1538,21 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void fyllTabell() {
-        Object[][] tabellInnhold = kontroll.lagVisningTabellListe();
-        Object[] kolonnenavn = {"Film", "Tid", "Sal"};
+
+        Kino kino = kontroll.finnKino((String) cinemaChoice.getSelectedItem());
+        String sort = (String) dropdownSort.getSelectedItem();
+
+        if(sort.equals("Alfabetisk")) {
+            kontroll.sortering = Sortering.ALFABETISK;
+        } else if(sort.equals("Tidspunkt")) {
+            kontroll.sortering = Sortering.TID;
+        }
+
+        System.out.println(sort);
+
+        Object[][] tabellInnhold = kontroll.lagVisningTabellListe(kino);
+
+        Object[] kolonnenavn = {"Film", "Tid", "Sal", "Pris", "#"};
         reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
         staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
@@ -1810,12 +1834,22 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void dropdownSortActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        fyllTabell();
     }
 
     private void cinemaChoiceActionPerformed(java.awt.event.ActionEvent evt) {
-           // kontroll.hentKino();
+        fyllTabell();
+    }
 
+    public void reserveMovieTableSelected(ListSelectionEvent e) {
+        int visningsnr = -1;
+        visningsnr = (int) reserveMovieTable.getValueAt( reserveMovieTable.getSelectedRow(), 4);
+        if(visningsnr != -1) {
+            Visning visning = kontroll.finnVisning(visningsnr);
+            for(Plass p: visning.finnLedigePlasser()) {
+                System.out.println(p.toString());
+            }
+        }
     }
 
     private void reportStatisticsTableMouseClicked(java.awt.event.MouseEvent evt) {
