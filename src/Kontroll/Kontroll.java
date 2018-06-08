@@ -346,6 +346,40 @@ public class Kontroll {
         return tabellInnhold;
     }
 
+    /**
+     * Regner ut statistikk for en film.
+     * @param i
+     * @return
+     */
+    public Object[][] statistikkFilm(int i) {
+        int rader = filmer.get(i).getVisninger().size();
+        Object[][] tabellInnhold = new Object[rader][4];
+
+        int teller = 0;
+        for(int n=0; n<filmer.get(i).getVisninger().size(); n++) {
+
+            int antallBilletter = 0;
+            int kapasitet = filmer.get(i).getVisninger().get(n).getKinosal().getAntallPlasser();
+
+
+            for(int a=0; a<filmer.get(i).getVisninger().get(n).getBilletter().size(); a++) {
+                antallBilletter++;
+            }
+
+            int prosent = (antallBilletter*100) / kapasitet;
+
+            tabellInnhold[teller][0] = antallBilletter;
+            tabellInnhold[teller][1] = prosent + "%";
+            tabellInnhold[teller][2] = filmer.get(i).getVisninger().get(n).getIkkeBetalte();
+            tabellInnhold[teller][3] = filmer.get(i).getVisninger().get(n).getDato() + ", " + filmer.get(i).getVisninger().get(n).getStartTid();
+            teller++;
+            System.out.println(kapasitet);
+            System.out.println(prosent);
+        }
+        return tabellInnhold;
+    }
+
+
 
     /**
      * Lager en Object-liste over filmer i visninger, som skal vises i tabellen for filmer i rapportering
@@ -355,8 +389,8 @@ public class Kontroll {
         int rader = visninger.size();
         int teller = 0;
         Object[][] tabellInnhold = new Object[rader][1];
-        for(int i=0; i<visninger.size(); i++) {
-            tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
+        for(int i=0; i<filmer.size(); i++) {
+            tabellInnhold[teller][0] = filmer.get(i).getFilmnavn();
             teller++;
         }
 

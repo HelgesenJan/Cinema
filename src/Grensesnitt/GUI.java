@@ -1567,6 +1567,13 @@ public class GUI extends javax.swing.JFrame {
         reportMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
 
+    private void fyllRapportVisningsTabell(int i) {
+        Object[][] tabellInnhold = kontroll.statistikkFilm(i);
+        Object[] kolonnenavn = {"Antall", "% av kapasitet", "Ikke betalt", "Visningsdato"};
+        reportStatisticsTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+
+    }
+
     private void fyllKinosalTabell(){
         Object[][] tabellInnhold = kontroll.lagKinosalTabellListe();
         Object[] kolonnenavn = {"Kinosal"};
@@ -1696,15 +1703,20 @@ public class GUI extends javax.swing.JFrame {
 
     private void reportMovieTableMouseClicked(java.awt.event.MouseEvent evt) {
 
-        int indeks = reportMovieTable.getSelectedRow();
-        String film = reportMovieTable.getValueAt(indeks, 0).toString();
-        for(int i = 0; i < kontroll.getFilmer().size(); i++){
-            if(film == kontroll.getFilmer().get(i).getFilmnavn()){
-                fyllKinosalTabell();
+        try {
+            int indeks = reportMovieTable.getSelectedRow();
+            String film = reportMovieTable.getValueAt(indeks, 0).toString();
+            for(int i = 0; i < kontroll.getFilmer().size(); i++){
+                if(film == kontroll.getFilmer().get(i).getFilmnavn()){
+                    fyllRapportVisningsTabell(i);
+                }
             }
+        } catch(Exception e) {
         }
 
     }
+
+
 
     private void reportCloseMouseClicked(java.awt.event.MouseEvent evt) {
 
