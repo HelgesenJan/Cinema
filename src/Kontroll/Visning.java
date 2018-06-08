@@ -34,6 +34,18 @@ public class Visning implements Comparable<Visning> {
         this.pris = pris;
     }
 
+
+    public int getIkkeBetalte() {
+        int antall = 0;
+
+        for(int i=0; i<billetter.size(); i++) {
+            if(!billetter.get(i).isErBetalt()) {
+                antall ++;
+            }
+        }
+        return antall;
+    }
+
     /**
      * Legger til en Billett i Visning sin ArrayList over Billetter
      * @param billettkode
@@ -47,6 +59,9 @@ public class Visning implements Comparable<Visning> {
         billetter.add(billett);
     }
 
+    public ArrayList<Billett> getBilletter() {
+        return billetter;
+    }
 
     public int getVisningsNr() {
         return visningsNr;
