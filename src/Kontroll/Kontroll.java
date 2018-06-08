@@ -1,13 +1,15 @@
 package Kontroll;
 
 import java.sql.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
+
 public class Kontroll {
 
-    public static int sortering = 0;
+    public static Sortering sortering = Sortering.VERDI;
 
     //Singleton
     private static  Kontroll INSTANSE = null;
@@ -36,38 +38,51 @@ public class Kontroll {
 
         Kino kino = finnKino("Tiara");
         System.out.println(kino);
-        sortering = 1;
+        sortering = Sortering.ALFABETISK;
+
         /*
-        ArrayList<Visning> visninger = filtrerVisninger(kino);
         System.out.println(visninger.size());
         for(Visning v : visninger) {
             System.out.println(v.toString());
         }
         */
+
     }
 
 
     public Kino finnKino(String kinonavn) {
         Kino dummy = new Kino(kinonavn);
         int indeks = Collections.binarySearch(kinoer, dummy);
+        if(indeks < 0) {
+            return null;
+        }
         return kinoer.get(indeks);
     }
 
     public Kinosal finnKinosal(int kinosalnr) {
         Kinosal dummy = new Kinosal(kinosalnr);
         int indeks = Collections.binarySearch(kinosaler,dummy);
+        if(indeks < 0) {
+            return null;
+        }
         return kinosaler.get(indeks);
     }
 
     public Film finnFilm(int filmnr) {
         Film dummy =new Film(filmnr);
         int indeks = Collections.binarySearch(filmer, dummy);
+        if(indeks < 0) {
+            return null;
+        }
         return filmer.get(indeks);
     }
 
     public Visning finnVisning(int visningsnr) {
         Visning dummy = new Visning(visningsnr);
         int indeks = Collections.binarySearch(visninger, dummy);
+        if(indeks < 0) {
+            return null;
+        }
         return visninger.get(indeks);
     }
 
@@ -100,7 +115,7 @@ public class Kontroll {
 
     public void lastDatabase() throws SQLException {
 
-        sortering = -1;
+        sortering = Sortering.VERDI;
         //Opprett forbindelse til database
         opprettDBForbindelse();
 
@@ -180,18 +195,25 @@ public class Kontroll {
             int visningsnr = visninger.getInt("v_visningnr");
             int filmnr = visninger.getInt("v_filmnr");
             int kinosalnr = visninger.getInt("v_kinosalnr");
-            Date dato = visninger.getDate("v_dato");
-            Date starttid = visninger.getDate("v_starttid");
+            //Date dato = visninger.getDate("v_dato");
             double pris = visninger.getDouble("v_pris");
 
             //Bygg dato objekt for både dato og starttid
             String dato_str = visninger.getString("v_dato") + " " + visninger.getString("v_starttid");
             SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+            Date dato = null;
+
+            try {
+                dato = datoFormat.parse(dato_str);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
 
             Film film = finnFilm(filmnr);
             Kinosal kinosal = finnKinosal(kinosalnr);
-            Visning visning = new Visning(visningsnr, film, kinosal, null,pris);
+            Visning visning = new Visning(visningsnr, film, kinosal, dato,pris);
 
             film.leggTilVisning(visning);
             this.visninger.add(visning);
@@ -227,7 +249,7 @@ public class Kontroll {
             //Legg til plass
             billett.leggTilPlass(plass);
         }
-        sortering = 0;
+        sortering = Sortering.TID;
     }
 
     public ResultSet runDBQuery(String sql) {
@@ -289,13 +311,16 @@ public class Kontroll {
      * Lager en Object-liste over Visninger, som skal vises i tabellen for billettbestilling
      * @return
      */
-    public Object[][] lagVisningTabellListe() {
+    public Object[][] lagVisningTabellListe(Kino kino) {
+        ArrayList<Visning> visninger = filtrerVisninger(kino);
         int rader = visninger.size();
         int teller = 0;
         Object[][] tabellInnhold = new Object[rader][5];
         for(int i=0; i<visninger.size(); i++) {
+
+
             tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
-            tabellInnhold[teller][1] = (visninger.get(i).getDato() + ", " + visninger.get(i).getStartTid());
+            tabellInnhold[teller][1] = visninger.get(i).getStartTid();
             tabellInnhold[teller][2] = visninger.get(i).getKinosal().getKinosalnavn();
             tabellInnhold[teller][3] = visninger.get(i).getPris();
             tabellInnhold[teller][4] = visninger.get(i).getVisningsNr();
@@ -365,7 +390,5 @@ public class Kontroll {
         brukere.add(new Bruker(brukernavn, pin, erPlanlegger));
     }
 
-    public ArrayList<Bruker> getBrukere() {
-        return brukere;
-    }
+
 }

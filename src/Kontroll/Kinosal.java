@@ -50,6 +50,14 @@ public class Kinosal implements Comparable<Kinosal> {
         return this.kinosalnavn;
     }
 
+    public ArrayList<Plass> getPlasser() {
+        return plasser;
+    }
+
+    public void setPlasser(ArrayList<Plass> plasser) {
+        this.plasser = plasser;
+    }
+
     @Override
     public String toString() {
 
@@ -65,6 +73,8 @@ public class Kinosal implements Comparable<Kinosal> {
                 ", plasser=" + plass_liste +
                 '}';
     }
+
+
 
     @Override
     public int compareTo(Kinosal o) {

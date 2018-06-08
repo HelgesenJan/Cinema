@@ -31,9 +31,14 @@ public class Billett implements Comparable<Billett>{
         plasser.add(plassen);
     }
 
+    public boolean harPlass(Plass plass) {
+        return this.plasser.contains(plass);
+    }
+
     public String getBillettkode() {
         return billettkode;
     }
+
 
     public void setBillettkode(String billettkode) {
         this.billettkode = billettkode;

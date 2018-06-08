@@ -1,8 +1,13 @@
 package Kontroll;
 
+import javax.swing.text.html.HTMLDocument;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Visning implements Comparable<Visning> {
 
@@ -12,6 +17,7 @@ public class Visning implements Comparable<Visning> {
     private Date dato;
     private double pris;
 
+    private final static Calendar kalender = Calendar.getInstance();
     private final static Collator kollator = Collator.getInstance();
 
     private ArrayList<Billett> billetter = new ArrayList<>();
@@ -82,9 +88,37 @@ public class Visning implements Comparable<Visning> {
         this.pris = pris;
     }
 
-    public Date getStartTid() {
-        return dato;
+
+
+    public String getStartTid() {
+
+        //Gi kalender dato
+        kalender.setTime(this.dato);
+
+        //Hent ut dag, mnd, tid og minutter
+        int dag =  kalender.get(Calendar.DAY_OF_MONTH);
+        int mnd = kalender.get(Calendar.MONTH);
+        int år = kalender.get(Calendar.YEAR);
+
+        int time = kalender.get(Calendar.HOUR_OF_DAY);
+        int minutter = kalender.get(Calendar.MINUTE);
+
+        return " Kl: " + time + ":" + minutter + " - " + dag + "." + mnd + "." + år;
     }
+
+    public ArrayList<Plass> finnLedigePlasser() {
+        ArrayList<Plass> plasser = kinosal.getPlasser();
+        for(Plass plass:plasser) {
+            for(Billett billett:this.billetter) {
+                if(billett.harPlass(plass)) {
+                    plasser.remove(plass);
+                }
+            }
+        }
+        return plasser;
+    }
+
+
 
     @Override
     public String toString() {
@@ -99,14 +133,21 @@ public class Visning implements Comparable<Visning> {
 
     @Override
     public int compareTo(Visning o) {
-        switch (Kontroll.sortering) {
-            case 0:
+        //Hent ut sortering fra kontroll
+        Sortering sort = Kontroll.sortering;
+        //Detekter at en dummy visning er brukt, bytt til verdi modus for binær søk.
+        if(o.getFilm() == null) {
+            sort = Sortering.VERDI;
+        }
+        switch (sort) {
+            case ALFABETISK:
                 //Sortere alfabetisk
                 return kollator.compare(this.film.getFilmnavn(), o.getFilm().getFilmnavn());
-            case 1:
+            case TID:
                 //Sorter etter tid
                 return this.dato.compareTo(o.getDato());
-            default:
+                //Sortere etter visningsnummer (dummy visning)
+            case VERDI:
                 if(this.visningsNr < o.getVisningsNr()) {
                     return -1;
                 } else if(this.visningsNr > o.getVisningsNr()) {
@@ -114,6 +155,8 @@ public class Visning implements Comparable<Visning> {
                 } else {
                     return 0;
                 }
+            default:
+                return 0;
         }
     }
 }
