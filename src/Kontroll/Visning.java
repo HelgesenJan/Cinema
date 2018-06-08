@@ -59,6 +59,10 @@ public class Visning implements Comparable<Visning> {
         billetter.add(billett);
     }
 
+    public void fjernBillett(Billett billett) {
+        billetter.remove(billett);
+    }
+
     public ArrayList<Billett> getBilletter() {
         return billetter;
     }

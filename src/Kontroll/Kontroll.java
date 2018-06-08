@@ -3,6 +3,9 @@ package Kontroll;
 import com.sun.java.accessibility.util.AccessibilityEventMonitor;
 
 import javax.swing.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.*;
@@ -52,6 +55,36 @@ public class Kontroll {
         }
         */
 
+    }
+
+    public void fjernUbetalteBilletter(Visning visning) throws IOException {
+
+        /*
+            Opprett filer "slettinger.dat" dersom den ikke finnes
+         */
+
+        BufferedWriter fil = new BufferedWriter(new FileWriter("slettinger.dat", true));
+
+        ArrayList<Billett> fjernes = new ArrayList<Billett>();
+
+        //Gå gjennom bilettlista og sjekk om de er betalt
+        for(Billett billett: this.billetter) {
+            if (!billett.isErBetalt() && billett.getVisning().equals(visning)) {
+                //visning.fjernBillett(billett);
+                //billetter.remove(billett);
+                fil.append( billett.toString());
+                fil.newLine();
+
+                fjernes.add(billett);
+                System.out.println(billett.getBillettkode() + " er fjernet.");
+            }
+        }
+        //Fjern billett(er)
+        for(Billett billett: fjernes) {
+            this.billetter.remove(billett);
+        }
+        //Steng fil
+        fil.close();
     }
 
     public void nyBillett(Billett billett) {
