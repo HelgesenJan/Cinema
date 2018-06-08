@@ -1,5 +1,6 @@
 package Kontroll;
 
+import javax.swing.*;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -224,6 +225,19 @@ public class Kontroll {
         sortering = 0;
     }
 
+    public void slettPlass(int verdi) {
+        try {
+            for (int i = 0; i < filmer.size(); i++){
+                filmer.remove(verdi);
+            }
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null, "Kan ikke endre film");
+        }
+
+    }
+
+
+
     public ResultSet runDBQuery(String sql) {
         resultat = null; //Nullstill resultat
         try {
@@ -260,6 +274,8 @@ public class Kontroll {
         return billetter;
     }
 
+
+
     public void opprettDBForbindelse() {
 
         try {
@@ -295,6 +311,40 @@ public class Kontroll {
             tabellInnhold[teller][4] = visninger.get(i).getVisningsNr();
             teller++;
         }
+
+        return tabellInnhold;
+    }
+
+
+    /**
+     * Lager en Object-liste over filmer i visninger, som skal vises i tabellen for filmer i rapportering
+     * @return
+     */
+    public Object[][] lagFilmTabellListe() {
+        int rader = visninger.size();
+        int teller = 0;
+        Object[][] tabellInnhold = new Object[rader][1];
+        for(int i=0; i<visninger.size(); i++) {
+            tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
+            teller++;
+        }
+
+        return tabellInnhold;
+    }
+
+    /**
+     * Lager en Object-liste over statistikker i rapporter
+     */
+
+    public Object[][] lagKinosalTabellListe() {
+        int rader = kinosaler.size();
+        int teller = 0;
+        Object[][] tabellInnhold = new Object[rader][1];
+        for(int i=0; i<kinosaler.size(); i++) {
+            tabellInnhold[teller][0] = kinosaler.get(i).getKinosalnavn();
+            teller++;
+        }
+
         return tabellInnhold;
     }
 
