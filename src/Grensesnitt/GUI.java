@@ -8,7 +8,6 @@ package Grensesnitt;
 
 import Kontroll.*;
 
-import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -20,10 +19,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
-import static javax.swing.JOptionPane.YES_NO_OPTION;
-import static javax.swing.JOptionPane.YES_OPTION;
-import static javax.swing.JOptionPane.showConfirmDialog;
+import static javax.swing.JOptionPane.*;
 
 /**
  *
@@ -31,6 +30,10 @@ import static javax.swing.JOptionPane.showConfirmDialog;
  */
 public class GUI extends javax.swing.JFrame {
     private static Kontroll kontroll = null;
+
+    private Kino _KINO = null;
+    private Billett _BILLETT = null;
+    private Visning _VISNING = null;
 
     /**
      * Creates new form GUI
@@ -49,26 +52,25 @@ public class GUI extends javax.swing.JFrame {
     private void initComponents() {
 
         ticketReservation = new javax.swing.JDialog();
-        reserveDropdownRow = new javax.swing.JComboBox<>();
         reserveDropdownSeat = new javax.swing.JComboBox<>();
         commitReserveTicketOrder = new javax.swing.JButton();
-        reserveAddTicket = new javax.swing.JButton();
+        reserveAddSeat = new javax.swing.JButton();
         fieldReserveTicketPrice = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         reserveMovieTable = new javax.swing.JTable();
-        reserveRemoveTicket = new javax.swing.JButton();
+        reserveRemoveSeat = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         reserveTicketTable = new javax.swing.JTable();
-        fieldReservePriceAverage = new javax.swing.JTextField();
+        fieldReservePriceSum = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         dropdownSort = new javax.swing.JComboBox<>();
         closeTicketReservation = new javax.swing.JButton();
         jLabel22 = new javax.swing.JLabel();
         cinemaChoice = new javax.swing.JComboBox<>();
         jLabel33 = new javax.swing.JLabel();
+        jSeparator6 = new javax.swing.JSeparator();
         login = new javax.swing.JDialog();
         commitLogin = new javax.swing.JButton();
         fieldUsername = new javax.swing.JTextField();
@@ -84,8 +86,6 @@ public class GUI extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel8 = new javax.swing.JLabel();
-        staffDropdownRow = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
         staffDropdownSeat = new javax.swing.JComboBox<>();
         staffAddPlacement = new javax.swing.JButton();
@@ -176,13 +176,6 @@ public class GUI extends javax.swing.JFrame {
         openAttendant = new javax.swing.JButton();
         header = new javax.swing.JLabel();
 
-        reserveDropdownRow.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        reserveDropdownRow.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reserveDropdownRowActionPerformed(evt);
-            }
-        });
-
         reserveDropdownSeat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         reserveDropdownSeat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -197,10 +190,10 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        reserveAddTicket.setText("Legg til");
-        reserveAddTicket.addActionListener(new java.awt.event.ActionListener() {
+        reserveAddSeat.setText("Legg til");
+        reserveAddSeat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reserveAddTicketActionPerformed(evt);
+                reserveAddSeatActionPerformed(evt);
             }
         });
 
@@ -211,15 +204,6 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        reserveMovieTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                reserveMovieTableSelected(e);
-            }
-
-
-        });
-
         reserveMovieTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
                         {null, null, null},
@@ -228,7 +212,7 @@ public class GUI extends javax.swing.JFrame {
                         {null, null, null}
                 },
                 new String [] {
-                        "Film", "Tid", "Sal"
+                        "Film", "Tid", "Sal", "Pris","#"
                 }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -247,10 +231,10 @@ public class GUI extends javax.swing.JFrame {
             reserveMovieTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        reserveRemoveTicket.setText("Fjerne");
-        reserveRemoveTicket.addActionListener(new java.awt.event.ActionListener() {
+        reserveRemoveSeat.setText("Nullstill");
+        reserveRemoveSeat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reserveRemoveTicketActionPerformed(evt);
+                reserveRemoveSeatActionPerformed(evt);
             }
         });
 
@@ -283,20 +267,19 @@ public class GUI extends javax.swing.JFrame {
             reserveTicketTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        fieldReservePriceAverage.setEditable(false);
-        fieldReservePriceAverage.addActionListener(new java.awt.event.ActionListener() {
+        fieldReservePriceSum.setEditable(false);
+        fieldReservePriceSum.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldReservePriceAverageActionPerformed(evt);
+                fieldReservePriceSumActionPerformed(evt);
             }
         });
 
         jLabel10.setText("Sum:");
 
-        jLabel11.setText("Rad:");
-
         jLabel13.setText("Sete:");
 
         dropdownSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alfabetisk", "Tidspunkt" }));
+        dropdownSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tidspunkt", "Alfabetisk" }));
         dropdownSort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dropdownSortActionPerformed(evt);
@@ -312,10 +295,19 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel22.setText("Velg kino:");
 
-        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
+        //cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cinemaChoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cinemaChoiceActionPerformed(evt);
+            }
+        });
+
+        reserveMovieTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(e.getValueIsAdjusting()) {
+                    reserveMovieTableSelected(e);
+                }
             }
         });
 
@@ -326,94 +318,97 @@ public class GUI extends javax.swing.JFrame {
         ticketReservationLayout.setHorizontalGroup(
                 ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(ticketReservationLayout.createSequentialGroup()
+                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(ticketReservationLayout.createSequentialGroup()
+                                                .addContainerGap(823, Short.MAX_VALUE)
+                                                .addComponent(closeTicketReservation))
+                                        .addGroup(ticketReservationLayout.createSequentialGroup()
+                                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(jLabel13)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(reserveDropdownSeat, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(reserveAddSeat, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(17, 17, 17))
+                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(reserveRemoveSeat, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
+                                                                .addComponent(jLabel7)
+                                                                .addGap(18, 18, 18)
+                                                                .addComponent(fieldReserveTicketPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
+                                                                .addGap(53, 53, 53)
+                                                                .addComponent(jLabel10)
+                                                                .addGap(18, 18, 18)
+                                                                .addComponent(fieldReservePriceSum, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
+                                                                .addGap(54, 54, 54)
+                                                                .addComponent(commitReserveTicketOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(40, 40, 40))
+                        .addGroup(ticketReservationLayout.createSequentialGroup()
                                 .addGap(41, 41, 41)
                                 .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel22)
+                                        .addComponent(cinemaChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(46, 46, 46)
+                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(ticketReservationLayout.createSequentialGroup()
-                                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel22)
-                                                        .addComponent(cinemaChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(46, 46, 46)
-                                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
-                                                                .addComponent(jLabel33)
-                                                                .addGap(173, 173, 173)
-                                                                .addComponent(jLabel11)
-                                                                .addGap(58, 58, 58)
-                                                                .addComponent(jLabel13))
-                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
-                                                                .addComponent(dropdownSort, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addGap(274, 274, 274)
-                                                                .addComponent(reserveAddTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(138, 138, 138))))
+                                                .addComponent(jLabel33)
+                                                .addGap(0, 0, Short.MAX_VALUE))
                                         .addGroup(ticketReservationLayout.createSequentialGroup()
-                                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(closeTicketReservation)
-                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
-                                                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(99, 99, 99)
-                                                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(reserveRemoveTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
-                                                                                .addComponent(reserveDropdownRow, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addGap(18, 18, 18)
-                                                                                .addComponent(reserveDropdownSeat, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                                .addGap(18, 18, 18)
-                                                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
-                                                                                .addComponent(jLabel7)
-                                                                                .addGap(18, 18, 18)
-                                                                                .addComponent(fieldReserveTicketPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
-                                                                                .addGap(53, 53, 53)
-                                                                                .addComponent(jLabel10)
-                                                                                .addGap(18, 18, 18)
-                                                                                .addComponent(fieldReservePriceAverage, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
-                                                                                .addGap(54, 54, 54)
-                                                                                .addComponent(commitReserveTicketOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                                .addGap(40, 40, 40))))
+                                                .addComponent(dropdownSort, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGap(486, 486, 486))))
+                        .addComponent(jSeparator6)
         );
         ticketReservationLayout.setVerticalGroup(
                 ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(ticketReservationLayout.createSequentialGroup()
                                 .addGap(41, 41, 41)
-                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jLabel22)
-                                                .addComponent(jLabel33))
-                                        .addComponent(jLabel11)
-                                        .addComponent(jLabel13))
+                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel22)
+                                        .addComponent(jLabel33))
                                 .addGap(3, 3, 3)
                                 .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(cinemaChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(dropdownSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(reserveDropdownRow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addComponent(reserveDropdownSeat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(reserveAddTicket)))
-                                .addGap(38, 38, 38)
+                                                .addComponent(reserveAddSeat)
+                                                .addComponent(jLabel13))
+                                        .addComponent(dropdownSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13)
                                 .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(ticketReservationLayout.createSequentialGroup()
-                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(12, 12, 12)
-                                                .addComponent(reserveRemoveTicket))
                                         .addGroup(ticketReservationLayout.createSequentialGroup()
                                                 .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addGroup(ticketReservationLayout.createSequentialGroup()
-                                                                .addGap(4, 4, 4)
-                                                                .addComponent(jLabel7))
-                                                        .addComponent(fieldReserveTicketPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(12, 12, 12)
-                                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(jLabel10)
-                                                        .addComponent(fieldReservePriceAverage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(18, 18, 18)
-                                                .addComponent(commitReserveTicketOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(18, 18, 18)
-                                .addComponent(closeTicketReservation)
-                                .addContainerGap(27, Short.MAX_VALUE))
+                                                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addGroup(ticketReservationLayout.createSequentialGroup()
+                                                                                .addGap(4, 4, 4)
+                                                                                .addComponent(jLabel7))
+                                                                        .addComponent(fieldReserveTicketPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addGap(12, 12, 12)
+                                                                .addGroup(ticketReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                        .addComponent(jLabel10)
+                                                                        .addComponent(fieldReservePriceSum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addGap(18, 18, 18)
+                                                                .addComponent(commitReserveTicketOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(21, 21, 21)
+                                                .addComponent(closeTicketReservation))
+                                        .addGroup(ticketReservationLayout.createSequentialGroup()
+                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(reserveRemoveSeat)))
+                                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         login.setTitle("Pålogging");
@@ -534,15 +529,6 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel6.setText("Direkte bestilling");
 
-        jLabel8.setText("Rad:");
-
-        staffDropdownRow.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
-        staffDropdownRow.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                staffDropdownRowActionPerformed(evt);
-            }
-        });
-
         jLabel14.setText("Sete:");
 
         staffDropdownSeat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
@@ -645,52 +631,52 @@ public class GUI extends javax.swing.JFrame {
         cinemaStaffLayout.setHorizontalGroup(
                 cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                .addContainerGap(23, Short.MAX_VALUE)
+                                .addGap(14, 14, 14)
+                                .addComponent(jLabel1))
+                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(jLabel5)
+                                .addGap(506, 506, 506)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(141, 141, 141)
+                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 1040, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                .addGap(576, 576, 576)
+                                .addComponent(jLabel14)
+                                .addGap(5, 5, 5)
+                                .addComponent(staffDropdownSeat, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4)
+                                .addComponent(staffAddPlacement))
+                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45)
                                 .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 760, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                .addComponent(removeChosenTicket)
-                                                .addGap(524, 524, 524)
-                                                .addComponent(staffClose))
+                                                .addComponent(jLabel15)
+                                                .addGap(7, 7, 7)
+                                                .addComponent(staffPriceAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(88, 88, 88)
+                                                .addComponent(staffRemovePlacement))
+                                        .addComponent(staffConfirmPlacement))
+                                .addGap(18, 18, 18)
+                                .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(staffInsertTicketCode, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                .addGap(2, 2, 2)
-                                                .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel1)
-                                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                                .addComponent(jLabel5)
-                                                                .addGap(219, 219, 219)
-                                                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(131, 131, 131)
-                                                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(12, 12, 12)
-                                                                .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                                                .addComponent(jLabel8)
-                                                                                .addGap(14, 14, 14)
-                                                                                .addComponent(staffDropdownRow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addGap(9, 9, 9)
-                                                                                .addComponent(jLabel14)
-                                                                                .addGap(7, 7, 7)
-                                                                                .addComponent(staffDropdownSeat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addGap(4, 4, 4)
-                                                                                .addComponent(staffAddPlacement))
-                                                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                                                .addComponent(jLabel15)
-                                                                                .addGap(7, 7, 7)
-                                                                                .addComponent(staffPriceAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                                .addComponent(staffRemovePlacement))
-                                                                        .addComponent(staffConfirmPlacement))
-                                                                .addGap(18, 18, 18)
-                                                                .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(staffInsertTicketCode, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                                                .addGap(115, 115, 115)
-                                                                                .addComponent(staffConfirmPayment))))))))
+                                                .addGap(115, 115, 115)
+                                                .addComponent(staffConfirmPayment))))
+                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1020, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(removeChosenTicket)
+                                .addGap(788, 788, 788)
+                                .addComponent(staffClose))
         );
         cinemaStaffLayout.setVerticalGroup(
                 cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -700,41 +686,39 @@ public class GUI extends javax.swing.JFrame {
                                 .addGap(35, 35, 35)
                                 .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel5)
-                                        .addComponent(jLabel6)
-                                        .addComponent(jLabel16))
-                                .addGap(4, 4, 4)
+                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                                .addGap(2, 2, 2)
+                                                .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel6)
+                                                        .addComponent(jLabel16))))
+                                .addGap(2, 2, 2)
                                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(1, 1, 1)
                                 .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                                .addGap(4, 4, 4)
-                                                                .addComponent(jLabel8))
-                                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                                .addGap(1, 1, 1)
-                                                                .addComponent(staffDropdownRow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                                .addGap(4, 4, 4)
-                                                                .addComponent(jLabel14))
-                                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                                .addGap(1, 1, 1)
-                                                                .addComponent(staffDropdownSeat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addComponent(staffAddPlacement))
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(4, 4, 4)
+                                                .addComponent(jLabel14))
+                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                                .addGap(1, 1, 1)
+                                                .addComponent(staffDropdownSeat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(staffAddPlacement))
+                                .addGap(7, 7, 7)
+                                .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(9, 9, 9)
                                                 .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addGroup(cinemaStaffLayout.createSequentialGroup()
                                                                 .addGap(3, 3, 3)
                                                                 .addComponent(jLabel15))
-                                                        .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                .addComponent(staffPriceAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addComponent(staffRemovePlacement)))
+                                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                                                .addGap(1, 1, 1)
+                                                                .addComponent(staffPriceAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(staffRemovePlacement))
                                                 .addGap(11, 11, 11)
                                                 .addComponent(staffConfirmPlacement))
                                         .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                .addGap(32, 32, 32)
                                                 .addComponent(staffInsertTicketCode, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(7, 7, 7)
                                                 .addComponent(staffConfirmPayment)))
@@ -742,8 +726,7 @@ public class GUI extends javax.swing.JFrame {
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(removeChosenTicket)
-                                        .addComponent(staffClose))
-                                .addContainerGap(35, Short.MAX_VALUE))
+                                        .addComponent(staffClose)))
         );
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
@@ -1092,6 +1075,7 @@ public class GUI extends javax.swing.JFrame {
                                                         .addComponent(jLabel23))
                                                 .addContainerGap())
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirmationLayout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(jLabel32)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(confirmWindowClose)
@@ -1517,6 +1501,86 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
+    public void reserveMovieTableSelected(ListSelectionEvent e) {
+
+        commitReserveTicketOrder.setEnabled(false);
+
+        _BILLETT = null;
+        _VISNING = null;
+
+        reserveDropdownSeat.removeAllItems();
+        reserveTicketTable.removeAll();
+
+        fieldReserveTicketPrice.setText("");
+        fieldReservePriceSum.setText("");
+        reserveTicketTable.removeAll();
+
+        //Slett setevalg
+        DefaultTableModel model = (DefaultTableModel) reserveTicketTable.getModel();
+        for (int i = model.getRowCount() - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+
+
+        int visningsnr = -1;
+        try {
+            visningsnr = (int) reserveMovieTable.getValueAt(reserveMovieTable.getSelectedRow(), 4);
+        }catch(ArrayIndexOutOfBoundsException ex) {
+            reserveMovieTable.clearSelection();
+        }
+
+        if(visningsnr != -1) {
+
+            reserveDropdownSeat.removeAllItems();
+            System.out.println("Finn visning...");
+
+            _VISNING  = kontroll.finnVisning(visningsnr);
+            _BILLETT = new Billett(kontroll.genererBillettkode(),_VISNING, false);
+
+            //Sett pris...
+            fieldReserveTicketPrice.setText(_VISNING.getPris() + "kr");
+
+            for (Plass plass:_VISNING.finnLedigePlasser()) {
+                reserveDropdownSeat.addItem(plass.getRadnr() + ", " + plass.getSetenr());
+            }
+        }
+    }
+
+
+    private void reserveAddSeatActionPerformed(ActionEvent evt) {
+
+        String[] plass_str = reserveDropdownSeat.getSelectedItem().toString().split(",");
+
+        //Slett sete i valg
+        reserveDropdownSeat.removeItemAt(reserveDropdownSeat.getSelectedIndex());
+        reserveDropdownSeat.setSelectedIndex(0);
+
+        //Trim ut radnr og setenr
+        int radnr = Integer.parseInt(plass_str[0].trim());
+        int setenr = Integer.parseInt(plass_str[1].trim());
+
+        //Legg til sete
+        DefaultTableModel model = (DefaultTableModel) reserveTicketTable.getModel();
+        model.addRow(new Object[]{radnr, setenr, model.getRowCount() +1});
+        //Oppdater totalsum
+        fieldReservePriceSum.setText(model.getRowCount() * _VISNING.getPris() + "kr");
+
+        Plass plass = _VISNING.getKinosal().finnPlass(radnr,setenr);
+        _BILLETT.leggTilPlass(plass);
+
+        commitReserveTicketOrder.setEnabled(true);
+
+    }
+
+    private void reserveRemoveSeatActionPerformed(ActionEvent evt) {
+        reserveMovieTableSelected(null);
+    }
+
+    private void fieldReservePriceSumActionPerformed(ActionEvent evt) {
+
+    }
+
+
 
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1544,7 +1608,10 @@ public class GUI extends javax.swing.JFrame {
 
     private void fyllTabell() {
 
-        Kino kino = kontroll.finnKino((String) cinemaChoice.getSelectedItem());
+        commitReserveTicketOrder.setEnabled(false);
+
+        _KINO = null;
+        _KINO = kontroll.finnKino((String) cinemaChoice.getSelectedItem());
         String sort = (String) dropdownSort.getSelectedItem();
 
         if(sort.equals("Alfabetisk")) {
@@ -1555,11 +1622,12 @@ public class GUI extends javax.swing.JFrame {
 
         System.out.println(sort);
 
-        Object[][] tabellInnhold = kontroll.lagVisningTabellListe(kino);
+        Object[][] tabellInnhold = kontroll.lagVisningTabellListe(_KINO);
 
         Object[] kolonnenavn = {"Film", "Tid", "Sal", "Pris", "#"};
         reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
         staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+
     }
 
     /**
@@ -1570,6 +1638,13 @@ public class GUI extends javax.swing.JFrame {
         Object[][] tabellInnhold = kontroll.lagFilmTabellListe();
         Object[] kolonnenavn = {"Film"};
         reportMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+    }
+
+    private void fyllRapportVisningsTabell(int i) {
+        Object[][] tabellInnhold = kontroll.statistikkFilm(i);
+        Object[] kolonnenavn = {"Antall", "% av kapasitet", "Ikke betalt", "Visningsdato"};
+        reportStatisticsTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+
     }
 
     private void fyllKinosalTabell(){
@@ -1629,9 +1704,27 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void commitReserveTicketOrderActionPerformed(java.awt.event.ActionEvent evt) {
+        titleTxt.setText(_VISNING.getFilm().getFilmnavn());
+
+
+
+        dateTxt.setText(_VISNING.getDagMnd());
+        timeTxt.setText(_VISNING.getStartKlokkeslett());
+        seatCountTxt.setText(reserveTicketTable.getRowCount() + "");
+
+        String plasser  ="";
+        for(Plass plass:_BILLETT.getPlasser()) {
+            plasser += "Rad: " + plass.getRadnr() + ", Sete:" + plass.getSetenr() + " - ";
+        }
+
+        seatsTxt.setText(plasser);
+        totalTxt.setText(reserveTicketTable.getRowCount() * _VISNING.getPris() + "kr");
+        ticketCodeTxt.setText(_BILLETT.getBillettkode());
+
+        //Vis vindu
+        confirmWindowClose.setEnabled(false);
         confirmation.setVisible(true);
         confirmation.pack();
-        ticketReservation.setVisible(false);
     }
 
     private void reserveRemoveTicketActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1701,15 +1794,20 @@ public class GUI extends javax.swing.JFrame {
 
     private void reportMovieTableMouseClicked(java.awt.event.MouseEvent evt) {
 
-        int indeks = reportMovieTable.getSelectedRow();
-        String film = reportMovieTable.getValueAt(indeks, 0).toString();
-        for(int i = 0; i < kontroll.getFilmer().size(); i++){
-            if(film == kontroll.getFilmer().get(i).getFilmnavn()){
-                fyllKinosalTabell();
+        try {
+            int indeks = reportMovieTable.getSelectedRow();
+            String film = reportMovieTable.getValueAt(indeks, 0).toString();
+            for(int i = 0; i < kontroll.getFilmer().size(); i++){
+                if(film == kontroll.getFilmer().get(i).getFilmnavn()){
+                    fyllRapportVisningsTabell(i);
+                }
             }
+        } catch(Exception e) {
         }
 
     }
+
+
 
     private void reportCloseMouseClicked(java.awt.event.MouseEvent evt) {
 
@@ -1756,7 +1854,10 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void confirmConfirmWindowActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        //TODO:LEGG TIL BILLETT
+
+        confirmConfirmWindow.setEnabled(false);
+        confirmWindowClose.setEnabled(true);
     }
 
     private void timeTxtActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1764,7 +1865,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void cancelConfirmationWindowActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        confirmation.setVisible(false);
     }
 
     private void adminMovieTxtActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1832,6 +1933,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void confirmWindowCloseActionPerformed(java.awt.event.ActionEvent evt) {
+        reserveMovieTableSelected(null); //Nullstill setevalg
         confirmation.setVisible(false);
     }
 
@@ -1844,6 +1946,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void cinemaChoiceActionPerformed(java.awt.event.ActionEvent evt) {
+        reserveMovieTable.clearSelection();
         fyllTabell();
     }
 
@@ -1875,7 +1978,6 @@ public class GUI extends javax.swing.JFrame {
         }catch(Exception e){
 
         }
-
     }
 
     public void hentPlass(){
@@ -1936,6 +2038,23 @@ public class GUI extends javax.swing.JFrame {
         fyllTabell();
     }
 
+    public void opprettFilm() {
+        int filmNr = kontroll.getFilmer().size();
+        String filmNavn = adminMovieTxt.getText();
+        boolean funnet = false;
+        for (int i = 0; i < kontroll.getFilmer().size(); i++) {
+            if (filmNavn.equals(kontroll.getFilmer().get(i).getFilmnavn())) {
+                System.out.println("Filmen finnes fra før");
+                funnet = true;
+            }
+        }
+        if (funnet == false) {
+            filmNr++;
+            kontroll.leggTilFilm(filmNr, filmNavn);
+            System.out.println(filmNr + ", " + filmNavn + " er lagt til");
+        }
+        System.out.println(kontroll.getFilmer());
+    }
 
 
     public void opprettFilmGUI() {
@@ -2065,15 +2184,12 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel editLabel;
     private javax.swing.JButton exit;
     private javax.swing.JTextField fieldPassword;
-    private javax.swing.JTextField fieldReservePriceAverage;
+    private javax.swing.JTextField fieldReservePriceSum;
     private javax.swing.JTextField fieldReserveTicketPrice;
     private javax.swing.JTextField fieldUsername;
     private javax.swing.JLabel header;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -2116,6 +2232,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JDialog login;
     private javax.swing.JButton loginClose;
     private javax.swing.JLabel movieLabel;
@@ -2134,20 +2251,19 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTable reportMovieTable;
     private javax.swing.JTable reportPercentTable;
     private javax.swing.JTable reportStatisticsTable;
-    private javax.swing.JButton reserveAddTicket;
-    private javax.swing.JComboBox<String> reserveDropdownRow;
+    private javax.swing.JButton reserveAddSeat;
     private javax.swing.JComboBox<String> reserveDropdownSeat;
     private javax.swing.JTable reserveMovieTable;
-    private javax.swing.JButton reserveRemoveTicket;
+    private javax.swing.JButton reserveRemoveSeat;
     private javax.swing.JTable reserveTicketTable;
     private javax.swing.JTextField seatCountTxt;
     private javax.swing.JTextField seatsTxt;
     private javax.swing.JButton staffAddPlacement;
     private javax.swing.JTable staffAddPlacementTable;
+    private javax.swing.JComboBox<String> staffCinemaChoice;
     private javax.swing.JButton staffClose;
     private javax.swing.JButton staffConfirmPayment;
     private javax.swing.JButton staffConfirmPlacement;
-    private javax.swing.JComboBox<String> staffDropdownRow;
     private javax.swing.JComboBox<String> staffDropdownSeat;
     private javax.swing.JTextField staffInsertTicketCode;
     private javax.swing.JTable staffMovieTable;
@@ -2162,5 +2278,4 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel titleLabel;
     private javax.swing.JTextField titleTxt;
     private javax.swing.JTextField totalTxt;
-    // End of variables declaration
 }

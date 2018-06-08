@@ -33,6 +33,15 @@ public class Kinosal implements Comparable<Kinosal> {
         return null;
     }
 
+    public int getAntallPlasser() {
+        int antall = 0;
+
+        for(int i=0; i<plasser.size(); i++) {
+            antall++;
+        }
+        return antall;
+    }
+
     public void leggTilPlass(int radnr, int setenr) {
         plasser.add(new Plass(radnr,setenr, this));
     }
@@ -42,7 +51,6 @@ public class Kinosal implements Comparable<Kinosal> {
         return this.kinosalnr;
     }
 
-
     public Kino getKino() {
         return this.kino;
     }
@@ -51,12 +59,13 @@ public class Kinosal implements Comparable<Kinosal> {
         return this.kinosalnavn;
     }
 
-    public ArrayList<Plass> getPlasser() {
-        return plasser;
-    }
 
     public void setPlasser(ArrayList<Plass> plasser) {
         this.plasser = plasser;
+    }
+
+    public ArrayList<Plass> getPlasser() {
+        return this.plasser;
     }
 
     @Override

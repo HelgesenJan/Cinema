@@ -24,6 +24,18 @@ public class Bruker {
         return erPlanlegger;
     }
 
+    public String getBrukernavn() {
+        return brukernavn;
+    }
+
+    public int getPin() {
+        return pin;
+    }
+
+    public boolean isErPlanlegger() {
+        return erPlanlegger;
+    }
+
     @Override
     public String toString() {
         return "Bruker{" +
