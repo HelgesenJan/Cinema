@@ -143,9 +143,17 @@ public class Visning implements Comparable<Visning> {
     }
 
     public ArrayList<Plass> finnLedigePlasser() {
+
         ArrayList<Plass> plasser = kinosal.getPlasser();
-        for(Plass plass:plasser) {
-            for(Billett billett:this.billetter) {
+        ArrayList<Billett> billetter = this.billetter;
+
+        Iterator itr_plass = plasser.iterator();
+        Iterator itr_billett = billetter.iterator();
+
+        while(itr_plass.hasNext()) {
+            Plass plass = (Plass) itr_plass.next();
+            while (itr_billett.hasNext()) {
+                Billett billett = (Billett) itr_billett.next();
                 if(billett.harPlass(plass)) {
                     plasser.remove(plass);
                 }

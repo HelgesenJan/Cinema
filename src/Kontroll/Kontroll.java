@@ -1,5 +1,7 @@
 package Kontroll;
 
+import com.sun.java.accessibility.util.AccessibilityEventMonitor;
+
 import javax.swing.*;
 import java.sql.*;
 import java.text.ParseException;
@@ -53,6 +55,9 @@ public class Kontroll {
     public void nyBillett(Billett billett) {
         billett.getVisning().leggTilBillett(billett);
         billetter.add(billett);
+        for(Billett b:this.billetter) {
+            System.out.println(b.toString());
+        }
     }
 
 
