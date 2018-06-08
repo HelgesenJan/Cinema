@@ -1674,9 +1674,6 @@ public class GUI extends javax.swing.JFrame {
 
     }
 
-
-
-
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {
         int svar = showConfirmDialog(GUI.this,
                 "Vil du lagre data før du avslutter?",
