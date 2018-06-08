@@ -2112,42 +2112,41 @@ public class GUI extends javax.swing.JFrame {
         String tekst = adminCinemaDropdown.getSelectedItem().toString();
         Kino kino = kontroll.finnKino(tekst);
 
-        if(kino.equals(tekst)){
-            for (int i = 0; i < kontroll.getKinosaler().size(); i++) {
-                adminTheaterDropdown.addItem(kontroll.getKinosaler().get(i).getKinosalnavn());
-                String kinosal = adminTheaterDropdown.getSelectedItem().toString();
-                if (kontroll.getKinosaler().get(i).getKinosalnavn() == kinosal) {
-                    Kinosal riktigKinosal = kontroll.finnKinosal(i);
+        for (int i = 0; i < kontroll.getKinosaler().size(); i++) {
+            adminTheaterDropdown.addItem(kontroll.getKinosaler().get(i).getKinosalnavn());
+            String kinosal = adminTheaterDropdown.getSelectedItem().toString();
+            if (kontroll.getKinosaler().get(i).getKinosalnavn() == kinosal) {
+                Kinosal riktigKinosal = kontroll.finnKinosal(i);
 
-                    int visningsNr = kontroll.visningsNrIncrement();
-
-
-                    //Bygg dato objekt for dato
-                    String datoen = adminDateDropdown.getSelectedItem().toString();
-                    SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-                    Date dato = null;
-
-                    try {
-                        dato = datoFormat.parse(datoen);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                int visningsNr = kontroll.visningsNrIncrement();
 
 
-                    int pris = Integer.parseInt(adminPriceTxt.getSelectedText());
+                //Bygg dato objekt for dato
+                String datoen = adminDateDropdown.getSelectedItem().toString();
+                SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                    String tittel = adminTitleDropdown.getSelectedItem().toString();
-                    for (int n = 0; i < kontroll.getKinosaler().size(); n++) {
-                        if (kontroll.getFilmer().get(n).getFilmnavn() == tittel) {
-                            Film riktigFilmtittel = kontroll.finnFilm(n);
-                            kontroll.leggTilVisning(visningsNr, riktigFilmtittel, riktigKinosal, dato, pris);
-                        }
+                Date dato = null;
+
+                try {
+                    dato = datoFormat.parse(datoen);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+                int pris = Integer.parseInt(adminPriceTxt.getSelectedText());
+
+                String tittel = adminTitleDropdown.getSelectedItem().toString();
+                for (int n = 0; i < kontroll.getKinosaler().size(); n++) {
+                    if (kontroll.getFilmer().get(n).getFilmnavn() == tittel) {
+                        Film riktigFilmtittel = kontroll.finnFilm(n);
+                        kontroll.leggTilVisning(visningsNr, riktigFilmtittel, riktigKinosal, dato, pris);
                     }
                 }
             }
         }
     }
+
 
     /**
      * @param args the command line arguments
@@ -2319,4 +2318,5 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel titleLabel;
     private javax.swing.JTextField titleTxt;
     private javax.swing.JTextField totalTxt;
+    // End of variables declaration
 }
