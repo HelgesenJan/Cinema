@@ -3,6 +3,8 @@ package Kontroll;
 import com.sun.java.accessibility.util.AccessibilityEventMonitor;
 
 import javax.swing.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -86,6 +88,13 @@ public class Kontroll {
             return null;
         }
         return filmer.get(indeks);
+    }
+
+    private class dropdownHaandtering implements ItemListener {
+        @Override
+        public void itemStateChanged(ItemEvent event){
+
+        }
     }
 
     public Visning finnVisning(int visningsnr) {

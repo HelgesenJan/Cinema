@@ -8,7 +8,7 @@ package Grensesnitt;
 
 import Kontroll.*;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.util.stream.Collectors;
 
 import static javax.swing.JOptionPane.*;
 
@@ -1188,9 +1189,15 @@ public class GUI extends javax.swing.JFrame {
         jScrollPane9.setViewportView(adminMovieTable);
 
         adminCinemaDropdown.setModel(new javax.swing.DefaultComboBoxModel<>());
+
         adminCinemaDropdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adminCinemaDropdownActionPerformed(evt);
+            }
+        });
+        adminCinemaDropdown.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                adminCinemaDropdownItemStateChanged(evt);
             }
         });
 
@@ -1226,6 +1233,11 @@ public class GUI extends javax.swing.JFrame {
         movieLabel.setText("Tittel");
 
         adminTheaterDropdown.setModel(new javax.swing.DefaultComboBoxModel<>());
+        adminTheaterDropdown.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                adminTheaterDropdownItemStateChanged(evt);
+            }
+        });
         adminTheaterDropdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adminTheaterDropdownActionPerformed(evt);
@@ -1269,6 +1281,11 @@ public class GUI extends javax.swing.JFrame {
         priceLabel.setText("Pris");
 
         adminTitleDropdown.setModel(new javax.swing.DefaultComboBoxModel<>());
+        adminTitleDropdown.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                adminTitleDropdownItemStateChanged(evt);
+            }
+        });
         adminTitleDropdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adminTitleDropdownActionPerformed(evt);
@@ -1919,13 +1936,19 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void adminAddActionPerformed(java.awt.event.ActionEvent evt) {
-        opprettVisningGUI();
+
     }
 
     private void adminButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        adminSettings.setVisible(true);
-        adminSettings.pack();
-        fyllTabell();
+        try{
+            adminSettings.setVisible(true);
+            adminSettings.pack();
+            hentKino();
+        }catch(Exception e){
+
+        }
+
+
     }
 
     private void adminAddMovieActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1933,11 +1956,12 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void adminCinemaDropdownActionPerformed(java.awt.event.ActionEvent evt) {
-        Object kino = adminCinemaDropdown.getSelectedItem();
+
     }
 
+
     private void adminTheaterDropdownActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
     }
 
     private void adminPriceTxtActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1997,6 +2021,33 @@ public class GUI extends javax.swing.JFrame {
         fyllTabell();
     }
 
+    private void adminCinemaDropdownItemStateChanged(java.awt.event.ItemEvent evt) {
+        if (evt.getSource() == adminCinemaDropdown){
+            for (int i = 0; i < kontroll.getKinoer().size(); i++) {
+                System.out.println(kontroll.getKinoer().get(i).getKinonavn());
+                System.out.println(kontroll.getKinoer().get(i).getKinonavn());
+                if (adminCinemaDropdown.getSelectedItem().equals(kontroll.getKinoer().get(i).getKinonavn())){
+                    adminTheaterDropdown.removeAllItems();
+                    for (int n = 0; n < kontroll.getKinoer().get(i).getKinosaler().size(); n++) {
+                        System.out.println(kontroll.getKinoer().get(i).getKinosaler().get(n).getKinosalnavn());
+                        adminTheaterDropdown.addItem(kontroll.getKinoer().get(i).getKinosaler().get(n).getKinosalnavn());
+                    }
+
+                }
+            }
+        }
+    }
+
+
+
+    private void adminTheaterDropdownItemStateChanged(java.awt.event.ItemEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void adminTitleDropdownItemStateChanged(java.awt.event.ItemEvent evt) {
+        // TODO add your handling code here:
+    }
+
 
 
     private void reportStatisticsTableMouseClicked(java.awt.event.MouseEvent evt) {
@@ -2008,70 +2059,42 @@ public class GUI extends javax.swing.JFrame {
      */
 
     public void hentKino() {
-        try{
-            for (int i = 0; i < kontroll.getKinoer().size(); i++){
-                adminCinemaDropdown.addItem(kontroll.getKinoer().get(i).getKinonavn());
-                cinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
-                staffCinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
-            }
-
-        }catch(Exception e){
-
+        for (int i = 0; i < kontroll.getKinoer().size(); i++) {
+            System.out.println(kontroll.getKinoer().get(i).getKinonavn());
+            adminCinemaDropdown.addItem(kontroll.getKinoer().get(i).getKinonavn());
         }
     }
 
 
     public void hentPlass(){
-        try{
-            for (int i = 0; i < kontroll.getKinosaler().size(); i++){
-                cinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
-            }
-        }
-        catch(Exception e){
-
+        for (int i = 0; i < kontroll.getKinosaler().size(); i++){
+            cinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
         }
     }
 
-    public void hentSal(){
-        try{
-            for(int n = 0; n < kontroll.getKinoer().size(); n++){
-                for(int i = 0; i < kontroll.getKinosaler().size(); i++){
-                    if(kontroll.getKinosaler().get(i).getKinosalnavn().equals(kontroll.getKinoer().get(n).getKinosaler().get(i).getKinosalnavn()))
-                        adminTheaterDropdown.addItem(kontroll.getKinosaler().get(i).getKinosalnavn());
-                }
-
-            }
-        }catch(Exception e){
-
-        }
-
-    }
+//    public void hentSal(){
+//        for(int n = 0; n < kontroll.getKinoer().size(); n++){
+//            for(int i = 0; i < kontroll.getKinosaler().size(); i++){
+//                if(kontroll.getKinosaler().get(i).getKinosalnavn().equals(kontroll.getKinoer().get(n).getKinosaler().get(i).getKinosalnavn()))
+//                    adminTheaterDropdown.addItem(kontroll.getKinosaler().get(i).getKinosalnavn());
+//            }
+//        }
+//    }
 
     public void hentTittel(){
-        try{
-            for(int i = 0; i < kontroll.getKinosaler().size(); i++){
-                adminTitleDropdown.addItem(kontroll.getFilmer().get(i).getFilmnavn());
-            }
-        }catch(Exception e){
-
+        for(int i = 0; i < kontroll.getKinosaler().size(); i++){
+            adminTitleDropdown.addItem(kontroll.getFilmer().get(i).getFilmnavn());
         }
-
     }
 
     public void hentDato(){
-        try{
-            for(int i = 0; i < kontroll.getVisninger().size(); i++){
-                Date datoen = kontroll.getVisninger().get(i).getDato();
-                SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String stringDato = datoFormat.format(datoen);
-                adminDateDropdown.addItem(stringDato);
-            }
-        }catch(Exception e){
-
+        for(int i = 0; i < kontroll.getVisninger().size(); i++){
+            Date datoen = kontroll.getVisninger().get(i).getDato();
+            SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String stringDato = datoFormat.format(datoen);
+            adminDateDropdown.addItem(stringDato);
         }
-
     }
-
 
     public void slettPlassGUI(){
         int verdi = staffMovieTable.getSelectedRow();
@@ -2108,44 +2131,46 @@ public class GUI extends javax.swing.JFrame {
 
     }
 
-    public void opprettVisningGUI(){
-        String tekst = adminCinemaDropdown.getSelectedItem().toString();
-        Kino kino = kontroll.finnKino(tekst);
-
-        for (int i = 0; i < kontroll.getKinosaler().size(); i++) {
-            adminTheaterDropdown.addItem(kontroll.getKinosaler().get(i).getKinosalnavn());
-            String kinosal = adminTheaterDropdown.getSelectedItem().toString();
-            if (kontroll.getKinosaler().get(i).getKinosalnavn() == kinosal) {
-                Kinosal riktigKinosal = kontroll.finnKinosal(i);
-
-                int visningsNr = kontroll.visningsNrIncrement();
 
 
-                //Bygg dato objekt for dato
-                String datoen = adminDateDropdown.getSelectedItem().toString();
-                SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                Date dato = null;
-
-                try {
-                    dato = datoFormat.parse(datoen);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-
-                int pris = Integer.parseInt(adminPriceTxt.getSelectedText());
-
-                String tittel = adminTitleDropdown.getSelectedItem().toString();
-                for (int n = 0; i < kontroll.getKinosaler().size(); n++) {
-                    if (kontroll.getFilmer().get(n).getFilmnavn() == tittel) {
-                        Film riktigFilmtittel = kontroll.finnFilm(n);
-                        kontroll.leggTilVisning(visningsNr, riktigFilmtittel, riktigKinosal, dato, pris);
-                    }
-                }
-            }
-        }
-    }
+//    public void opprettVisningGUI(){
+//
+//
+//        for (int i = 0; i < kontroll.getKinosaler().size(); i++) {
+//            adminTheaterDropdown.addItem(kontroll.getKinosaler().get(i).getKinosalnavn());
+//            String kinosal = adminTheaterDropdown.getSelectedItem().toString();
+//            if (kontroll.getKinosaler().get(i).getKinosalnavn() == kinosal) {
+//                Kinosal riktigKinosal = kontroll.finnKinosal(i);
+//
+//                int visningsNr = kontroll.visningsNrIncrement();
+//
+//
+//                //Bygg dato objekt for dato
+//                String datoen = adminDateDropdown.getSelectedItem().toString();
+//                SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//
+//                Date dato = null;
+//
+//                try {
+//                    dato = datoFormat.parse(datoen);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//                int pris = Integer.parseInt(adminPriceTxt.getSelectedText());
+//
+//                String tittel = adminTitleDropdown.getSelectedItem().toString();
+//                for (int n = 0; i < kontroll.getKinosaler().size(); n++) {
+//                    if (kontroll.getFilmer().get(n).getFilmnavn() == tittel) {
+//                        Film riktigFilmtittel = kontroll.finnFilm(n);
+//                        kontroll.leggTilVisning(visningsNr, riktigFilmtittel, riktigKinosal, dato, pris);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
     /**
@@ -2184,10 +2209,7 @@ public class GUI extends javax.swing.JFrame {
                 GUI gui = new GUI();
 
                 gui.setVisible(true);
-                gui.hentKino();
-                gui.hentDato();
-                gui.hentSal();
-                gui.hentTittel();
+
 
     }
 
