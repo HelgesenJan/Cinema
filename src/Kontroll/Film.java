@@ -32,6 +32,11 @@ public class Film implements Comparable<Film>{
      //   visninger.add(new Visning(visningsNr, filmen, kinosalen, dato, startTid, pris));
 //    }
 
+    public ArrayList<Visning> getVisninger() {
+        return visninger;
+    }
+
+
     public void leggTilVisning(Visning visning) {
         visninger.add(visning);
     }
