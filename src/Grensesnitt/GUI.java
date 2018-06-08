@@ -15,15 +15,13 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
 
 import static javax.swing.JOptionPane.*;
-import java.util.ArrayList;
-import static javax.swing.JOptionPane.*;
 
 /**
  *
  * @author Jan Helge
  */
 public class GUI extends javax.swing.JFrame {
-    Kontroll kontroll =  Kontroll.getInstance();
+    private static Kontroll kontroll = null;
 
     /**
      * Creates new form GUI
@@ -289,7 +287,7 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel13.setText("Sete:");
 
-        dropdownSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alfabetisk", "Tidspunkt"}));
+        dropdownSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         dropdownSort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dropdownSortActionPerformed(evt);
@@ -306,8 +304,6 @@ public class GUI extends javax.swing.JFrame {
         jLabel22.setText("Velg kino:");
 
         cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
-        cinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>());
-
         cinemaChoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cinemaChoiceActionPerformed(evt);
@@ -810,6 +806,11 @@ public class GUI extends javax.swing.JFrame {
             }
         });
         reportStatisticsTable.getTableHeader().setReorderingAllowed(false);
+        reportStatisticsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportStatisticsTableMouseClicked(evt);
+            }
+        });
         jScrollPane6.setViewportView(reportStatisticsTable);
         if (reportStatisticsTable.getColumnModel().getColumnCount() > 0) {
             reportStatisticsTable.getColumnModel().getColumn(0).setResizable(false);
@@ -1082,7 +1083,6 @@ public class GUI extends javax.swing.JFrame {
                                                         .addComponent(jLabel23))
                                                 .addContainerGap())
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirmationLayout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(jLabel32)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(confirmWindowClose)
@@ -1509,6 +1509,7 @@ public class GUI extends javax.swing.JFrame {
     }// </editor-fold>
 
 
+
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {
         int svar = showConfirmDialog(GUI.this,
                 "Vil du lagre data før du avslutter?",
@@ -1552,6 +1553,22 @@ public class GUI extends javax.swing.JFrame {
         staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
 
+    /**
+     * Vindu for rapporter
+     */
+
+    private void fyllRapportTabell() {
+        Object[][] tabellInnhold = kontroll.lagFilmTabellListe();
+        Object[] kolonnenavn = {"Film"};
+        reportMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+    }
+
+    private void fyllKinosalTabell(){
+        Object[][] tabellInnhold = kontroll.lagKinosalTabellListe();
+        Object[] kolonnenavn = {"Kinosal"};
+        reportCinemaTheater.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+    }
+
 
     private void openAdminActionPerformed(java.awt.event.ActionEvent evt) {
         login.setVisible(true);
@@ -1586,7 +1603,8 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void removeChosenTicketActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        slettPlassGUI();
+
     }
 
     private void staffConfirmPaymentActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1673,7 +1691,15 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void reportMovieTableMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
+
+        int indeks = reportMovieTable.getSelectedRow();
+        String film = reportMovieTable.getValueAt(indeks, 0).toString();
+        for(int i = 0; i < kontroll.getFilmer().size(); i++){
+            if(film == kontroll.getFilmer().get(i).getFilmnavn()){
+                fyllKinosalTabell();
+            }
+        }
+
     }
 
     private void reportCloseMouseClicked(java.awt.event.MouseEvent evt) {
@@ -1784,6 +1810,7 @@ public class GUI extends javax.swing.JFrame {
     private void reportButtonActionPerformed(java.awt.event.ActionEvent evt) {
         statistics.setVisible(true);
         statistics.pack();
+        fyllRapportTabell();
     }
 
     private void planningCloseActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1821,6 +1848,10 @@ public class GUI extends javax.swing.JFrame {
         }
     }
 
+    private void reportStatisticsTableMouseClicked(java.awt.event.MouseEvent evt) {
+        // TODO add your handling code here:
+    }
+
     /**
      * Metode for å hente kinoliste og kino-dropdown med den
      */
@@ -1829,6 +1860,21 @@ public class GUI extends javax.swing.JFrame {
             cinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
         }
     }
+
+    public void hentPlass(){
+        for (int i = 0; i < kontroll.getKinosaler().size(); i++){
+            cinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
+        }
+    }
+
+
+    public void slettPlassGUI(){
+        int verdi = staffMovieTable.getSelectedRow();
+        kontroll.slettPlass(verdi);
+        fyllTabell();
+    }
+
+
 
 
 
@@ -1871,38 +1917,6 @@ public class GUI extends javax.swing.JFrame {
                 gui.setVisible(true);
                 gui.hentKino();
 
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-
-        /* Create and display the form */
-        GUI gui = new GUI();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                gui.setVisible(true);
-                Kontroll kontroll = Kontroll.getInstance();
-                kontroll.opprettDBForbindelse();
-                try {
-                    kontroll.lastDatabase();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     // Variables declaration - do not modify
