@@ -76,6 +76,18 @@ public class Visning implements Comparable<Visning> {
         return dato;
     }
 
+    public String getDagMnd() {
+        //Gi kalender dato
+        kalender.setTime(this.dato);
+
+        //Hent ut dag, mnd, tid og minutter
+        int dag =  kalender.get(Calendar.DAY_OF_MONTH);
+        int mnd = kalender.get(Calendar.MONTH);
+        int år = kalender.get(Calendar.YEAR);
+
+        return dag + "." + mnd + "." + år;
+    }
+
     public void setDato(Date dato) {
         this.dato = dato;
     }
@@ -89,6 +101,15 @@ public class Visning implements Comparable<Visning> {
     }
 
 
+    public String getStartKlokkeslett(){
+        //Gi kalender dato
+        kalender.setTime(this.dato);
+
+        int time = kalender.get(Calendar.HOUR_OF_DAY);
+        int minutter = kalender.get(Calendar.MINUTE);
+
+        return " Kl: " + time + ":" + minutter;
+    }
 
     public String getStartTid() {
 

@@ -60,6 +60,10 @@ public class Billett implements Comparable<Billett>{
         this.erBetalt = erBetalt;
     }
 
+    public ArrayList<Plass> getPlasser() {
+        return this.plasser;
+    }
+
     @Override
     public int compareTo(Billett o) {
         return kollator.compare(this.billettkode, o.getBillettkode());

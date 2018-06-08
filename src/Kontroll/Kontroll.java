@@ -98,11 +98,11 @@ public class Kontroll {
 
     public ArrayList<Visning> filtrerVisninger(Kino kino) {
         ArrayList<Visning> visninger = new ArrayList<>();
-
+        System.out.println(kino);
         Iterator itr = this.visninger.iterator();
         while (itr.hasNext()) {
             Visning visning = (Visning) itr.next();
-
+            System.out.println(visning.toString());
             if(visning.getKinosal().getKino().getKinonavn().equals(kino.getKinonavn())) {
                 visninger.add(visning);
             }
