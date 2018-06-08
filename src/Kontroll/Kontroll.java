@@ -50,6 +50,11 @@ public class Kontroll {
 
     }
 
+    public void nyBillett(Billett billett) {
+        billett.getVisning().leggTilBillett(billett);
+        billetter.add(billett);
+    }
+
 
     public Kino finnKino(String kinonavn) {
         Kino dummy = new Kino(kinonavn);

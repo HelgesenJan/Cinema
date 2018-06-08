@@ -64,6 +64,10 @@ public class Kinosal implements Comparable<Kinosal> {
         this.plasser = plasser;
     }
 
+    public ArrayList<Plass> getPlasser() {
+        return this.plasser;
+    }
+
     @Override
     public String toString() {
 
