@@ -65,6 +65,16 @@ public class Billett implements Comparable<Billett>{
     }
 
     @Override
+    public String toString() {
+        return "Billett{" +
+                "billettkode='" + billettkode + '\'' +
+                ", visning=" + visning +
+                ", erBetalt=" + erBetalt +
+                ", plasser=" + plasser +
+                '}';
+    }
+
+    @Override
     public int compareTo(Billett o) {
         return kollator.compare(this.billettkode, o.getBillettkode());
     }
