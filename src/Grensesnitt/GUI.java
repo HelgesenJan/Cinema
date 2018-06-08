@@ -2201,5 +2201,4 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel titleLabel;
     private javax.swing.JTextField titleTxt;
     private javax.swing.JTextField totalTxt;
-    private javax.swing.JComboBox<String> staffCinemaChoice;
 }
