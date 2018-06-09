@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.*;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -96,6 +97,35 @@ public class Kontroll {
     }
 
 
+    public void nyVisning(String kino, String sal, Double pris, String tittel, String dato, String starttid){
+        for(int i = 0; i < filmer.size(); i++){
+            if(filmer.get(i).getFilmnavn().equals(tittel)) {
+                Film nyFilm = filmer.get(i);
+                for(int n = 0; n < kinosaler.size(); n++){
+                    if(sal.equals(kinosaler.get(n).getKinosalnavn())){
+                        Kinosal nySal = kinosaler.get(n);
+
+                        String dato_str = dato + " " + starttid + ":00";
+                        SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                        Date datoSjekk = null;
+
+                        try {
+                            datoSjekk = datoFormat.parse(dato_str);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        for(int o = 0; o < visninger.size(); o++){
+                            int visningsNr = visninger.size()+1;
+
+                            visninger.add(new Visning(visningsNr, nyFilm, nySal, datoSjekk, pris));
+                        }
+                    }
+                }
+            }
+        }
+    }
     public Kino finnKino(String kinonavn) {
         Kino dummy = new Kino(kinonavn);
         int indeks = Collections.binarySearch(kinoer, dummy);

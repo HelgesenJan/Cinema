@@ -2269,6 +2269,10 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void adminAddActionPerformed(java.awt.event.ActionEvent evt) {
+            leggTilVisning();
+            for(int i = 0; i < kontroll.getVisninger().size(); i++){
+                System.out.println(kontroll.getVisninger().get(i).toString());
+            }
 
     }
 
@@ -2288,6 +2292,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void adminAddMovieActionPerformed(java.awt.event.ActionEvent evt) {
         opprettFilm();
+
     }
 
     private void adminCinemaDropdownActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2416,21 +2421,6 @@ public class GUI extends javax.swing.JFrame {
     }
 
 
-    public void hentPlass(){
-        for (int i = 0; i < kontroll.getKinosaler().size(); i++){
-            cinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
-        }
-    }
-
-//    public void hentSal(){
-//        for(int n = 0; n < kontroll.getKinoer().size(); n++){
-//            for(int i = 0; i < kontroll.getKinosaler().size(); i++){
-//                if(kontroll.getKinosaler().get(i).getKinosalnavn().equals(kontroll.getKinoer().get(n).getKinosaler().get(i).getKinosalnavn()))
-//                    adminTheaterDropdown.addItem(kontroll.getKinosaler().get(i).getKinosalnavn());
-//            }
-//        }
-//    }
-
     public void hentTittel(){
         for(int i = 0; i < kontroll.getFilmer().size(); i++){
             adminTitleDropdown.addItem(kontroll.getFilmer().get(i).getFilmnavn());
@@ -2438,6 +2428,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     public void hentDato(){
+
         for(int i = 0; i < kontroll.getVisninger().size(); i++){
             Date datoen = kontroll.getVisninger().get(i).getDato();
             SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -2446,6 +2437,26 @@ public class GUI extends javax.swing.JFrame {
         }
     }
 
+    public void hentPris(){
+
+    }
+
+    public void leggTilVisning() {
+        Object sal = adminTheaterDropdown.getSelectedItem();
+        String konvertertSal = String.valueOf(sal);
+        Double pris = Double.parseDouble(adminPriceTxt.getText());
+        Object tittel = adminTitleDropdown.getSelectedItem();
+        String konvertertTittel = String.valueOf(tittel);
+        String dato = adminDisplayDate.getText();
+        String starttid = adminDisplayClock.getText();
+
+        kontroll.nyVisning(konvertertSal, konvertertSal, pris, konvertertTittel, dato, starttid);
+
+    }
+
+    public void hentKlokkeslett(){
+
+    }
 
 
     public void opprettFilm() {
@@ -2467,15 +2478,15 @@ public class GUI extends javax.swing.JFrame {
     }
 
 
-    public void opprettFilmGUI() {
-        int teller = kontroll.filmNrIncrement();
-        String tittel = adminMovieTxt.getText();
-        kontroll.leggTilFilm(teller, tittel);
-        for(int i = 0; i < kontroll.getFilmer().size(); i++){
-            System.out.println(kontroll.getFilmer().get(i).getFilmnavn());
-        }
-
-    }
+//    public void opprettFilmGUI() {
+//        int teller = kontroll.filmNrIncrement();
+//        String tittel = adminMovieTxt.getText();
+//        kontroll.leggTilFilm(teller, tittel);
+//        for(int i = 0; i < kontroll.getFilmer().size(); i++){
+//            System.out.println(kontroll.getFilmer().get(i).getFilmnavn());
+//        }
+//
+//    }
 
 
 
@@ -2556,7 +2567,6 @@ public class GUI extends javax.swing.JFrame {
                 GUI gui = new GUI();
                 gui.hentKino();
                 gui.setVisible(true);
-
 
     }
 
