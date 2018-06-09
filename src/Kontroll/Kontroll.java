@@ -3,9 +3,7 @@ package Kontroll;
 import com.sun.java.accessibility.util.AccessibilityEventMonitor;
 
 import javax.swing.*;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.*;
@@ -56,6 +54,40 @@ public class Kontroll {
         }
         */
 
+    }
+
+    public BufferedReader leseForbindelse(String filnavn) {
+        try {
+            FileReader filForbindelse = new FileReader(filnavn);
+            BufferedReader leser = new BufferedReader(filForbindelse);
+            return leser;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public int finnAntallUbetalteBilletter(Visning visningen) {
+        int antall = 0;
+        try {
+            BufferedReader fil = leseForbindelse("slettinger.dat");
+            String linje = fil.readLine();
+            while(linje != null) {
+                String[] split1 = linje.split(", film");
+                String del1 = split1[0];
+                String[] split2 = del1.split("visningsNr=");
+                String del2 = split2[1];
+                System.out.println(del2 + ", " + linje);
+                int funnetNummer = Integer.parseInt(del2);
+
+                if(visningen.getVisningsNr() == funnetNummer) {
+                    antall++;
+                }
+                linje = fil.readLine();
+            }
+            return antall;
+        } catch(IOException e) {
+            return antall;
+        }
     }
 
     public void fjernUbetalteBilletter(Visning visning) throws IOException {
@@ -471,7 +503,7 @@ public class Kontroll {
 
             tabellInnhold[teller][0] = antallBilletter + " billetter / " + antallPlasser + " plasser";
             tabellInnhold[teller][1] = prosent + "%";
-            tabellInnhold[teller][2] = filmer.get(i).getVisninger().get(n).getIkkeBetalte();
+            tabellInnhold[teller][2] = finnAntallUbetalteBilletter(filmer.get(i).getVisninger().get(n));
             tabellInnhold[teller][3] = filmer.get(i).getVisninger().get(n).getDato() + ", " + filmer.get(i).getVisninger().get(n).getStartTid();
             teller++;
         }
