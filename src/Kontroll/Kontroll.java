@@ -514,13 +514,15 @@ public class Kontroll {
         Object[][] tabellInnhold = new Object[rader][5];
         for(int i=0; i<visninger.size(); i++) {
 
-
-            tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
-            tabellInnhold[teller][1] = visninger.get(i).getStartTid();
-            tabellInnhold[teller][2] = visninger.get(i).getKinosal().getKinosalnavn();
-            tabellInnhold[teller][3] = visninger.get(i).getPris();
-            tabellInnhold[teller][4] = visninger.get(i).getVisningsNr();
-            teller++;
+            Visning visning = visninger.get(i);
+            if(visning.erhalvtimeFørStart()) {
+                tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
+                tabellInnhold[teller][1] = visninger.get(i).getStartTid();
+                tabellInnhold[teller][2] = visninger.get(i).getKinosal().getKinosalnavn();
+                tabellInnhold[teller][3] = visninger.get(i).getPris();
+                tabellInnhold[teller][4] = visninger.get(i).getVisningsNr();
+                teller++;
+            }
         }
 
         return tabellInnhold;

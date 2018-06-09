@@ -2700,16 +2700,18 @@ public class GUI extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-                try {
-                    kontroll =  Kontroll.getInstance();
+        try {
+            kontroll =  Kontroll.getInstance();
 
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            GUI gui = new GUI();
+            gui.hentKino();
+            gui.setVisible(true);
 
-                GUI gui = new GUI();
-                gui.hentKino();
-                gui.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Klarte ikke å koble til database: " + e.getMessage());
+            System.exit(0);
+        }
 
     }
 

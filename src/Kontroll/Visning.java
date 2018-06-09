@@ -129,7 +129,7 @@ public class Visning implements Comparable<Visning> {
 
         //Hent ut dag, mnd, tid og minutter
         int dag =  kalender.get(Calendar.DAY_OF_MONTH);
-        int mnd = kalender.get(Calendar.MONTH);
+        int mnd = kalender.get(Calendar.MONTH) +1;
         int år = kalender.get(Calendar.YEAR);
 
         return år + "-" + mnd + "-" + dag;
@@ -153,7 +153,7 @@ public class Visning implements Comparable<Visning> {
 
         //Hent ut dag, mnd, tid og minutter
         int dag =  kalender.get(Calendar.DAY_OF_MONTH);
-        int mnd = kalender.get(Calendar.MONTH);
+        int mnd = kalender.get(Calendar.MONTH) +1;
         int år = kalender.get(Calendar.YEAR);
 
         int time = kalender.get(Calendar.HOUR_OF_DAY);
@@ -161,6 +161,35 @@ public class Visning implements Comparable<Visning> {
 
         return " Kl: " + time + ":" + minutter + " - " + dag + "." + mnd + "." + år;
     }
+
+    /**
+     * Returnerer sann dersom visning ikke har "gått" enda
+     * @return boolean
+     */
+
+    public boolean erKommende() {
+        return new Date().before(this.dato);
+    }
+
+    /**
+     * Returnerer sann dersom en visning har gått, passert starttidspunktet.
+     * @return boolean
+     */
+
+    public boolean harGått() {
+        return new Date().after(this.dato);
+    }
+
+    public boolean erhalvtimeFørStart() {
+        Date dato_halvtimefør = new Date();
+        //Bruk kalender til å hente ut dato objekt en halvtime frem i tid
+        kalender.setTime(dato_halvtimefør);
+        kalender.add(Calendar.MINUTE, 30); //Legg til 30 minutt
+        dato_halvtimefør = kalender.getTime();
+        //Sammenlign med visningsdato og returner boolean
+        return dato_halvtimefør.before(this.dato);
+    }
+
 
     public ArrayList<Plass> finnLedigePlasser() {
 
