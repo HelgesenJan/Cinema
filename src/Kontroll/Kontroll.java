@@ -21,7 +21,7 @@ public class Kontroll {
     public static Sortering sortering = Sortering.VERDI;
 
     //Singleton
-    private static  Kontroll INSTANSE = null;
+    private static Kontroll INSTANSE = null;
 
     //Database konfigurasjon
     private String db_navn = "kino";
@@ -34,7 +34,7 @@ public class Kontroll {
     private Statement stmt;
 
     //Lister med objekter
-    private  ArrayList<Kino> kinoer = new ArrayList<>();
+    private ArrayList<Kino> kinoer = new ArrayList<>();
     private ArrayList<Kinosal> kinosaler = new ArrayList<>();
     private ArrayList<Film> filmer = new ArrayList<>();
     private ArrayList<Bruker> brukere = new ArrayList<>();
@@ -669,6 +669,8 @@ public class Kontroll {
     public void leggTilBruker(String brukernavn, int pin, boolean erPlanlegger) {
         brukere.add(new Bruker(brukernavn, pin, erPlanlegger));
     }
+
+
 
 
 }
