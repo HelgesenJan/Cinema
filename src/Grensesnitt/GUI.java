@@ -9,17 +9,25 @@ package Grensesnitt;
 import Kontroll.*;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.awt.event.*;
 import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+import java.util.stream.Collectors;
 
-import static javax.swing.JOptionPane.YES_NO_OPTION;
-import static javax.swing.JOptionPane.YES_OPTION;
-import static javax.swing.JOptionPane.showConfirmDialog;
+import static javax.swing.JOptionPane.*;
 
 /**
  *
@@ -57,6 +65,7 @@ public class GUI extends javax.swing.JFrame {
         reserveMovieTable = new javax.swing.JTable();
         reserveRemoveSeat = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         reserveTicketTable = new javax.swing.JTable();
         fieldReservePriceSum = new javax.swing.JTextField();
@@ -84,6 +93,7 @@ public class GUI extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel14 = new javax.swing.JLabel();
+        staffCinemaChoice = new javax.swing.JComboBox<>();
         staffDropdownSeat = new javax.swing.JComboBox<>();
         staffAddPlacement = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -173,7 +183,14 @@ public class GUI extends javax.swing.JFrame {
         openAttendant = new javax.swing.JButton();
         header = new javax.swing.JLabel();
 
-        reserveDropdownSeat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        //staffCinemaChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        staffCinemaChoice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                staffCinemaChoiceActionPerformed(evt);
+            }
+        });
+
+        //reserveDropdownSeat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         reserveDropdownSeat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reserveDropdownSeatActionPerformed(evt);
@@ -200,6 +217,8 @@ public class GUI extends javax.swing.JFrame {
                 fieldReserveTicketPriceActionPerformed(evt);
             }
         });
+
+
 
         reserveMovieTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
@@ -275,7 +294,7 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel13.setText("Sete:");
 
-        dropdownSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tidspunkt", "Alfabetisk" }));
+        dropdownSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alfabetisk", "Tidspunkt" }));
         dropdownSort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dropdownSortActionPerformed(evt);
@@ -512,6 +531,16 @@ public class GUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+
+        staffMovieTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(e.getValueIsAdjusting()) {
+                    staffMovieTableSelected(e);
+                }
+            }
+        });
+
         staffMovieTable.setSurrendersFocusOnKeystroke(true);
         staffMovieTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(staffMovieTable);
@@ -527,7 +556,7 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel14.setText("Sete:");
 
-        staffDropdownSeat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
+        //staffDropdownSeat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
         staffDropdownSeat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 staffDropdownSeatActionPerformed(evt);
@@ -585,7 +614,7 @@ public class GUI extends javax.swing.JFrame {
         });
 
         jLabel16.setText("Bekreft en reservasjon med billettkode");
-
+        jLabel8.setText("Velg kino:");
         staffInsertTicketCode.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         staffInsertTicketCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -615,7 +644,7 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        staffRemovePlacement.setText("Fjern");
+        staffRemovePlacement.setText("Nullstill");
         staffRemovePlacement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 staffRemovePlacementActionPerformed(evt);
@@ -655,8 +684,8 @@ public class GUI extends javax.swing.JFrame {
                                         .addGroup(cinemaStaffLayout.createSequentialGroup()
                                                 .addComponent(jLabel15)
                                                 .addGap(7, 7, 7)
-                                                .addComponent(staffPriceAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(88, 88, 88)
+                                                .addComponent(staffPriceAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(44, 44, 44)
                                                 .addComponent(staffRemovePlacement))
                                         .addComponent(staffConfirmPlacement))
                                 .addGap(18, 18, 18)
@@ -673,6 +702,20 @@ public class GUI extends javax.swing.JFrame {
                                 .addComponent(removeChosenTicket)
                                 .addGap(788, 788, 788)
                                 .addComponent(staffClose))
+                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(cinemaStaffLayout.createSequentialGroup()
+                                                .addComponent(jLabel8)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(staffCinemaChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(393, 393, 393)
+                                                .addComponent(jLabel14)
+                                                .addGap(5, 5, 5)
+                                                .addComponent(staffDropdownSeat, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(4, 4, 4)
+                                                .addComponent(staffAddPlacement))
+                                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 1040, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         cinemaStaffLayout.setVerticalGroup(
                 cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -692,8 +735,11 @@ public class GUI extends javax.swing.JFrame {
                                 .addGap(1, 1, 1)
                                 .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(cinemaStaffLayout.createSequentialGroup()
-                                                .addGap(4, 4, 4)
-                                                .addComponent(jLabel14))
+                                                .addGap(1, 1, 1)
+                                                .addGroup(cinemaStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel14)
+                                                        .addComponent(jLabel8)
+                                                        .addComponent(staffCinemaChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGroup(cinemaStaffLayout.createSequentialGroup()
                                                 .addGap(1, 1, 1)
                                                 .addComponent(staffDropdownSeat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -794,6 +840,11 @@ public class GUI extends javax.swing.JFrame {
             }
         });
         reportStatisticsTable.getTableHeader().setReorderingAllowed(false);
+        reportStatisticsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportStatisticsTableMouseClicked(evt);
+            }
+        });
         jScrollPane6.setViewportView(reportStatisticsTable);
         if (reportStatisticsTable.getColumnModel().getColumnCount() > 0) {
             reportStatisticsTable.getColumnModel().getColumn(0).setResizable(false);
@@ -965,6 +1016,8 @@ public class GUI extends javax.swing.JFrame {
         jLabel26.setText("Antall plasser");
 
         seatsTxt.setEditable(false);
+        seatsTxt.setVisible(false);
+        jLabel25.setVisible(false);
         seatsTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 seatsTxtActionPerformed(evt);
@@ -1146,17 +1199,23 @@ public class GUI extends javax.swing.JFrame {
         adminMovieTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane9.setViewportView(adminMovieTable);
 
-        adminCinemaDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        adminCinemaDropdown.setModel(new javax.swing.DefaultComboBoxModel<>());
+
         adminCinemaDropdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adminCinemaDropdownActionPerformed(evt);
+            }
+        });
+        adminCinemaDropdown.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                adminCinemaDropdownItemStateChanged(evt);
             }
         });
 
         adminHeader.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         adminHeader.setText("Administrasjon");
 
-        adminDateDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        adminDateDropdown.setModel(new javax.swing.DefaultComboBoxModel<>());
         adminDateDropdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adminDateDropdownActionPerformed(evt);
@@ -1184,7 +1243,12 @@ public class GUI extends javax.swing.JFrame {
 
         movieLabel.setText("Tittel");
 
-        adminTheaterDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        adminTheaterDropdown.setModel(new javax.swing.DefaultComboBoxModel<>());
+        adminTheaterDropdown.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                adminTheaterDropdownItemStateChanged(evt);
+            }
+        });
         adminTheaterDropdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adminTheaterDropdownActionPerformed(evt);
@@ -1227,7 +1291,12 @@ public class GUI extends javax.swing.JFrame {
 
         priceLabel.setText("Pris");
 
-        adminTitleDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        adminTitleDropdown.setModel(new javax.swing.DefaultComboBoxModel<>());
+        adminTitleDropdown.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                adminTitleDropdownItemStateChanged(evt);
+            }
+        });
         adminTitleDropdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adminTitleDropdownActionPerformed(evt);
@@ -1492,6 +1561,53 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
+    private void staffMovieTableSelected(ListSelectionEvent e) {
+
+        staffDropdownSeat.removeAllItems();
+        staffPriceAmount.setText("");
+        staffConfirmPlacement.setEnabled(false);
+
+        //Slett setevalg
+        DefaultTableModel model = (DefaultTableModel) staffAddPlacementTable.getModel();
+        for (int i = model.getRowCount() - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+
+        int visningsnr = -1;
+        try {
+            visningsnr = (int) staffMovieTable.getValueAt(staffMovieTable.getSelectedRow(), 4);
+        }catch(ArrayIndexOutOfBoundsException ex) {
+            //reserveMovieTable.clearSelection();
+        }
+
+        if(visningsnr != -1 && e != null) {
+
+            System.out.println("Finn visning staff...");
+            System.out.println(visningsnr);
+            _VISNING  = kontroll.finnVisning(visningsnr);
+            _BILLETT = new Billett(kontroll.genererBillettkode(),_VISNING, true);
+
+            //Try catch pga av mystisk exception
+            try {
+                Iterator<Plass> itr = _VISNING.finnLedigePlasser().iterator();
+                while (itr.hasNext()) {
+                    Plass plass = itr.next();
+                    staffDropdownSeat.addItem(plass.getRadnr() + ", " + plass.getSetenr());
+                }
+            }catch (Exception ex) {
+                //Prøv på ny,
+                staffMovieTableSelected(e);
+            }
+
+        } else {
+            staffMovieTable.clearSelection();
+        }
+    }
+
+    private void staffCinemaChoiceActionPerformed(ActionEvent evt) {
+        fyllFilmReservasjonsTabell(true);
+    }
+
     public void reserveMovieTableSelected(ListSelectionEvent e) {
 
         commitReserveTicketOrder.setEnabled(false);
@@ -1517,23 +1633,33 @@ public class GUI extends javax.swing.JFrame {
         try {
             visningsnr = (int) reserveMovieTable.getValueAt(reserveMovieTable.getSelectedRow(), 4);
         }catch(ArrayIndexOutOfBoundsException ex) {
-            reserveMovieTable.clearSelection();
+            //reserveMovieTable.clearSelection();
         }
 
-        if(visningsnr != -1) {
+        if(visningsnr != -1 && e != null) {
 
-            reserveDropdownSeat.removeAllItems();
             System.out.println("Finn visning...");
-
+            System.out.println(visningsnr);
             _VISNING  = kontroll.finnVisning(visningsnr);
             _BILLETT = new Billett(kontroll.genererBillettkode(),_VISNING, false);
 
             //Sett pris...
             fieldReserveTicketPrice.setText(_VISNING.getPris() + "kr");
 
-            for (Plass plass:_VISNING.finnLedigePlasser()) {
-                reserveDropdownSeat.addItem(plass.getRadnr() + ", " + plass.getSetenr());
+            //Try catch pga av mystisk exception
+            try {
+                Iterator<Plass> itr = _VISNING.finnLedigePlasser().iterator();
+                while (itr.hasNext()) {
+                    Plass plass = itr.next();
+                    reserveDropdownSeat.addItem(plass.getRadnr() + ", " + plass.getSetenr());
+                }
+            }catch (Exception ex) {
+                //Prøv på ny,
+                reserveMovieTableSelected(e);
             }
+
+        } else {
+            reserveMovieTable.clearSelection();
         }
     }
 
@@ -1571,9 +1697,6 @@ public class GUI extends javax.swing.JFrame {
 
     }
 
-
-
-
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {
         int svar = showConfirmDialog(GUI.this,
                 "Vil du lagre data før du avslutter?",
@@ -1594,20 +1717,27 @@ public class GUI extends javax.swing.JFrame {
     private void openTicketReservationActionPerformed(java.awt.event.ActionEvent evt) {
         ticketReservation.setVisible(true);
         ticketReservation.pack();
-        fyllTabell();
+        fyllFilmReservasjonsTabell(false);
     }
 
-    private void fyllTabell() {
+    private void fyllFilmReservasjonsTabell(boolean betjent) {
 
         commitReserveTicketOrder.setEnabled(false);
 
         _KINO = null;
-        _KINO = kontroll.finnKino((String) cinemaChoice.getSelectedItem());
+        if(betjent) {
+            _KINO = kontroll.finnKino((String) staffCinemaChoice.getSelectedItem());
+        } else {
+            _KINO = kontroll.finnKino((String) cinemaChoice.getSelectedItem());
+        }
+
         String sort = (String) dropdownSort.getSelectedItem();
 
         if(sort.equals("Alfabetisk")) {
+            System.out.println("Alfabetisk");
             kontroll.sortering = Sortering.ALFABETISK;
-        } else if(sort.equals("Tidspunkt")) {
+        } else {
+            System.out.println("Tid");
             kontroll.sortering = Sortering.TID;
         }
 
@@ -1616,10 +1746,17 @@ public class GUI extends javax.swing.JFrame {
         Object[][] tabellInnhold = kontroll.lagVisningTabellListe(_KINO);
 
         Object[] kolonnenavn = {"Film", "Tid", "Sal", "Pris", "#"};
-        reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+
+
         staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+        reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+
 
     }
+
+
+
+
 
     /**
      * Vindu for rapporter
@@ -1661,7 +1798,7 @@ public class GUI extends javax.swing.JFrame {
     private void openAttendantActionPerformed(java.awt.event.ActionEvent evt) {
         login.setVisible(true);
         login.pack();
-        fyllTabell();
+        fyllFilmReservasjonsTabell(false);
     }
 
     private void reserveAddTicketActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1682,16 +1819,66 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void staffAddPlacementActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        String[] plass_str = staffDropdownSeat.getSelectedItem().toString().split(",");
+
+        //Slett sete i valg
+        staffDropdownSeat.removeItemAt(staffDropdownSeat.getSelectedIndex());
+        staffDropdownSeat.setSelectedIndex(0);
+
+        //Trim ut radnr og setenr
+        int radnr = Integer.parseInt(plass_str[0].trim());
+        int setenr = Integer.parseInt(plass_str[1].trim());
+
+        //Legg til sete
+        DefaultTableModel model = (DefaultTableModel) staffAddPlacementTable.getModel();
+        model.addRow(new Object[]{model.getRowCount() +1, radnr, setenr});
+        //Oppdater totalsum
+        staffPriceAmount.setText(model.getRowCount() * _VISNING.getPris() + "kr");
+
+        Plass plass = _VISNING.getKinosal().finnPlass(radnr,setenr);
+        _BILLETT.leggTilPlass(plass);
+
+        staffConfirmPlacement.setEnabled(true);
     }
 
     private void removeChosenTicketActionPerformed(java.awt.event.ActionEvent evt) {
-        slettPlassGUI();
+        Visning visning = null;
+        int visningsnr = -1;
+        try {
+            visningsnr = (int) staffMovieTable.getValueAt(staffMovieTable.getSelectedRow(), 4);
+
+        }catch(ArrayIndexOutOfBoundsException ex) {
+            reserveMovieTable.clearSelection();
+        }
+        if(visningsnr != -1) {
+            visning = kontroll.finnVisning(visningsnr);
+            JOptionPane.showMessageDialog(cinemaStaff, "Ubetalte billetter er fjernet!");
+            if (visning != null) {
+
+                try {
+                    kontroll.fjernUbetalteBilletter(visning);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(cinemaStaff, "Klarte ikke å åpne slettinger.dat, sjekk skrive tilgang.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(cinemaStaff, "Velg en visning!");
+            }
+        }
 
     }
 
     private void staffConfirmPaymentActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        String billettkode = staffInsertTicketCode.getText();
+
+        Billett billett = kontroll.finnBillett(billettkode);
+        if(billett != null && !billett.isErBetalt()) {
+            billett.setErBetalt(true);
+            JOptionPane.showMessageDialog(cinemaStaff, "Billett " + billettkode + " er merket betalt!");
+        } else if( billett != null && billett.isErBetalt()) {
+            JOptionPane.showMessageDialog(cinemaStaff, "Billett " + billettkode + " er allerede brukt!");
+        } else {
+            JOptionPane.showMessageDialog(cinemaStaff, "Ugyldig billettkode!");
+        }
     }
 
     private void staffCloseActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1699,7 +1886,12 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void staffConfirmPlacementActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(cinemaStaff, "Total sum: " +  _VISNING.getPris() * _BILLETT.getPlasser().size() + ""
+                                        +   "kr, Bilettkode: " + _BILLETT.getBillettkode()
+                                        +   ", Film: " + _VISNING.getFilm().getFilmnavn()
+                                        +   ", Sal: " + _VISNING.getKinosal().getKinosalnavn());
+        kontroll.nyBillett(_BILLETT);
+        staffMovieTableSelected(null);
     }
 
     private void commitReserveTicketOrderActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1748,7 +1940,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void staffRemovePlacementActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        staffMovieTableSelected(null);
     }
 
     private void staffPriceAmountActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1862,7 +2054,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void confirmConfirmWindowActionPerformed(java.awt.event.ActionEvent evt) {
         //TODO:LEGG TIL BILLETT
-
+        kontroll.nyBillett(_BILLETT);
         confirmConfirmWindow.setEnabled(false);
         confirmWindowClose.setEnabled(true);
     }
@@ -1880,24 +2072,35 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void adminAddActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
     }
 
     private void adminButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        adminSettings.setVisible(true);
-        adminSettings.pack();
+        try{
+            adminSettings.setVisible(true);
+            adminSettings.pack();
+            hentKino();
+            hentTittel();
+            fyllFilmReservasjonsTabell(false);
+        }catch (Exception e){
+
+        }
+
     }
 
+
+
     private void adminAddMovieActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        opprettFilm();
     }
 
     private void adminCinemaDropdownActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
     }
 
+
     private void adminTheaterDropdownActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
     }
 
     private void adminPriceTxtActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1905,7 +2108,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void adminTitleDropdownActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
     }
 
     private void adminDateDropdownActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1922,7 +2125,9 @@ public class GUI extends javax.swing.JFrame {
 
     private void adminCloseActionPerformed(java.awt.event.ActionEvent evt) {
         adminSettings.setVisible(false);
+
     }
+
 
     private void reportButtonActionPerformed(java.awt.event.ActionEvent evt) {
         statistics.setVisible(true);
@@ -1940,8 +2145,9 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void confirmWindowCloseActionPerformed(java.awt.event.ActionEvent evt) {
-        reserveMovieTableSelected(null); //Nullstill setevalg
         confirmation.setVisible(false);
+        confirmConfirmWindow.setEnabled(true);
+        reserveMovieTableSelected(null); //Nullstill setevalg
     }
 
     private void loginCloseActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1949,12 +2155,39 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void dropdownSortActionPerformed(java.awt.event.ActionEvent evt) {
-        fyllTabell();
+        fyllFilmReservasjonsTabell(true);
     }
 
     private void cinemaChoiceActionPerformed(java.awt.event.ActionEvent evt) {
         reserveMovieTable.clearSelection();
-        fyllTabell();
+        fyllFilmReservasjonsTabell(false);
+    }
+
+    private void adminCinemaDropdownItemStateChanged(java.awt.event.ItemEvent evt) {
+        if (evt.getSource() == adminCinemaDropdown){
+            for (int i = 0; i < kontroll.getKinoer().size(); i++) {
+                System.out.println(kontroll.getKinoer().get(i).getKinonavn());
+                System.out.println(kontroll.getKinoer().get(i).getKinonavn());
+                if (adminCinemaDropdown.getSelectedItem().equals(kontroll.getKinoer().get(i).getKinonavn())){
+                    adminTheaterDropdown.removeAllItems();
+                    for (int n = 0; n < kontroll.getKinoer().get(i).getKinosaler().size(); n++) {
+                        System.out.println(kontroll.getKinoer().get(i).getKinosaler().get(n).getKinosalnavn());
+                        adminTheaterDropdown.addItem(kontroll.getKinoer().get(i).getKinosaler().get(n).getKinosalnavn());
+                    }
+
+                }
+            }
+        }
+    }
+
+
+
+    private void adminTheaterDropdownItemStateChanged(java.awt.event.ItemEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void adminTitleDropdownItemStateChanged(java.awt.event.ItemEvent evt) {
+        // TODO add your handling code here:
     }
 
 
@@ -1966,11 +2199,16 @@ public class GUI extends javax.swing.JFrame {
     /**
      * Metode for å hente kinoliste og kino-dropdown med den
      */
+
     public void hentKino() {
-        for (int i = 0; i < kontroll.getKinoer().size(); i++){
+        for (int i = 0; i < kontroll.getKinoer().size(); i++) {
+            System.out.println(kontroll.getKinoer().get(i).getKinonavn());
+            adminCinemaDropdown.addItem(kontroll.getKinoer().get(i).getKinonavn());
             cinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
+            staffCinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
         }
     }
+
 
     public void hentPlass(){
         for (int i = 0; i < kontroll.getKinosaler().size(); i++){
@@ -1978,15 +2216,101 @@ public class GUI extends javax.swing.JFrame {
         }
     }
 
+//    public void hentSal(){
+//        for(int n = 0; n < kontroll.getKinoer().size(); n++){
+//            for(int i = 0; i < kontroll.getKinosaler().size(); i++){
+//                if(kontroll.getKinosaler().get(i).getKinosalnavn().equals(kontroll.getKinoer().get(n).getKinosaler().get(i).getKinosalnavn()))
+//                    adminTheaterDropdown.addItem(kontroll.getKinosaler().get(i).getKinosalnavn());
+//            }
+//        }
+//    }
 
-    public void slettPlassGUI(){
-        int verdi = staffMovieTable.getSelectedRow();
-        kontroll.slettPlass(verdi);
-        fyllTabell();
+    public void hentTittel(){
+        for(int i = 0; i < kontroll.getFilmer().size(); i++){
+            adminTitleDropdown.addItem(kontroll.getFilmer().get(i).getFilmnavn());
+        }
+    }
+
+    public void hentDato(){
+        for(int i = 0; i < kontroll.getVisninger().size(); i++){
+            Date datoen = kontroll.getVisninger().get(i).getDato();
+            SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String stringDato = datoFormat.format(datoen);
+            adminDateDropdown.addItem(stringDato);
+        }
     }
 
 
 
+    public void opprettFilm() {
+        int filmNr = kontroll.getFilmer().size();
+        String filmNavn = adminMovieTxt.getText();
+        boolean funnet = false;
+        for (int i = 0; i < kontroll.getFilmer().size(); i++) {
+            if (filmNavn.equals(kontroll.getFilmer().get(i).getFilmnavn())) {
+                System.out.println("Filmen finnes fra før");
+                funnet = true;
+            }
+        }
+        if (funnet == false) {
+            filmNr++;
+            kontroll.leggTilFilm(filmNr, filmNavn);
+            System.out.println(filmNr + ", " + filmNavn + " er lagt til");
+        }
+        System.out.println(kontroll.getFilmer());
+    }
+
+
+    public void opprettFilmGUI() {
+        int teller = kontroll.filmNrIncrement();
+        String tittel = adminMovieTxt.getText();
+        kontroll.leggTilFilm(teller, tittel);
+        for(int i = 0; i < kontroll.getFilmer().size(); i++){
+            System.out.println(kontroll.getFilmer().get(i).getFilmnavn());
+        }
+
+    }
+
+
+
+
+//    public void opprettVisningGUI(){
+//
+//
+//        for (int i = 0; i < kontroll.getKinosaler().size(); i++) {
+//            adminTheaterDropdown.addItem(kontroll.getKinosaler().get(i).getKinosalnavn());
+//            String kinosal = adminTheaterDropdown.getSelectedItem().toString();
+//            if (kontroll.getKinosaler().get(i).getKinosalnavn() == kinosal) {
+//                Kinosal riktigKinosal = kontroll.finnKinosal(i);
+//
+//                int visningsNr = kontroll.visningsNrIncrement();
+//
+//
+//                //Bygg dato objekt for dato
+//                String datoen = adminDateDropdown.getSelectedItem().toString();
+//                SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//
+//                Date dato = null;
+//
+//                try {
+//                    dato = datoFormat.parse(datoen);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//                int pris = Integer.parseInt(adminPriceTxt.getSelectedText());
+//
+//                String tittel = adminTitleDropdown.getSelectedItem().toString();
+//                for (int n = 0; i < kontroll.getKinosaler().size(); n++) {
+//                    if (kontroll.getFilmer().get(n).getFilmnavn() == tittel) {
+//                        Film riktigFilmtittel = kontroll.finnFilm(n);
+//                        kontroll.leggTilVisning(visningsNr, riktigFilmtittel, riktigKinosal, dato, pris);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
     /**
@@ -2025,7 +2349,7 @@ public class GUI extends javax.swing.JFrame {
                 GUI gui = new GUI();
 
                 gui.setVisible(true);
-                gui.hentKino();
+
 
     }
 
@@ -2156,4 +2480,5 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel titleLabel;
     private javax.swing.JTextField titleTxt;
     private javax.swing.JTextField totalTxt;
+    // End of variables declaration
 }

@@ -1,6 +1,13 @@
 package Kontroll;
 
+import com.sun.java.accessibility.util.AccessibilityEventMonitor;
+
 import javax.swing.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,9 +57,42 @@ public class Kontroll {
 
     }
 
+    public void fjernUbetalteBilletter(Visning visning) throws IOException {
+
+        /*
+            Opprett filer "slettinger.dat" dersom den ikke finnes
+         */
+
+        BufferedWriter fil = new BufferedWriter(new FileWriter("slettinger.dat", true));
+
+        ArrayList<Billett> fjernes = new ArrayList<Billett>();
+
+        //Gå gjennom bilettlista og sjekk om de er betalt
+        for(Billett billett: this.billetter) {
+            if (!billett.isErBetalt() && billett.getVisning().equals(visning)) {
+                //visning.fjernBillett(billett);
+                //billetter.remove(billett);
+                fil.append( billett.toString());
+                fil.newLine();
+
+                fjernes.add(billett);
+                System.out.println(billett.getBillettkode() + " er fjernet.");
+            }
+        }
+        //Fjern billett(er)
+        for(Billett billett: fjernes) {
+            this.billetter.remove(billett);
+        }
+        //Steng fil
+        fil.close();
+    }
+
     public void nyBillett(Billett billett) {
         billett.getVisning().leggTilBillett(billett);
         billetter.add(billett);
+        for(Billett b:this.billetter) {
+            System.out.println(b.toString());
+        }
     }
 
 
@@ -81,6 +121,13 @@ public class Kontroll {
             return null;
         }
         return filmer.get(indeks);
+    }
+
+    private class dropdownHaandtering implements ItemListener {
+        @Override
+        public void itemStateChanged(ItemEvent event){
+
+        }
     }
 
     public Visning finnVisning(int visningsnr) {
@@ -351,6 +398,7 @@ public class Kontroll {
         return tabellInnhold;
     }
 
+
     /**
      * Regner ut statistikk for en film.
      * @param i
@@ -424,6 +472,7 @@ public class Kontroll {
         return tabellInnhold;
     }
 
+
     /**
      * Lager en Object-liste over statistikker i rapporter
      */
@@ -467,6 +516,21 @@ public class Kontroll {
         return billettKode;
     }
 
+    public int visningsNrIncrement(){
+        int visningsNr;
+        for(visningsNr = 0; visningsNr < getVisninger().size(); visningsNr++){
+            visningsNr++;
+        }
+        return visningsNr;
+    }
+
+    public int filmNrIncrement(){
+        int filmNr;
+        for(filmNr = 0; filmNr < getVisninger().size(); filmNr++){
+            filmNr++;
+        }
+        return filmNr;
+    }
 
 
 
@@ -482,13 +546,30 @@ public class Kontroll {
     /**
      * Legger til en Kinoasal i Kontroll sin ArrayList over Kinosaler
      * @param kinosalnr
-     * @param kinosalnavn
+     * @param kino
      * @param kinonavn
      */
-    //public void leggTilKinosal(int kinosalnr, Kontroll.Kino kinosalnavn, String kinonavn) {
-      //  kinosaler.add(new Kinosal(kinosalnr, kinosalnavn, kinonavn));
+    public void leggTilKinosal(int kinosalnr, Kino kino, String kinonavn) {
+        kinosaler.add(new Kinosal(kinosalnr, kino, kinonavn));
 
-    //}
+    }
+
+    /**
+     * Legger til en Visning i Kontroll sin ArrayList over Visninger
+     */
+    public void leggTilVisning(int visningsnr, Film film, Kinosal kinosal, Date dato, double pris) {
+        visninger.add(new Visning(visningsnr, film, kinosal, dato, pris));
+    }
+
+
+    /**
+     * Legger til en Kino i Kontroll sin ArrayList over Kinoer
+     */
+
+    public void leggTilKino(String kinonavn) {
+        kinoer.add(new Kino(kinonavn));
+    }
+
 
 
     /**
