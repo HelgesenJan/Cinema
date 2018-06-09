@@ -1755,8 +1755,11 @@ public class GUI extends javax.swing.JFrame {
         reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
 
 
-
     }
+
+
+
+
 
     /**
      * Vindu for rapporter
@@ -2064,12 +2067,15 @@ public class GUI extends javax.swing.JFrame {
             adminSettings.setVisible(true);
             adminSettings.pack();
             hentKino();
+            hentTittel();
             fyllFilmReservasjonsTabell(false);
         }catch (Exception e){
 
         }
 
     }
+
+
 
     private void adminAddMovieActionPerformed(java.awt.event.ActionEvent evt) {
         opprettFilm();
@@ -2089,7 +2095,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void adminTitleDropdownActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
     }
 
     private void adminDateDropdownActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2106,7 +2112,9 @@ public class GUI extends javax.swing.JFrame {
 
     private void adminCloseActionPerformed(java.awt.event.ActionEvent evt) {
         adminSettings.setVisible(false);
+
     }
+
 
     private void reportButtonActionPerformed(java.awt.event.ActionEvent evt) {
         statistics.setVisible(true);
@@ -2204,7 +2212,7 @@ public class GUI extends javax.swing.JFrame {
 //    }
 
     public void hentTittel(){
-        for(int i = 0; i < kontroll.getKinosaler().size(); i++){
+        for(int i = 0; i < kontroll.getFilmer().size(); i++){
             adminTitleDropdown.addItem(kontroll.getFilmer().get(i).getFilmnavn());
         }
     }

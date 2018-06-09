@@ -398,6 +398,7 @@ public class Kontroll {
         return tabellInnhold;
     }
 
+
     /**
      * Regner ut statistikk for en film.
      * @param i
