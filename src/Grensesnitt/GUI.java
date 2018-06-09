@@ -65,7 +65,6 @@ public class GUI extends javax.swing.JFrame {
         reserveMovieTable = new javax.swing.JTable();
         reserveRemoveSeat = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         reserveTicketTable = new javax.swing.JTable();
         fieldReservePriceSum = new javax.swing.JTextField();
@@ -93,7 +92,6 @@ public class GUI extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel14 = new javax.swing.JLabel();
-        staffCinemaChoice = new javax.swing.JComboBox<>();
         staffDropdownSeat = new javax.swing.JComboBox<>();
         staffAddPlacement = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -108,6 +106,8 @@ public class GUI extends javax.swing.JFrame {
         staffClose = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         staffRemovePlacement = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        staffCinemaChoice = new javax.swing.JComboBox<>();
         statistics = new javax.swing.JDialog();
         jLabel17 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
@@ -152,7 +152,6 @@ public class GUI extends javax.swing.JFrame {
         adminMovieTable = new javax.swing.JTable();
         adminCinemaDropdown = new javax.swing.JComboBox<>();
         adminHeader = new javax.swing.JLabel();
-        adminDateDropdown = new javax.swing.JComboBox<>();
         adminEditMovie = new javax.swing.JButton();
         newMovie = new javax.swing.JLabel();
         theaterLabel = new javax.swing.JLabel();
@@ -164,7 +163,6 @@ public class GUI extends javax.swing.JFrame {
         adminAddMovie = new javax.swing.JButton();
         timeLabel = new javax.swing.JLabel();
         newShowing = new javax.swing.JLabel();
-        adminTimeDropdown = new javax.swing.JComboBox<>();
         titleLabel = new javax.swing.JLabel();
         priceLabel = new javax.swing.JLabel();
         adminTitleDropdown = new javax.swing.JComboBox<>();
@@ -172,11 +170,37 @@ public class GUI extends javax.swing.JFrame {
         dateLabel = new javax.swing.JLabel();
         editLabel = new javax.swing.JLabel();
         cinemaLabel = new javax.swing.JLabel();
+        adminDisplayDate = new javax.swing.JTextField();
+        adminDisplayClock = new javax.swing.JTextField();
+        newMovie1 = new javax.swing.JLabel();
+        adminChangeMovieName = new javax.swing.JButton();
+        adminChangeNameList = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        jSeparator8 = new javax.swing.JSeparator();
+        jSeparator9 = new javax.swing.JSeparator();
+        jSeparator10 = new javax.swing.JSeparator();
         adminPlanner = new javax.swing.JDialog();
         planningHeader = new javax.swing.JLabel();
         adminButton = new javax.swing.JButton();
         reportButton = new javax.swing.JButton();
         planningClose = new javax.swing.JButton();
+        adminChangeDisplayWindow = new javax.swing.JDialog();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        changeDisplayID = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        changeDisplayMovie = new javax.swing.JComboBox<>();
+        jLabel36 = new javax.swing.JLabel();
+        changeDisplayTheatre = new javax.swing.JComboBox<>();
+        jLabel37 = new javax.swing.JLabel();
+        changeDisplayDate = new javax.swing.JTextField();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        changeDisplayTime = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        changeDisplayConfirm = new javax.swing.JButton();
+        changeDisplayClose = new javax.swing.JButton();
         exit = new javax.swing.JButton();
         openTicketReservation = new javax.swing.JButton();
         openAdmin = new javax.swing.JButton();
@@ -1177,19 +1201,19 @@ public class GUI extends javax.swing.JFrame {
 
         adminMovieTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null}
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null}
                 },
                 new String [] {
-                        "Film", "Klokkeslett", "Sal", "Pris"
+                        "Kino", "Film", "Sal", "Dato", "Pris"
                 }
         ) {
             boolean[] canEdit = new boolean [] {
-                    false, false, false, false
+                    false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1198,14 +1222,15 @@ public class GUI extends javax.swing.JFrame {
         });
         adminMovieTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane9.setViewportView(adminMovieTable);
+        if (adminMovieTable.getColumnModel().getColumnCount() > 0) {
+            adminMovieTable.getColumnModel().getColumn(0).setResizable(false);
+            adminMovieTable.getColumnModel().getColumn(1).setResizable(false);
+            adminMovieTable.getColumnModel().getColumn(2).setResizable(false);
+            adminMovieTable.getColumnModel().getColumn(3).setResizable(false);
+            adminMovieTable.getColumnModel().getColumn(4).setResizable(false);
+        }
 
-        adminCinemaDropdown.setModel(new javax.swing.DefaultComboBoxModel<>());
-
-        adminCinemaDropdown.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminCinemaDropdownActionPerformed(evt);
-            }
-        });
+       // adminCinemaDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         adminCinemaDropdown.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 adminCinemaDropdownItemStateChanged(evt);
@@ -1214,13 +1239,6 @@ public class GUI extends javax.swing.JFrame {
 
         adminHeader.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         adminHeader.setText("Administrasjon");
-
-        adminDateDropdown.setModel(new javax.swing.DefaultComboBoxModel<>());
-        adminDateDropdown.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminDateDropdownActionPerformed(evt);
-            }
-        });
 
         adminEditMovie.setText("Endre");
         adminEditMovie.addActionListener(new java.awt.event.ActionListener() {
@@ -1243,12 +1261,7 @@ public class GUI extends javax.swing.JFrame {
 
         movieLabel.setText("Tittel");
 
-        adminTheaterDropdown.setModel(new javax.swing.DefaultComboBoxModel<>());
-        adminTheaterDropdown.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                adminTheaterDropdownItemStateChanged(evt);
-            }
-        });
+        //adminTheaterDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         adminTheaterDropdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adminTheaterDropdownActionPerformed(evt);
@@ -1280,23 +1293,11 @@ public class GUI extends javax.swing.JFrame {
         newShowing.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         newShowing.setText("Legg til visning");
 
-        adminTimeDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        adminTimeDropdown.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminTimeDropdownActionPerformed(evt);
-            }
-        });
-
-        titleLabel.setText("Tittel");
+        titleLabel.setText("Film");
 
         priceLabel.setText("Pris");
 
-        adminTitleDropdown.setModel(new javax.swing.DefaultComboBoxModel<>());
-        adminTitleDropdown.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                adminTitleDropdownItemStateChanged(evt);
-            }
-        });
+        //adminTitleDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         adminTitleDropdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adminTitleDropdownActionPerformed(evt);
@@ -1316,58 +1317,116 @@ public class GUI extends javax.swing.JFrame {
 
         cinemaLabel.setText("Kino");
 
+        newMovie1.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        newMovie1.setText("Endre filmnavn");
+
+        adminChangeMovieName.setText("Endre");
+        adminChangeMovieName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adminChangeMovieNameActionPerformed(evt);
+            }
+        });
+
+        adminChangeNameList.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                adminChangeNameListItemStateChanged(evt);
+            }
+        });
+        adminChangeNameList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adminChangeNameListActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("YYYY-MM-DD");
+
+        jLabel34.setText("HH:MM");
+
         javax.swing.GroupLayout adminSettingsLayout = new javax.swing.GroupLayout(adminSettings.getContentPane());
         adminSettings.getContentPane().setLayout(adminSettingsLayout);
         adminSettingsLayout.setHorizontalGroup(
                 adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminSettingsLayout.createSequentialGroup()
-                                .addContainerGap(25, Short.MAX_VALUE)
                                 .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminSettingsLayout.createSequentialGroup()
-                                                .addComponent(adminEditMovie)
-                                                .addGap(71, 71, 71)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(adminClose))
-                                        .addComponent(jScrollPane9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(27, 27, 27))
-                        .addGroup(adminSettingsLayout.createSequentialGroup()
-                                .addGap(23, 23, 23)
-                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(adminHeader)
-                                        .addComponent(newShowing)
-                                        .addComponent(movieLabel)
-                                        .addComponent(newMovie)
                                         .addGroup(adminSettingsLayout.createSequentialGroup()
-                                                .addComponent(adminMovieTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(adminAddMovie))
-                                        .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(adminAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGroup(adminSettingsLayout.createSequentialGroup()
-                                                        .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminSettingsLayout.createSequentialGroup()
-                                                                        .addComponent(cinemaLabel)
-                                                                        .addGap(169, 169, 169))
-                                                                .addGroup(adminSettingsLayout.createSequentialGroup()
-                                                                        .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                                                        .addComponent(adminCinemaDropdown, 0, 182, Short.MAX_VALUE)
-                                                                                        .addComponent(titleLabel, javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                        .addComponent(adminTitleDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                                                .addComponent(editLabel))
-                                                                        .addGap(12, 12, 12)))
-                                                        .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addComponent(dateLabel)
-                                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                        .addComponent(adminDateDropdown, 0, 150, Short.MAX_VALUE)
-                                                                        .addComponent(theaterLabel)
-                                                                        .addComponent(adminTheaterDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                                        .addGap(12, 12, 12)
-                                                        .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addComponent(timeLabel)
-                                                                .addComponent(adminTimeDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addComponent(priceLabel)
-                                                                .addComponent(adminPriceTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addGap(23, 23, 23)
+                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                                .addComponent(editLabel)
+                                                                .addGap(0, 0, Short.MAX_VALUE))
+                                                        .addComponent(jScrollPane9)))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminSettingsLayout.createSequentialGroup()
+                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                .addComponent(adminEditMovie)))
+                                .addContainerGap())
+                        .addComponent(jSeparator8)
+                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                .addGap(23, 23, 23)
+                                                .addComponent(adminHeader))
+                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                .addGap(23, 23, 23)
+                                                .addComponent(newShowing))
+                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                .addGap(24, 24, 24)
+                                                .addComponent(cinemaLabel)
+                                                .addGap(169, 169, 169)
+                                                .addComponent(theaterLabel)
+                                                .addGap(144, 144, 144)
+                                                .addComponent(priceLabel))
+                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                .addGap(23, 23, 23)
+                                                .addComponent(adminCinemaDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(12, 12, 12)
+                                                .addComponent(adminTheaterDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(12, 12, 12)
+                                                .addComponent(adminPriceTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                .addGap(23, 23, 23)
+                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(adminTitleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(titleLabel))
+                                                .addGap(12, 12, 12)
+                                                .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(125, 125, 125)
+                                                .addComponent(timeLabel))
+                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                .addGap(23, 23, 23)
+                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(newMovie)
+                                                        .addComponent(movieLabel)
+                                                        .addComponent(adminMovieTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(adminAddMovie))
+                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                                .addGap(34, 34, 34)
+                                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(newMovie1)
+                                                                        .addComponent(adminChangeMovieName)))
+                                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                                .addGap(35, 35, 35)
+                                                                .addComponent(adminChangeNameList, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                .addGap(217, 217, 217)
+                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(adminAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(adminDisplayDate, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(jLabel11))
+                                                                .addGap(12, 12, 12)
+                                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel34)
+                                                                        .addComponent(adminDisplayClock, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jSeparator9)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminSettingsLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jSeparator10, javax.swing.GroupLayout.PREFERRED_SIZE, 625, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         adminSettingsLayout.setVerticalGroup(
                 adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1375,52 +1434,69 @@ public class GUI extends javax.swing.JFrame {
                                 .addGap(14, 14, 14)
                                 .addComponent(adminHeader)
                                 .addGap(26, 26, 26)
-                                .addComponent(newMovie)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(newMovie)
+                                        .addComponent(newMovie1))
+                                .addGap(13, 13, 13)
                                 .addComponent(movieLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(13, 13, 13)
                                 .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(adminMovieTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(adminAddMovie))
-                                .addGap(18, 18, 18)
+                                        .addComponent(adminChangeNameList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(13, 13, 13)
+                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(adminAddMovie)
+                                        .addComponent(adminChangeMovieName))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator10, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(3, 3, 3)
                                 .addComponent(newShowing)
                                 .addGap(15, 15, 15)
-                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(adminSettingsLayout.createSequentialGroup()
-                                                .addComponent(cinemaLabel)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(adminCinemaDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(adminTheaterDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(adminPriceTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(3, 3, 3)
+                                                .addComponent(cinemaLabel))
+                                        .addComponent(theaterLabel)
+                                        .addComponent(priceLabel))
+                                .addGap(7, 7, 7)
+                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(adminCinemaDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(adminTheaterDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(adminPriceTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(adminSettingsLayout.createSequentialGroup()
-                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(theaterLabel)
-                                                        .addComponent(priceLabel))
-                                                .addGap(32, 32, 32)))
-                                .addGap(11, 11, 11)
-                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(titleLabel)
-                                        .addComponent(dateLabel)
-                                        .addComponent(timeLabel))
+                                                .addGap(11, 11, 11)
+                                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(dateLabel)
+                                                        .addComponent(timeLabel)))
+                                        .addGroup(adminSettingsLayout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(titleLabel)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(adminTitleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(adminDisplayDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(adminDisplayClock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(adminTitleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(adminDateDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(adminTimeDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel11)
+                                        .addComponent(jLabel34))
+                                .addGap(14, 14, 14)
                                 .addComponent(adminAdd)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                                .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(editLabel)
-                                .addGap(15, 15, 15)
-                                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(adminSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(adminEditMovie)
-                                        .addComponent(adminClose))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(adminEditMovie)
+                                .addGap(9, 9, 9)
+                                .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31)
+                                .addComponent(adminClose)
+                                .addContainerGap())
         );
-
         planningHeader.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         planningHeader.setText("Planleggingsadministrator");
 
@@ -1474,6 +1550,114 @@ public class GUI extends javax.swing.JFrame {
                                 .addComponent(planningClose)
                                 .addContainerGap(30, Short.MAX_VALUE))
         );
+
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel9.setText("Endre visning");
+
+        jLabel12.setText("Visningsnr:");
+
+        changeDisplayID.setEditable(false);
+
+        jLabel35.setText("Film:");
+
+        jLabel36.setText("Sal:");
+
+        jLabel37.setText("Dato:");
+
+        jLabel38.setText("Klokkeslett:");
+
+        jLabel39.setText("Pris:");
+
+        changeDisplayConfirm.setText("Endre");
+        changeDisplayConfirm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeDisplayConfirmActionPerformed(evt);
+            }
+        });
+
+        changeDisplayClose.setText("Lukk");
+        changeDisplayClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeDisplayCloseActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout adminChangeDisplayWindowLayout = new javax.swing.GroupLayout(adminChangeDisplayWindow.getContentPane());
+        adminChangeDisplayWindow.getContentPane().setLayout(adminChangeDisplayWindowLayout);
+        adminChangeDisplayWindowLayout.setHorizontalGroup(
+                adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(adminChangeDisplayWindowLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(adminChangeDisplayWindowLayout.createSequentialGroup()
+                                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(jLabel9)
+                                                        .addGroup(adminChangeDisplayWindowLayout.createSequentialGroup()
+                                                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel12)
+                                                                        .addComponent(jLabel35)
+                                                                        .addComponent(jLabel36)
+                                                                        .addComponent(jLabel37))
+                                                                .addGap(18, 18, 18)
+                                                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                        .addComponent(changeDisplayID)
+                                                                        .addComponent(changeDisplayMovie, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(changeDisplayTheatre, 0, 158, Short.MAX_VALUE)
+                                                                        .addComponent(changeDisplayDate)))
+                                                        .addGroup(adminChangeDisplayWindowLayout.createSequentialGroup()
+                                                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel38)
+                                                                        .addComponent(jLabel39))
+                                                                .addGap(18, 18, 18)
+                                                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(changeDisplayTime)
+                                                                        .addGroup(adminChangeDisplayWindowLayout.createSequentialGroup()
+                                                                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addGap(0, 79, Short.MAX_VALUE)))))
+                                                .addGap(0, 60, Short.MAX_VALUE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminChangeDisplayWindowLayout.createSequentialGroup()
+                                                .addComponent(changeDisplayClose)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(changeDisplayConfirm)))
+                                .addContainerGap())
+        );
+        adminChangeDisplayWindowLayout.setVerticalGroup(
+                adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(adminChangeDisplayWindowLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(changeDisplayID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel12))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel35)
+                                        .addComponent(changeDisplayMovie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel36)
+                                        .addComponent(changeDisplayTheatre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel37)
+                                        .addComponent(changeDisplayDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel38)
+                                        .addComponent(changeDisplayTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel39)
+                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                                .addGroup(adminChangeDisplayWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(changeDisplayConfirm)
+                                        .addComponent(changeDisplayClose))
+                                .addContainerGap())
+        );
+
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -1560,6 +1744,20 @@ public class GUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>
+
+
+
+    private void adminChangeNameListActionPerformed(ActionEvent evt) {
+
+    }
+
+    private void adminChangeNameListItemStateChanged(ItemEvent evt) {
+
+    }
+
+    private void adminChangeMovieNameActionPerformed(ActionEvent evt) {
+
+    }
 
     private void staffMovieTableSelected(ListSelectionEvent e) {
 
@@ -2078,7 +2276,6 @@ public class GUI extends javax.swing.JFrame {
         try{
             adminSettings.setVisible(true);
             adminSettings.pack();
-            hentKino();
             hentTittel();
             fyllFilmReservasjonsTabell(false);
         }catch (Exception e){
@@ -2119,7 +2316,8 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void adminEditMovieActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        adminChangeDisplayWindow.setVisible(true);
+        adminChangeDisplayWindow.pack();
     }
 
     private void adminCloseActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2195,12 +2393,21 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }
 
+    private void changeDisplayConfirmActionPerformed(java.awt.event.ActionEvent evt) {
+        adminChangeDisplayWindow.setVisible(false);
+    }
+
+    private void changeDisplayCloseActionPerformed(java.awt.event.ActionEvent evt) {
+        adminChangeDisplayWindow.setVisible(false);
+    }
+
     /**
      * Metode for å hente kinoliste og kino-dropdown med den
      */
 
     public void hentKino() {
         for (int i = 0; i < kontroll.getKinoer().size(); i++) {
+            System.out.println(kontroll.getKinoer().get(i));
             System.out.println(kontroll.getKinoer().get(i).getKinonavn());
             adminCinemaDropdown.addItem(kontroll.getKinoer().get(i).getKinonavn());
             cinemaChoice.addItem(kontroll.getKinoer().get(i).getKinonavn());
@@ -2235,7 +2442,7 @@ public class GUI extends javax.swing.JFrame {
             Date datoen = kontroll.getVisninger().get(i).getDato();
             SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String stringDato = datoFormat.format(datoen);
-            adminDateDropdown.addItem(stringDato);
+            //adminDate.addItem(stringDato);
         }
     }
 
@@ -2341,24 +2548,29 @@ public class GUI extends javax.swing.JFrame {
 
                 try {
                     kontroll =  Kontroll.getInstance();
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
 
                 GUI gui = new GUI();
-
+                gui.hentKino();
                 gui.setVisible(true);
 
 
     }
 
-    // Variables declaration - do not modify
+
     private javax.swing.JButton adminAdd;
     private javax.swing.JButton adminAddMovie;
     private javax.swing.JButton adminButton;
+    private javax.swing.JDialog adminChangeDisplayWindow;
+    private javax.swing.JButton adminChangeMovieName;
+    private javax.swing.JComboBox<String> adminChangeNameList;
     private javax.swing.JComboBox<String> adminCinemaDropdown;
     private javax.swing.JButton adminClose;
-    private javax.swing.JComboBox<String> adminDateDropdown;
+    private javax.swing.JTextField adminDisplayClock;
+    private javax.swing.JTextField adminDisplayDate;
     private javax.swing.JButton adminEditMovie;
     private javax.swing.JLabel adminHeader;
     private javax.swing.JTable adminMovieTable;
@@ -2367,9 +2579,15 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField adminPriceTxt;
     private javax.swing.JDialog adminSettings;
     private javax.swing.JComboBox<String> adminTheaterDropdown;
-    private javax.swing.JComboBox<String> adminTimeDropdown;
     private javax.swing.JComboBox<String> adminTitleDropdown;
     private javax.swing.JButton cancelConfirmationWindow;
+    private javax.swing.JButton changeDisplayClose;
+    private javax.swing.JButton changeDisplayConfirm;
+    private javax.swing.JTextField changeDisplayDate;
+    private javax.swing.JTextField changeDisplayID;
+    private javax.swing.JComboBox<String> changeDisplayMovie;
+    private javax.swing.JComboBox<String> changeDisplayTheatre;
+    private javax.swing.JTextField changeDisplayTime;
     private javax.swing.JComboBox<String> cinemaChoice;
     private javax.swing.JLabel cinemaLabel;
     private javax.swing.JDialog cinemaStaff;
@@ -2391,6 +2609,8 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel header;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -2414,11 +2634,18 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2429,15 +2656,20 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JTextField jTextField3;
     private javax.swing.JDialog login;
     private javax.swing.JButton loginClose;
     private javax.swing.JLabel movieLabel;
     private javax.swing.JLabel newMovie;
+    private javax.swing.JLabel newMovie1;
     private javax.swing.JLabel newShowing;
     private javax.swing.JButton openAdmin;
     private javax.swing.JButton openAttendant;
@@ -2479,5 +2711,4 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel titleLabel;
     private javax.swing.JTextField titleTxt;
     private javax.swing.JTextField totalTxt;
-    // End of variables declaration
 }
