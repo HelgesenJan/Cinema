@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.*;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -96,6 +97,35 @@ public class Kontroll {
     }
 
 
+    public void nyVisning(String kino, String sal, Double pris, String tittel, String dato, String starttid){
+        for(int i = 0; i < filmer.size(); i++){
+            if(filmer.get(i).getFilmnavn().equals(tittel)) {
+                Film nyFilm = filmer.get(i);
+                for(int n = 0; n < kinosaler.size(); n++){
+                    if(sal.equals(kinosaler.get(n).getKinosalnavn())){
+                        Kinosal nySal = kinosaler.get(n);
+
+                        String dato_str = dato + " " + starttid + ":00";
+                        SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                        Date datoSjekk = null;
+
+                        try {
+                            datoSjekk = datoFormat.parse(dato_str);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        for(int o = 0; o < visninger.size(); o++){
+                            int visningsNr = visninger.size()+1;
+
+                            visninger.add(new Visning(visningsNr, nyFilm, nySal, datoSjekk, pris));
+                        }
+                    }
+                }
+            }
+        }
+    }
     public Kino finnKino(String kinonavn) {
         Kino dummy = new Kino(kinonavn);
         int indeks = Collections.binarySearch(kinoer, dummy);
@@ -412,16 +442,18 @@ public class Kontroll {
         for(int n=0; n<filmer.get(i).getVisninger().size(); n++) {
 
             int antallBilletter = 0;
+            int antallPlasser = 0;
             int kapasitet = filmer.get(i).getVisninger().get(n).getKinosal().getAntallPlasser();
 
 
             for(int a=0; a<filmer.get(i).getVisninger().get(n).getBilletter().size(); a++) {
+                antallPlasser += filmer.get(i).getVisninger().get(n).getBilletter().get(a).getAntallPlasser();
                 antallBilletter++;
             }
 
-            int prosent = (antallBilletter*100) / kapasitet;
+            int prosent = (antallPlasser*100) / kapasitet;
 
-            tabellInnhold[teller][0] = antallBilletter;
+            tabellInnhold[teller][0] = antallBilletter + " billetter / " + antallPlasser + " plasser";
             tabellInnhold[teller][1] = prosent + "%";
             tabellInnhold[teller][2] = filmer.get(i).getVisninger().get(n).getIkkeBetalte();
             tabellInnhold[teller][3] = filmer.get(i).getVisninger().get(n).getDato() + ", " + filmer.get(i).getVisninger().get(n).getStartTid();
@@ -496,26 +528,18 @@ public class Kontroll {
         return tabellInnhold;
     }
 
-    public Object[][] lagVisningerIkkeBestiltListe() {
-        int rader = this.visninger.size();
+    public Object[][] lagKinosalKinoTabellListe() {
+        int rader = kinosaler.size();
         int teller = 0;
-        Object[][] tabellInnhold = new Object[rader][6];
-        for(int i=0; i<visninger.size(); i++) {
-
-            Visning visning = visninger.get(i);
-            if(!visning.harBilletter()) {
-                tabellInnhold[teller][0] = visning.getKinosal().getKino().getKinonavn();
-                tabellInnhold[teller][1] = visning.getFilm().getFilmnavn();
-                tabellInnhold[teller][2] = visning.getKinosal().getKinosalnavn();
-                tabellInnhold[teller][3] = visning.getStartTid();
-                tabellInnhold[teller][4] = visning.getPris();
-                tabellInnhold[teller][5] = visning.getVisningsNr();
-                teller++;
-            }
+        Object[][] tabellInnhold = new Object[rader][1];
+        for(int i=0; i<kinosaler.size(); i++) {
+            tabellInnhold[teller][0] = kinosaler.get(i).getKino().getKinonavn() + " - " + kinosaler.get(i).getKinosalnavn();
+            teller++;
         }
 
         return tabellInnhold;
     }
+
 
     /**
      * Genererer en tilfeldig billettkode
@@ -525,8 +549,7 @@ public class Kontroll {
         // Bruker et random-objekt for å trekke en tilfeldig posisjon fra bokstaver- og siffer-listene.
         // Bygger dermed en billettkode bestående av fire karakterer og to sifre
 
-        char[] bokstaver = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-                'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        char[] bokstaver = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
         char[] siffer = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
         Random tilfeldigPosisjon = new Random();
