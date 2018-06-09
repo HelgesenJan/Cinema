@@ -1645,6 +1645,14 @@ public class GUI extends javax.swing.JFrame {
     }
 
 
+    private void fyllKinosalStatistikk(int i) {
+        Object[][] tabellInnhold = kontroll.statistikkKinosal(i);
+        Object[] kolonnenavn = {"Film", "% brukte plasser"};
+        reportPercentTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+        System.out.println("Nå skal tabellen være fylt");
+    }
+
+
     private void openAdminActionPerformed(java.awt.event.ActionEvent evt) {
         login.setVisible(true);
         login.pack();
@@ -1798,14 +1806,22 @@ public class GUI extends javax.swing.JFrame {
 
     }
 
-
-
     private void reportCloseMouseClicked(java.awt.event.MouseEvent evt) {
 
     }
 
     private void reportCinemaTheaterMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
+        try {
+            int indeks = reportCinemaTheater.getSelectedRow();
+            String sal = reportCinemaTheater.getValueAt(indeks, 0).toString();
+            for(int i=0; i<kontroll.getKinosaler().size(); i++) {
+                if(sal == kontroll.getKinosaler().get(i).getKinosalnavn()) {
+                    fyllKinosalStatistikk(i);
+                }
+            }
+
+        } catch (Exception e) {
+        }
     }
 
     private void reportCloseActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1912,6 +1928,7 @@ public class GUI extends javax.swing.JFrame {
         statistics.setVisible(true);
         statistics.pack();
         fyllRapportTabell();
+        fyllKinosalTabell();
     }
 
     private void planningCloseActionPerformed(java.awt.event.ActionEvent evt) {

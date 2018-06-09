@@ -378,9 +378,31 @@ public class Kontroll {
             tabellInnhold[teller][2] = filmer.get(i).getVisninger().get(n).getIkkeBetalte();
             tabellInnhold[teller][3] = filmer.get(i).getVisninger().get(n).getDato() + ", " + filmer.get(i).getVisninger().get(n).getStartTid();
             teller++;
-            System.out.println(kapasitet);
-            System.out.println(prosent);
         }
+        return tabellInnhold;
+    }
+
+    public Object[][] statistikkKinosal(int i) {
+        int rader = kinosaler.get(i).getVisninger().size();
+        Object[][] tabellInnhold = new Object[rader][2];
+
+        System.out.println(kinosaler.get(i).getKinosalnavn());
+
+        int teller = 0;
+
+        for(int n=0; n<filmer.size(); n++) {
+            for(int v=0; v<kinosaler.get(i).getVisninger().size(); v++) {
+                if(filmer.get(n).equals(kinosaler.get(i).getVisninger().get(v).getFilm())) {
+                    tabellInnhold[teller][1] = filmer.get(n).getFilmnavn();
+                    tabellInnhold[teller][2] = "Test prosent";
+                }
+            }
+        }
+
+        for(int v=0; v<kinosaler.get(i).getVisninger().size(); v++) {
+            System.out.println("test");
+        }
+
         return tabellInnhold;
     }
 
