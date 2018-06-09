@@ -96,35 +96,29 @@ public class Kontroll {
         }
     }
 
+    public Date lagDato(String dato, String startid) throws ParseException {
+        SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dato_str = dato + " " + startid + ":00";
+        return datoFormat.parse(dato_str);
+    }
 
-    public void nyVisning(String kino, String sal, Double pris, String tittel, String dato, String starttid){
-        for(int i = 0; i < filmer.size(); i++){
-            if(filmer.get(i).getFilmnavn().equals(tittel)) {
-                Film nyFilm = filmer.get(i);
-                for(int n = 0; n < kinosaler.size(); n++){
-                    if(sal.equals(kinosaler.get(n).getKinosalnavn())){
-                        Kinosal nySal = kinosaler.get(n);
 
-                        String dato_str = dato + " " + starttid + ":00";
-                        SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public void nyVisning(String kinonavn, String salnavn, Double pris, String tittel, String dagmnd, String starttid) throws ParseException {
 
-                        Date datoSjekk = null;
+        Kinosal sal = this.finnSal(kinonavn, salnavn);
 
-                        try {
-                            datoSjekk = datoFormat.parse(dato_str);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        for(int o = 0; o < visninger.size(); o++){
-                            int visningsNr = visninger.size()+1;
-
-                            visninger.add(new Visning(visningsNr, nyFilm, nySal, datoSjekk, pris));
-                        }
-                    }
-                }
-            }
+        if(sal== null) {
+            System.out.println("kukhode");
         }
+        Film film = this.finnFilm(tittel);
+        Date dato = this.lagDato(dagmnd, starttid);
+
+        int visningsnr = this.visninger.size()+1;
+        Visning visning = new Visning(visningsnr,film,sal,dato,pris);
+
+        film.leggTilVisning(visning);
+        this.visninger.add(visning);
+
     }
     public Kino finnKino(String kinonavn) {
         Kino dummy = new Kino(kinonavn);
@@ -153,6 +147,15 @@ public class Kontroll {
         return filmer.get(indeks);
     }
 
+    public Film finnFilm(String filmnavn) {
+        for (Film film:this.filmer) {
+            if(film.getFilmnavn().equals(filmnavn)) {
+                return film;
+            }
+        }
+        return null;
+    }
+
     private class dropdownHaandtering implements ItemListener {
         @Override
         public void itemStateChanged(ItemEvent event){
@@ -176,6 +179,19 @@ public class Kontroll {
             return null;
         }
         return billetter.get(indeks);
+    }
+
+    public Kinosal finnSal(String kinonavn, String salnavn) {
+
+        for(Kinosal sal:this.getKinosaler()) {
+            System.out.println(kinonavn + " " + salnavn);
+            if(sal.getKino().getKinonavn().equals(kinonavn)
+                    && sal.getKinosalnavn().equals(salnavn)) {
+                System.out.println("sann");
+                return sal;
+            }
+        }
+        return null;
     }
 
     public ArrayList<Visning> filtrerVisninger(Kino kino) {
@@ -525,6 +541,26 @@ public class Kontroll {
             teller++;
         }
 
+        return tabellInnhold;
+    }
+
+    public Object[][] lagVisningerIkkeBestiltListe() {
+        int rader = this.visninger.size();
+        int teller = 0;
+        Object[][] tabellInnhold = new Object[rader][6];
+        for(int i=0; i<visninger.size(); i++) {
+
+            Visning visning = visninger.get(i);
+            if(!visning.harBilletter()) {
+                tabellInnhold[teller][0] = visning.getKinosal().getKino().getKinonavn();
+                tabellInnhold[teller][1] = visning.getFilm().getFilmnavn();
+                tabellInnhold[teller][2] = visning.getKinosal().getKinosalnavn();
+                tabellInnhold[teller][3] = visning.getStartTid();
+                tabellInnhold[teller][4] = visning.getPris();
+                tabellInnhold[teller][5] = visning.getVisningsNr();
+                teller++;
+            }
+        }
         return tabellInnhold;
     }
 

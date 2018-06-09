@@ -49,6 +49,10 @@ public class Film implements Comparable<Film>{
         return filmnavn;
     }
 
+    public void setFilmnavn(String filmnavn) {
+        this.filmnavn = filmnavn;
+    }
+
     @Override
     public int compareTo(Film o) {
         if(this.filmnr < o.getFilmnr()) {

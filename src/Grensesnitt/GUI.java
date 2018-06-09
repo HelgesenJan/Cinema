@@ -20,12 +20,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.awt.event.ActionEvent;
-import java.sql.SQLException;
-import java.util.stream.Collectors;
 
 import static javax.swing.JOptionPane.*;
 
@@ -1766,7 +1760,35 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void adminChangeMovieNameActionPerformed(ActionEvent evt) {
+        String filmnavn = (String) adminChangeNameList.getSelectedItem();
+        String nytt_filmnavn = JOptionPane.showInputDialog(adminSettings, "Oppgi nytt filmnavn",filmnavn);
 
+        if(nytt_filmnavn != null && !filmnavn.equals(nytt_filmnavn)) {
+            //Sjekk om nytt_filmavn er i bruk
+            boolean film_finnes = false;
+            for (Film film : kontroll.getFilmer()) {
+                if (film.getFilmnavn().equals(nytt_filmnavn)) {
+                    film_finnes = true;
+                }
+            }
+
+            if (film_finnes) {
+                JOptionPane.showMessageDialog(adminSettings, "Filmnavn er allerede i bruk!");
+            } else {
+
+                Film film = kontroll.finnFilm(filmnavn);
+
+                if (film != null) {
+                    film.setFilmnavn(nytt_filmnavn);
+                    //Oppdater gui
+                    hentFilmTitler();
+                    fyllVisningerSomKanEndres();
+                    JOptionPane.showMessageDialog(adminSettings, "Filmnavn endret.");
+                } else {
+                    JOptionPane.showMessageDialog(adminSettings, "Du må velge en film!");
+                }
+            }
+        }
     }
 
     private void adminMovieTableSelected(ListSelectionEvent e) {
@@ -1951,9 +1973,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void fyllVisningerSomKanEndres() {
         Object[][] tabellInnhold = kontroll.lagVisningerIkkeBestiltListe();
-
         Object[] kolonnenavn = {"Kino", "Film", "Sal", "Dato", "Pris","Visningsnr"};
-
 
         adminMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
@@ -2317,6 +2337,7 @@ public class GUI extends javax.swing.JFrame {
             for(int i = 0; i < kontroll.getVisninger().size(); i++){
                 System.out.println(kontroll.getVisninger().get(i).toString());
             }
+            fyllVisningerSomKanEndres();
 
     }
 
@@ -2325,7 +2346,7 @@ public class GUI extends javax.swing.JFrame {
             _VISNING = null;
             adminSettings.setVisible(true);
             adminSettings.pack();
-            hentTittel();
+            hentFilmTitler();
             fyllVisningerSomKanEndres();
             System.out.println("lol");
             //fyllFilmReservasjonsTabell(false);
@@ -2340,6 +2361,8 @@ public class GUI extends javax.swing.JFrame {
     private void adminAddMovieActionPerformed(java.awt.event.ActionEvent evt) {
         opprettFilm();
 
+        //Oppdater film liste
+        hentFilmTitler();
     }
 
     private void adminCinemaDropdownActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2496,9 +2519,12 @@ public class GUI extends javax.swing.JFrame {
     }
 
 
-    public void hentTittel(){
+    public void hentFilmTitler(){
+        adminTitleDropdown.removeAllItems();
+        adminChangeNameList.removeAllItems();
         for(int i = 0; i < kontroll.getFilmer().size(); i++){
             adminTitleDropdown.addItem(kontroll.getFilmer().get(i).getFilmnavn());
+            adminChangeNameList.addItem(kontroll.getFilmer().get(i).getFilmnavn());
         }
     }
 
@@ -2519,13 +2545,20 @@ public class GUI extends javax.swing.JFrame {
     public void leggTilVisning() {
         Object sal = adminTheaterDropdown.getSelectedItem();
         String konvertertSal = String.valueOf(sal);
+        Object kino = adminCinemaDropdown.getSelectedItem();
+        String konvertertKino = String.valueOf(kino);
         Double pris = Double.parseDouble(adminPriceTxt.getText());
         Object tittel = adminTitleDropdown.getSelectedItem();
         String konvertertTittel = String.valueOf(tittel);
         String dato = adminDisplayDate.getText();
         String starttid = adminDisplayClock.getText();
 
-        kontroll.nyVisning(konvertertSal, konvertertSal, pris, konvertertTittel, dato, starttid);
+        try {
+            kontroll.nyVisning(konvertertKino, konvertertSal, pris, konvertertTittel, dato, starttid);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(adminSettings, "Du har oppgitt ugydlig dato/klokkeslett. Sjekk ");
+        }
 
     }
 
