@@ -11,7 +11,7 @@ public class Kinosal implements Comparable<Kinosal> {
     private String kinosalnavn;
 
     private ArrayList<Plass> plasser = new ArrayList<>();
-    private ArrayList<Visning> visninger = new ArrayList<>();
+    //private ArrayList<Visning> visninger = new ArrayList<>();
 
     public Kinosal(int kinosalnr) {
         this.kinosalnr = kinosalnr;
@@ -23,9 +23,9 @@ public class Kinosal implements Comparable<Kinosal> {
         this.kinosalnavn = kinonavn;
     }
 
-    public ArrayList<Visning> getVisninger() {
-        return visninger;
-    }
+   // public ArrayList<Visning> getVisninger() {
+     //   return visninger;
+    //}
 
     public Plass finnPlass(int radnr, int setenr) {
         Iterator itr = plasser.iterator();

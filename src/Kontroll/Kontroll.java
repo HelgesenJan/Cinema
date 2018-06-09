@@ -156,12 +156,7 @@ public class Kontroll {
         return null;
     }
 
-    private class dropdownHaandtering implements ItemListener {
-        @Override
-        public void itemStateChanged(ItemEvent event){
 
-        }
-    }
 
     public Visning finnVisning(int visningsnr) {
         Visning dummy = new Visning(visningsnr);
@@ -349,20 +344,77 @@ public class Kontroll {
             billett.leggTilPlass(plass);
         }
         sortering = Sortering.TID;
+        db.close();
     }
 
-    public void slettPlass(int verdi) {
+    public void lagreDatabase() throws SQLException {
+        opprettDBForbindelse();
+
         try {
-            for (int i = 0; i < filmer.size(); i++){
-                filmer.remove(verdi);
+            //Kjør truncate på tabellene
+            runDBEndring("SET FOREIGN_KEY_CHECKS=0");
+            runDBEndring("TRUNCATE TABLE tblplassbillett");
+            runDBEndring("TRUNCATE TABLE tblfilm");
+            runDBEndring("TRUNCATE TABLE tblbillett");
+            runDBEndring("TRUNCATE TABLE tblvisning");
+            runDBEndring("SET FOREIGN_KEY_CHECKS=1");
+
+            //Legg til filmer
+            for (Film film : this.filmer) {
+                runDBEndring("INSERT INTO tblfilm(f_filmnr, f_filmnavn) VALUES('" +
+                        film.getFilmnr() + "', '" +
+                        film.getFilmnavn() + "')");
             }
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null, "Kan ikke endre film");
+
+            //Legg til visning
+            for (Visning visning : this.visninger) {
+                runDBEndring("INSERT INTO tblvisning(v_visningnr, v_filmnr, v_kinosalnr, v_dato, v_starttid, v_pris) VALUES('" +
+                        visning.getVisningsNr() + "','" +
+                        visning.getFilm().getFilmnr() + "','" +
+                        visning.getKinosal().getKinosalnr() + "','" +
+                        visning.getDagMnd() + "','" +
+                        visning.getStartKlokkeslett() + "','" +
+                        visning.getPris() + "')");
+            }
+
+            //for billetter
+            for (Billett billett : this.billetter) {
+                runDBEndring("INSERT INTO tblbillett(b_billettkode, b_visningsnr, b_erBetalt) VALUES('" +
+                        billett.getBillettkode() + "','" +
+                        billett.getVisning().getVisningsNr() + "','" +
+                        (billett.isErBetalt() ? 1 : 0) + "')"); //Kommentar: erBetalt blir 1 og !erBetalt blir 0
+                for (Plass plass : billett.getPlasser()) {
+                    runDBEndring("INSERT INTO tblplassbillett(pb_radnr, pb_setenr, pb_kinosalnr, pb_billettkode) VALUES('" +
+                            plass.getRadnr() + "','" +
+                            plass.getSetenr() + "','" +
+                            plass.getKinosal().getKinosalnr() + "','" +
+                            billett.getBillettkode() + "')");
+                }
+            }
+            //Kjør commit
+            db.commit();
+            db.close();
+        }catch(SQLException e) {
+            db.rollback();
+            db.close();
+            throw e;
         }
+        //
 
     }
 
+    /**
+     * Utfør SQL spørringer som gjør endringer INSERT/UPDATE/DELETE
+     * @param sql String
+     * @return boolean
+     */
 
+    public void runDBEndring(String sql) throws SQLException {
+            //Kjør spørring
+            stmt = db.createStatement();
+            stmt.executeUpdate(sql);
+
+    }
 
     public ResultSet runDBQuery(String sql) {
         resultat = null; //Nullstill resultat
@@ -375,6 +427,15 @@ public class Kontroll {
             return null;
         }
     }
+
+    public void opprettDBForbindelse() throws SQLException {
+            db = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db_navn,db_bruker,db_passord);
+            //Set autocommit false, slik at vi kan commite manuelt når alle spørringene er utført
+            db.setAutoCommit(false);
+            System.out.println("Dabase er koblet til!");
+
+    }
+
 
     public ArrayList<Kino> getKinoer() {
         return kinoer;
@@ -400,21 +461,6 @@ public class Kontroll {
         return billetter;
     }
 
-
-
-    public void opprettDBForbindelse() {
-
-        try {
-            db = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db_navn,db_bruker,db_passord);
-            //Set autocommit false, slik at vi kan commite manuelt når alle spørringene er utført
-            db.setAutoCommit(false);
-            System.out.println("Dabase er koblet til!");
-        } catch(Exception e) {
-            //Klarte ikke å åpne
-            System.out.println(e); //debug
-
-        }
-    }
 
     public static Kontroll getInstance() throws SQLException {
         if(INSTANSE == null) INSTANSE = new Kontroll(); //Opprett ny instanse

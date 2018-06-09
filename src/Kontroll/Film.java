@@ -21,12 +21,7 @@ public class Film implements Comparable<Film>{
 
     /**
      * Oppretter en visning og legger den til i Film sin ArrayListe
-     * @param visningsNr
-     * @param filmen
-     * @param kinosalen
-     * @param dato
-     * @param startTid
-     * @param pris
+
      */
   //  public void leggTilVisning(int visningsNr, Film filmen, Kinosal kinosalen, Date dato, Date startTid, Double pris) {
      //   visninger.add(new Visning(visningsNr, filmen, kinosalen, dato, startTid, pris));
@@ -39,6 +34,10 @@ public class Film implements Comparable<Film>{
 
     public void leggTilVisning(Visning visning) {
         visninger.add(visning);
+    }
+
+    public void fjernVisning(Visning visning) {
+        this.visninger.remove(visning);
     }
 
     public int getFilmnr() {

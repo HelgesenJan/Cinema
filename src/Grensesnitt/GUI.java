@@ -1953,8 +1953,15 @@ public class GUI extends javax.swing.JFrame {
                 "Vil du lagre data før du avslutter?",
                 "Avbryt", YES_NO_OPTION);
         if (svar == YES_OPTION) {
-            setVisible(false);
-            System.exit(0);
+            try {
+                kontroll.lagreDatabase();
+                setVisible(false);
+                System.exit(0);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Databasefeil:"+ e.getMessage());
+                e.printStackTrace();
+            }
+
         } else {
             setVisible(false);
             System.exit(0);
@@ -2497,7 +2504,37 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void changeDisplayConfirmActionPerformed(java.awt.event.ActionEvent evt) {
-        adminChangeDisplayWindow.setVisible(false);
+
+
+        //Endre visning
+        Film gml_film = _VISNING.getFilm();
+        Film ny_film = kontroll.finnFilm((String)changeDisplayMovie.getSelectedItem());
+
+        Kinosal ny_sal = kontroll.finnSal(_VISNING.getKinosal().getKino().getKinonavn(),
+                                        (String)changeDisplayTheatre.getSelectedItem());
+        double ny_pris = Double.parseDouble(jTextField3.getText());
+        Date ny_dato = null;
+        try {
+            ny_dato = kontroll.lagDato(changeDisplayDate.getText(), changeDisplayTime.getText());
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(adminChangeDisplayWindow, "Ugyldig dato!");
+            e.printStackTrace();
+        }
+
+        if(ny_dato != null) {
+
+
+            _VISNING.setFilm(ny_film);
+            _VISNING.setKinosal(ny_sal);
+            _VISNING.setDato(ny_dato);
+            _VISNING.setPris(ny_pris);
+
+            ny_film.leggTilVisning(_VISNING);
+            gml_film.fjernVisning(_VISNING);
+
+            fyllVisningerSomKanEndres();
+            adminChangeDisplayWindow.setVisible(false);
+        }
     }
 
     private void changeDisplayCloseActionPerformed(java.awt.event.ActionEvent evt) {
