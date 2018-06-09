@@ -180,6 +180,11 @@ public class Visning implements Comparable<Visning> {
         return new Date().after(this.dato);
     }
 
+    /**
+     * Er sann dersom det er en halvtime før filmen starter
+     * @return
+     */
+
     public boolean erhalvtimeFørStart() {
         Date dato_halvtimefør = new Date();
         //Bruk kalender til å hente ut dato objekt en halvtime frem i tid

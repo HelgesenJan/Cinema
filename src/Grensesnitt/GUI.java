@@ -1795,7 +1795,6 @@ public class GUI extends javax.swing.JFrame {
 
         _VISNING = null;
 
-
         int visningsnr = -1;
         try {
             visningsnr = (int) adminMovieTable.getValueAt(adminMovieTable.getSelectedRow(), 5);
@@ -2007,15 +2006,16 @@ public class GUI extends javax.swing.JFrame {
         }
 
         System.out.println(sort);
-
-        Object[][] tabellInnhold = kontroll.lagVisningTabellListe(_KINO);
+        System.out.println("betjent: " + betjent);
+        Object[][] tabellInnhold = kontroll.lagVisningTabellListe(_KINO, betjent);
 
         Object[] kolonnenavn = {"Film", "Tid", "Sal", "Pris", "#"};
 
-
-        staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
-        reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
-
+        if(betjent) {
+            staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+        } else {
+            reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+        }
 
     }
 
@@ -2062,7 +2062,7 @@ public class GUI extends javax.swing.JFrame {
     private void openAttendantActionPerformed(java.awt.event.ActionEvent evt) {
         login.setVisible(true);
         login.pack();
-        fyllFilmReservasjonsTabell(false);
+        fyllFilmReservasjonsTabell(true);
     }
 
     private void reserveAddTicketActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2459,7 +2459,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void dropdownSortActionPerformed(java.awt.event.ActionEvent evt) {
-        fyllFilmReservasjonsTabell(true);
+        fyllFilmReservasjonsTabell(false);
     }
 
     private void cinemaChoiceActionPerformed(java.awt.event.ActionEvent evt) {

@@ -212,7 +212,6 @@ public class Kontroll {
     public Kinosal finnSal(String kinonavn, String salnavn) {
 
         for(Kinosal sal:this.getKinosaler()) {
-            System.out.println(kinonavn + " " + salnavn);
             if(sal.getKino().getKinonavn().equals(kinonavn)
                     && sal.getKinosalnavn().equals(salnavn)) {
                 System.out.println("sann");
@@ -224,7 +223,6 @@ public class Kontroll {
 
     public ArrayList<Visning> filtrerVisninger(Kino kino) {
         ArrayList<Visning> visninger = new ArrayList<>();
-        System.out.println(kino);
         Iterator itr = this.visninger.iterator();
         while (itr.hasNext()) {
             Visning visning = (Visning) itr.next();
@@ -233,7 +231,7 @@ public class Kontroll {
                 visninger.add(visning);
             }
         }
-
+        //Kjør sortering
        Collections.sort(visninger);
        return visninger;
     }
@@ -507,7 +505,7 @@ public class Kontroll {
      * Lager en Object-liste over Visninger, som skal vises i tabellen for billettbestilling
      * @return
      */
-    public Object[][] lagVisningTabellListe(Kino kino) {
+    public Object[][] lagVisningTabellListe(Kino kino, boolean betjent) {
         ArrayList<Visning> visninger = filtrerVisninger(kino);
         int rader = visninger.size();
         int teller = 0;
@@ -515,7 +513,7 @@ public class Kontroll {
         for(int i=0; i<visninger.size(); i++) {
 
             Visning visning = visninger.get(i);
-            if(visning.erhalvtimeFørStart()) {
+            if((visning.erhalvtimeFørStart() && !betjent) || (visning.erKommende() && betjent)) {
                 tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
                 tabellInnhold[teller][1] = visninger.get(i).getStartTid();
                 tabellInnhold[teller][2] = visninger.get(i).getKinosal().getKinosalnavn();
@@ -674,26 +672,19 @@ public class Kontroll {
             billettKode = billettKode + siffer[posisjon];
         }
 
-        return billettKode;
-    }
 
-    public int visningsNrIncrement(){
-        int visningsNr;
-        for(visningsNr = 0; visningsNr < getVisninger().size(); visningsNr++){
-            visningsNr++;
+        //Sjekk om billettkode er i bruk
+        //Se om man  finner en billet med den billetkoden som er generer
+        Billett billett = finnBillett(billettKode);
+
+        if(billett != null) {
+            //Billettkoden finnes ikke, returner generert kode.
+            return billettKode;
+        } else {
+            //generer en ny billettkode fordi den allerede finnes
+            return genererBillettkode();
         }
-        return visningsNr;
     }
-
-    public int filmNrIncrement(){
-        int filmNr;
-        for(filmNr = 0; filmNr < getVisninger().size(); filmNr++){
-            filmNr++;
-        }
-        return filmNr;
-    }
-
-
 
     /**
      * Legger til en Film i Kontroll sin ArrayListe over Filmer
