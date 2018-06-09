@@ -1786,7 +1786,6 @@ public class GUI extends javax.swing.JFrame {
         Object[][] tabellInnhold = kontroll.statistikkKinosal(i);
         Object[] kolonnenavn = {"Film", "% brukte plasser"};
         reportPercentTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
-        System.out.println("Nå skal tabellen være fylt");
     }
 
 

@@ -35,6 +35,7 @@ public class Visning implements Comparable<Visning> {
     }
 
 
+
     public int getIkkeBetalte() {
         int antall = 0;
 
@@ -42,6 +43,14 @@ public class Visning implements Comparable<Visning> {
             if(!billetter.get(i).isErBetalt()) {
                 antall ++;
             }
+        }
+        return antall;
+    }
+
+    public int getAntallBilletter() {
+        int antall = 0;
+        for(int i=0; i<billetter.size(); i++) {
+            antall++;
         }
         return antall;
     }

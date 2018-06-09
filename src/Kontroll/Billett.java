@@ -23,6 +23,14 @@ public class Billett implements Comparable<Billett>{
         this.erBetalt = erBetalt;
     }
 
+    public int getAntallPlasser() {
+        int antall=0;
+        for(int i=0; i<plasser.size(); i++) {
+            antall++;
+        }
+        return antall;
+    }
+
     /**
      * Legger til en Plass i Billett sin ArrayList over Plasser
      * @param plassen

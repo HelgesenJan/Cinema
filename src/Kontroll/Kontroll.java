@@ -431,26 +431,33 @@ public class Kontroll {
     }
 
     public Object[][] statistikkKinosal(int i) {
-        int rader = kinosaler.get(i).getVisninger().size();
+        int rader = visninger.size();
         Object[][] tabellInnhold = new Object[rader][2];
-
-        System.out.println(kinosaler.get(i).getKinosalnavn());
 
         int teller = 0;
 
-        for(int n=0; n<filmer.size(); n++) {
-            for(int v=0; v<kinosaler.get(i).getVisninger().size(); v++) {
-                if(filmer.get(n).equals(kinosaler.get(i).getVisninger().get(v).getFilm())) {
-                    tabellInnhold[teller][1] = filmer.get(n).getFilmnavn();
-                    tabellInnhold[teller][2] = "Test prosent";
+        for(int f=0; f<filmer.size(); f++) {
+            boolean erVist = false;
+            int antallBruktePlasser = 0;
+
+            for(int v=0; v<filmer.get(f).getVisninger().size(); v++) {
+                if(filmer.get(f).getVisninger().get(v).getKinosal().equals(kinosaler.get(i))) {
+                    erVist = true;
+
+                    for (int b=0; b<filmer.get(f).getVisninger().get(v).getBilletter().size(); b++) {
+                        antallBruktePlasser += filmer.get(f).getVisninger().get(v).getBilletter().get(b).getAntallPlasser();
+                    }
+
                 }
             }
-        }
 
-        for(int v=0; v<kinosaler.get(i).getVisninger().size(); v++) {
-            System.out.println("test");
-        }
+            if(erVist) {
+                tabellInnhold[teller][0] = filmer.get(f).getFilmnavn();
+                tabellInnhold[teller][1] = (antallBruktePlasser * 100) / kinosaler.get(i).getAntallPlasser() + "%";
+                teller++;
+            }
 
+        }
         return tabellInnhold;
     }
 
