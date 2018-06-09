@@ -2128,7 +2128,6 @@ public class GUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(cinemaStaff, "Velg en visning!");
             }
         }
-
     }
 
     private void staffConfirmPaymentActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2160,8 +2159,6 @@ public class GUI extends javax.swing.JFrame {
 
     private void commitReserveTicketOrderActionPerformed(java.awt.event.ActionEvent evt) {
         titleTxt.setText(_VISNING.getFilm().getFilmnavn());
-
-
 
         dateTxt.setText(_VISNING.getDagMnd());
         timeTxt.setText(_VISNING.getStartKlokkeslett());
