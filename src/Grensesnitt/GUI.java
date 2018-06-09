@@ -2065,7 +2065,7 @@ public class GUI extends javax.swing.JFrame {
     private void commitLoginActionPerformed(java.awt.event.ActionEvent evt) {
         login.setVisible(false);
 
-        if(login_opphav.equals("Planleggingsadmin")){
+        if(login_opphav.equals("Kinoadministrator")){
             adminPlanner.setVisible(true);
             adminPlanner.pack();
         }else{
