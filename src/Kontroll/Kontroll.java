@@ -83,6 +83,7 @@ public class Kontroll {
         //Fjern billett(er)
         for(Billett billett: fjernes) {
             this.billetter.remove(billett);
+            visning.fjernBillett(billett);
         }
         //Steng fil
         fil.close();
@@ -348,8 +349,11 @@ public class Kontroll {
     }
 
     public void lagreDatabase() throws SQLException {
+
+        //Opprett DB forbindelse
         opprettDBForbindelse();
 
+        //Forsøk å sette inn data i database
         try {
             //Kjør truncate på tabellene
             runDBEndring("SET FOREIGN_KEY_CHECKS=0");
@@ -578,17 +582,6 @@ public class Kontroll {
      * Lager en Object-liste over statistikker i rapporter
      */
 
-    public Object[][] lagKinosalTabellListe() {
-        int rader = kinosaler.size();
-        int teller = 0;
-        Object[][] tabellInnhold = new Object[rader][1];
-        for(int i=0; i<kinosaler.size(); i++) {
-            tabellInnhold[teller][0] = kinosaler.get(i).getKinosalnavn();
-            teller++;
-        }
-
-        return tabellInnhold;
-    }
 
     public Object[][] lagVisningerIkkeBestiltListe() {
         int rader = this.visninger.size();
@@ -677,44 +670,7 @@ public class Kontroll {
         filmer.add(new Film(filmnr, filmNavn));
     }
 
-    /**
-     * Legger til en Kinoasal i Kontroll sin ArrayList over Kinosaler
-     * @param kinosalnr
-     * @param kino
-     * @param kinonavn
-     */
-    public void leggTilKinosal(int kinosalnr, Kino kino, String kinonavn) {
-        kinosaler.add(new Kinosal(kinosalnr, kino, kinonavn));
 
-    }
-
-    /**
-     * Legger til en Visning i Kontroll sin ArrayList over Visninger
-     */
-    public void leggTilVisning(int visningsnr, Film film, Kinosal kinosal, Date dato, double pris) {
-        visninger.add(new Visning(visningsnr, film, kinosal, dato, pris));
-    }
-
-
-    /**
-     * Legger til en Kino i Kontroll sin ArrayList over Kinoer
-     */
-
-    public void leggTilKino(String kinonavn) {
-        kinoer.add(new Kino(kinonavn));
-    }
-
-
-
-    /**
-     * Legger til en Bruker i Kontroll sin ArrayList over brukere
-     * @param brukernavn
-     * @param pin
-     * @param erPlanlegger
-     */
-    public void leggTilBruker(String brukernavn, int pin, boolean erPlanlegger) {
-        brukere.add(new Bruker(brukernavn, pin, erPlanlegger));
-    }
 
 
 
