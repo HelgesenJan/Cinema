@@ -47,6 +47,11 @@ public class Visning implements Comparable<Visning> {
         return antall;
     }
 
+    public boolean harBilletter() {
+        System.out.println(this.billetter.size());
+        return this.billetter.size() > 0;
+    }
+
     public int getAntallBilletter() {
         int antall = 0;
         for(int i=0; i<billetter.size(); i++) {
@@ -127,7 +132,7 @@ public class Visning implements Comparable<Visning> {
         int mnd = kalender.get(Calendar.MONTH);
         int år = kalender.get(Calendar.YEAR);
 
-        return dag + "." + mnd + "." + år;
+        return år + "-" + mnd + "-" + dag;
     }
 
 
@@ -138,7 +143,7 @@ public class Visning implements Comparable<Visning> {
         int time = kalender.get(Calendar.HOUR_OF_DAY);
         int minutter = kalender.get(Calendar.MINUTE);
 
-        return " Kl: " + time + ":" + minutter;
+        return time + ":" + minutter;
     }
 
     public String getStartTid() {

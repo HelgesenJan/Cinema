@@ -496,6 +496,27 @@ public class Kontroll {
         return tabellInnhold;
     }
 
+    public Object[][] lagVisningerIkkeBestiltListe() {
+        int rader = this.visninger.size();
+        int teller = 0;
+        Object[][] tabellInnhold = new Object[rader][6];
+        for(int i=0; i<visninger.size(); i++) {
+
+            Visning visning = visninger.get(i);
+            if(!visning.harBilletter()) {
+                tabellInnhold[teller][0] = visning.getKinosal().getKino().getKinonavn();
+                tabellInnhold[teller][1] = visning.getFilm().getFilmnavn();
+                tabellInnhold[teller][2] = visning.getKinosal().getKinosalnavn();
+                tabellInnhold[teller][3] = visning.getStartTid();
+                tabellInnhold[teller][4] = visning.getPris();
+                tabellInnhold[teller][5] = visning.getVisningsNr();
+                teller++;
+            }
+        }
+
+        return tabellInnhold;
+    }
+
     /**
      * Genererer en tilfeldig billettkode
      * @return
@@ -504,7 +525,8 @@ public class Kontroll {
         // Bruker et random-objekt for å trekke en tilfeldig posisjon fra bokstaver- og siffer-listene.
         // Bygger dermed en billettkode bestående av fire karakterer og to sifre
 
-        char[] bokstaver = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        char[] bokstaver = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+                'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
         char[] siffer = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
         Random tilfeldigPosisjon = new Random();

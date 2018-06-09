@@ -350,6 +350,15 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        adminMovieTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(e.getValueIsAdjusting()) {
+                    adminMovieTableSelected(e);
+                }
+            }
+        });
+
         jLabel33.setText("Sortering:");
 
         javax.swing.GroupLayout ticketReservationLayout = new javax.swing.GroupLayout(ticketReservation.getContentPane());
@@ -1747,6 +1756,7 @@ public class GUI extends javax.swing.JFrame {
 
 
 
+
     private void adminChangeNameListActionPerformed(ActionEvent evt) {
 
     }
@@ -1757,6 +1767,27 @@ public class GUI extends javax.swing.JFrame {
 
     private void adminChangeMovieNameActionPerformed(ActionEvent evt) {
 
+    }
+
+    private void adminMovieTableSelected(ListSelectionEvent e) {
+
+        _VISNING = null;
+
+
+        int visningsnr = -1;
+        try {
+            visningsnr = (int) adminMovieTable.getValueAt(adminMovieTable.getSelectedRow(), 5);
+        }catch(ArrayIndexOutOfBoundsException ex) {
+            adminMovieTable.clearSelection();
+        }
+
+        if(visningsnr != -1 && e != null) {
+
+            System.out.println("Finn visning...");
+            System.out.println(visningsnr);
+            _VISNING = kontroll.finnVisning(visningsnr);
+            System.out.println(_VISNING.toString());
+        }
     }
 
     private void staffMovieTableSelected(ListSelectionEvent e) {
@@ -1916,6 +1947,15 @@ public class GUI extends javax.swing.JFrame {
         ticketReservation.setVisible(true);
         ticketReservation.pack();
         fyllFilmReservasjonsTabell(false);
+    }
+
+    private void fyllVisningerSomKanEndres() {
+        Object[][] tabellInnhold = kontroll.lagVisningerIkkeBestiltListe();
+
+        Object[] kolonnenavn = {"Kino", "Film", "Sal", "Dato", "Pris","Visningsnr"};
+
+
+        adminMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
 
     private void fyllFilmReservasjonsTabell(boolean betjent) {
@@ -2274,12 +2314,15 @@ public class GUI extends javax.swing.JFrame {
 
     private void adminButtonActionPerformed(java.awt.event.ActionEvent evt) {
         try{
+            _VISNING = null;
             adminSettings.setVisible(true);
             adminSettings.pack();
             hentTittel();
-            fyllFilmReservasjonsTabell(false);
+            fyllVisningerSomKanEndres();
+            System.out.println("lol");
+            //fyllFilmReservasjonsTabell(false);
         }catch (Exception e){
-
+            e.printStackTrace();
         }
 
     }
@@ -2316,8 +2359,36 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void adminEditMovieActionPerformed(java.awt.event.ActionEvent evt) {
-        adminChangeDisplayWindow.setVisible(true);
-        adminChangeDisplayWindow.pack();
+
+        //Fyll ut filmer
+        changeDisplayMovie.removeAllItems();
+        changeDisplayTheatre.removeAllItems();
+
+       //Sjekk om visning er valgt
+        if(_VISNING != null) {
+
+            //Legg til filmer
+            for(Film film:kontroll.getFilmer()) {
+                changeDisplayMovie.addItem(film.getFilmnavn());
+            }
+
+            //Legg til kinosaler
+            for(Kinosal sal: _VISNING.getKinosal().getKino().getKinosaler()) {
+                changeDisplayTheatre.addItem(sal.getKinosalnavn());
+            }
+
+            changeDisplayID.setText(_VISNING.getVisningsNr() + "");
+            changeDisplayMovie.setSelectedItem(_VISNING.getFilm().getFilmnavn());
+            changeDisplayTheatre.setSelectedItem(_VISNING.getKinosal().getKinosalnavn());
+            changeDisplayDate.setText(_VISNING.getDagMnd());
+            changeDisplayTime.setText(_VISNING.getStartKlokkeslett());
+            jTextField3.setText(_VISNING.getPris() + "");
+
+            adminChangeDisplayWindow.setVisible(true);
+            adminChangeDisplayWindow.pack();
+        } else {
+            JOptionPane.showMessageDialog(adminSettings, "Velg en visning fra tabellen ovenfor!");
+        }
     }
 
     private void adminCloseActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2476,6 +2547,7 @@ public class GUI extends javax.swing.JFrame {
         }
 
     }
+
 
 
 
