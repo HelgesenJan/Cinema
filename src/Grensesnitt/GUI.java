@@ -1974,7 +1974,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void fyllKinosalTabell(){
-        Object[][] tabellInnhold = kontroll.lagKinosalTabellListe();
+        Object[][] tabellInnhold = kontroll.lagKinosalKinoTabellListe();
         Object[] kolonnenavn = {"Kinosal"};
         reportCinemaTheater.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
@@ -2202,9 +2202,13 @@ public class GUI extends javax.swing.JFrame {
     private void reportCinemaTheaterMouseClicked(java.awt.event.MouseEvent evt) {
         try {
             int indeks = reportCinemaTheater.getSelectedRow();
-            String sal = reportCinemaTheater.getValueAt(indeks, 0).toString();
+            String kinoSal = reportCinemaTheater.getValueAt(indeks, 0).toString();
+            String[] split = kinoSal.split(" - ");
+            String sal = split[1];
+            System.out.println(sal);
+
             for(int i=0; i<kontroll.getKinosaler().size(); i++) {
-                if(sal == kontroll.getKinosaler().get(i).getKinosalnavn()) {
+                if(kontroll.getKinosaler().get(i).getKinosalnavn().equals(sal)) {
                     fyllKinosalStatistikk(i);
                 }
             }

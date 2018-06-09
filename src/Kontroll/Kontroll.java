@@ -442,16 +442,18 @@ public class Kontroll {
         for(int n=0; n<filmer.get(i).getVisninger().size(); n++) {
 
             int antallBilletter = 0;
+            int antallPlasser = 0;
             int kapasitet = filmer.get(i).getVisninger().get(n).getKinosal().getAntallPlasser();
 
 
             for(int a=0; a<filmer.get(i).getVisninger().get(n).getBilletter().size(); a++) {
+                antallPlasser += filmer.get(i).getVisninger().get(n).getBilletter().get(a).getAntallPlasser();
                 antallBilletter++;
             }
 
-            int prosent = (antallBilletter*100) / kapasitet;
+            int prosent = (antallPlasser*100) / kapasitet;
 
-            tabellInnhold[teller][0] = antallBilletter;
+            tabellInnhold[teller][0] = antallBilletter + " billetter / " + antallPlasser + " plasser";
             tabellInnhold[teller][1] = prosent + "%";
             tabellInnhold[teller][2] = filmer.get(i).getVisninger().get(n).getIkkeBetalte();
             tabellInnhold[teller][3] = filmer.get(i).getVisninger().get(n).getDato() + ", " + filmer.get(i).getVisninger().get(n).getStartTid();
@@ -525,6 +527,19 @@ public class Kontroll {
 
         return tabellInnhold;
     }
+
+    public Object[][] lagKinosalKinoTabellListe() {
+        int rader = kinosaler.size();
+        int teller = 0;
+        Object[][] tabellInnhold = new Object[rader][1];
+        for(int i=0; i<kinosaler.size(); i++) {
+            tabellInnhold[teller][0] = kinosaler.get(i).getKino().getKinonavn() + " - " + kinosaler.get(i).getKinosalnavn();
+            teller++;
+        }
+
+        return tabellInnhold;
+    }
+
 
     /**
      * Genererer en tilfeldig billettkode
