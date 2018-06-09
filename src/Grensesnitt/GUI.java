@@ -1680,7 +1680,7 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        openAdmin.setText("Planleggingsadmin");
+        openAdmin.setText("Kinoadministrator");
         openAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 openAdminMouseClicked(evt);
@@ -1705,7 +1705,7 @@ public class GUI extends javax.swing.JFrame {
         });
 
         header.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-        header.setText("Overskrift");
+        header.setText("Kinosentral");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
