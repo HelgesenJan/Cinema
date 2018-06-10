@@ -354,10 +354,7 @@ public class Kontroll {
 
     public void nyBillett(Billett billett) {
         billett.getVisning().leggTilBillett(billett);
-        billetter.add(billett);
-        for(Billett b:this.billetter) {
-            System.out.println(b.toString());
-        }
+        this.billetter.add(billett);
     }
 
     /**
@@ -411,6 +408,7 @@ public class Kontroll {
      */
 
     public Kino finnKino(String kinonavn) {
+        Collections.sort(kinoer);
         Kino dummy = new Kino(kinonavn);
         int indeks = Collections.binarySearch(kinoer, dummy);
         if(indeks < 0) {
@@ -426,6 +424,7 @@ public class Kontroll {
      */
 
     public Kinosal finnKinosal(int kinosalnr) {
+        Collections.sort(kinosaler);
         Kinosal dummy = new Kinosal(kinosalnr);
         int indeks = Collections.binarySearch(kinosaler,dummy);
         if(indeks < 0) {
@@ -441,6 +440,7 @@ public class Kontroll {
      */
 
     public Film finnFilm(int filmnr) {
+        Collections.sort(filmer);
         Film dummy =new Film(filmnr);
         int indeks = Collections.binarySearch(filmer, dummy);
         if(indeks < 0) {
@@ -456,6 +456,7 @@ public class Kontroll {
      */
 
     public Film finnFilm(String filmnavn) {
+        Collections.sort(filmer);
         for (Film film:this.filmer) {
             if(film.getFilmnavn().equals(filmnavn)) {
                 return film;
@@ -471,6 +472,7 @@ public class Kontroll {
      */
 
     public Visning finnVisning(int visningsnr) {
+        Collections.sort(visninger);
         Visning dummy = new Visning(visningsnr);
         int indeks = Collections.binarySearch(visninger, dummy);
         if(indeks < 0) {
@@ -486,6 +488,7 @@ public class Kontroll {
      */
 
     public Billett finnBillett(String billettkode) {
+        Collections.sort(billetter);
         Billett dummy = new Billett(billettkode);
         int indeks = Collections.binarySearch(billetter, dummy);
         if(indeks < 0) {

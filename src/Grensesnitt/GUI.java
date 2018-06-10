@@ -2328,6 +2328,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void confirmConfirmWindowActionPerformed(java.awt.event.ActionEvent evt) {
         //TODO:LEGG TIL BILLETT
+        System.out.println(_BILLETT.toString());
         kontroll.nyBillett(_BILLETT);
         confirmConfirmWindow.setEnabled(false);
         confirmWindowClose.setEnabled(true);
