@@ -578,22 +578,30 @@ public class Kontroll {
 
         for(int f=0; f<filmer.size(); f++) {
             boolean erVist = false;
+            int antallVisninger = 0;
+            int gjennomsnitt = 0;
+            int iProsent = 0;
             int antallBruktePlasser = 0;
+            int samletProsent = 0;
 
             for(int v=0; v<filmer.get(f).getVisninger().size(); v++) {
                 if(filmer.get(f).getVisninger().get(v).getKinosal().equals(kinosaler.get(i))) {
                     erVist = true;
+                    antallVisninger++;
+                    antallBruktePlasser = 0;
 
                     for (int b=0; b<filmer.get(f).getVisninger().get(v).getBilletter().size(); b++) {
                         antallBruktePlasser += filmer.get(f).getVisninger().get(v).getBilletter().get(b).getAntallPlasser();
+                        iProsent = antallBruktePlasser / filmer.get(f).getVisninger().get(v).getKinosal().getAntallPlasser();
+                        samletProsent += iProsent;
                     }
-
                 }
             }
 
             if(erVist) {
+                samletProsent *= 100;
                 tabellInnhold[teller][0] = filmer.get(f).getFilmnavn();
-                tabellInnhold[teller][1] = (antallBruktePlasser * 100) / kinosaler.get(i).getAntallPlasser() + "%";
+                tabellInnhold[teller][1] = samletProsent / antallVisninger + "%";
                 teller++;
             }
 
