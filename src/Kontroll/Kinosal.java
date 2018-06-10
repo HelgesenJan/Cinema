@@ -13,9 +13,21 @@ public class Kinosal implements Comparable<Kinosal> {
     private ArrayList<Plass> plasser = new ArrayList<>();
     //private ArrayList<Visning> visninger = new ArrayList<>();
 
+    /**
+     * Konstruktør for oppretting av dummy kinosal. Brukes i binærsøk
+     * @param kinosalnr
+     */
+
     public Kinosal(int kinosalnr) {
         this.kinosalnr = kinosalnr;
     }
+
+    /**
+     * Ordinær konstruktør
+     * @param kinosalnr
+     * @param kino
+     * @param kinonavn
+     */
 
     public Kinosal(int kinosalnr, Kino kino, String kinonavn) {
         this.kinosalnr = kinosalnr;
@@ -23,9 +35,12 @@ public class Kinosal implements Comparable<Kinosal> {
         this.kinosalnavn = kinonavn;
     }
 
-   // public ArrayList<Visning> getVisninger() {
-     //   return visninger;
-    //}
+    /**
+     * Finn en plass i kinosalen basert på radnr og setenr
+     * @param radnr
+     * @param setenr
+     * @return Plass
+     */
 
     public Plass finnPlass(int radnr, int setenr) {
         Iterator itr = plasser.iterator();
@@ -38,6 +53,11 @@ public class Kinosal implements Comparable<Kinosal> {
         return null;
     }
 
+    /**
+     * Finn antall plasser i en kinosal
+     * @return int
+     */
+
     public int getAntallPlasser() {
         int antall = 0;
 
@@ -47,31 +67,65 @@ public class Kinosal implements Comparable<Kinosal> {
         return antall;
     }
 
+    /**
+     * Legg til en plass i kinosal
+     * @param radnr
+     * @param setenr
+     */
+
     public void leggTilPlass(int radnr, int setenr) {
         plasser.add(new Plass(radnr,setenr, this));
     }
 
 
+    /**
+     * Hent kinosalnr
+     * @return int
+     */
+
     public int getKinosalnr() {
         return this.kinosalnr;
     }
+
+    /**
+     * Hent en kinosalens kino
+     * @return Kino
+     */
 
     public Kino getKino() {
         return this.kino;
     }
 
+    /**
+     * Hent kinosal navn
+     * @return String
+     */
+
     public String getKinosalnavn() {
         return this.kinosalnavn;
     }
 
+    /**
+     * Hent plasse arrayList
+     * @param plasser
+     */
 
     public void setPlasser(ArrayList<Plass> plasser) {
         this.plasser = plasser;
     }
 
+    /**
+     * Hent arraylist med plasser
+     * @return ArrayList
+     */
+
     public ArrayList<Plass> getPlasser() {
         return this.plasser;
     }
+
+    /**
+     * @return String
+     */
 
     @Override
     public String toString() {
@@ -90,6 +144,11 @@ public class Kinosal implements Comparable<Kinosal> {
     }
 
 
+    /**
+     * return int
+     * @param o
+     * @return
+     */
 
     @Override
     public int compareTo(Kinosal o) {
