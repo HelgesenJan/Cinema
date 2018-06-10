@@ -70,7 +70,7 @@ public class GUI extends javax.swing.JFrame {
         login = new javax.swing.JDialog();
         commitLogin = new javax.swing.JButton();
         fieldUsername = new javax.swing.JTextField();
-        fieldPassword = new javax.swing.JTextField();
+        fieldPassword = new javax.swing.JPasswordField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -844,7 +844,7 @@ public class GUI extends javax.swing.JFrame {
                         {null, null, null, null}
                 },
                 new String [] {
-                        "Antall", "% av kapasitet", "Ikke betalt", "Visningsdato"
+                        "Billetter/plasser", "% av kapasitet", "Ikke betalt", "Visningsdato"
                 }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -867,6 +867,8 @@ public class GUI extends javax.swing.JFrame {
             reportStatisticsTable.getColumnModel().getColumn(2).setResizable(false);
             reportStatisticsTable.getColumnModel().getColumn(3).setResizable(false);
         }
+
+
 
         jLabel20.setText("Popularitet av kinosal");
 
@@ -910,7 +912,7 @@ public class GUI extends javax.swing.JFrame {
                         {null, null}
                 },
                 new String [] {
-                        "Film", "% brukte plasser"
+                        "Film", "Gjennomsnitt %"
                 }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -928,6 +930,8 @@ public class GUI extends javax.swing.JFrame {
             reportPercentTable.getColumnModel().getColumn(1).setResizable(false);
         }
 
+        jSeparator6.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
         javax.swing.GroupLayout statisticsLayout = new javax.swing.GroupLayout(statistics.getContentPane());
         statistics.getContentPane().setLayout(statisticsLayout);
         statisticsLayout.setHorizontalGroup(
@@ -937,59 +941,69 @@ public class GUI extends javax.swing.JFrame {
                                 .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(statisticsLayout.createSequentialGroup()
                                                 .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jSeparator3)
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statisticsLayout.createSequentialGroup()
+                                                        .addGroup(statisticsLayout.createSequentialGroup()
                                                                 .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                                         .addGroup(statisticsLayout.createSequentialGroup()
                                                                                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addGap(15, 15, 15)
-                                                                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                .addGap(9, 9, 9)
+                                                                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                         .addComponent(jLabel19))
-                                                                .addGap(40, 40, 40)
+                                                                .addGap(18, 18, Short.MAX_VALUE)
+                                                                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(18, 18, 18)
                                                                 .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                                         .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addGroup(statisticsLayout.createSequentialGroup()
                                                                                 .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                                        .addComponent(reportClose)
                                                                                         .addGroup(statisticsLayout.createSequentialGroup()
-                                                                                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                .addGap(15, 15, 15)
+                                                                                                .addGap(195, 195, 195)
+                                                                                                .addComponent(reportClose))
+                                                                                        .addGroup(statisticsLayout.createSequentialGroup()
+                                                                                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                                                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                                                .addGap(0, 14, Short.MAX_VALUE))))
+                                                                                .addGap(0, 0, Short.MAX_VALUE))))
                                                         .addGroup(statisticsLayout.createSequentialGroup()
-                                                                .addComponent(jLabel17)
+                                                                .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel17)
+                                                                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 1049, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                 .addGap(0, 0, Short.MAX_VALUE)))
                                                 .addContainerGap())
                                         .addGroup(statisticsLayout.createSequentialGroup()
                                                 .addComponent(jLabel18)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(jLabel20)
-                                                .addGap(417, 417, 417))))
+                                                .addGap(276, 276, 276))))
         );
         statisticsLayout.setVerticalGroup(
                 statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(statisticsLayout.createSequentialGroup()
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statisticsLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jLabel17)
                                 .addGap(20, 20, 20)
                                 .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel18)
                                         .addComponent(jLabel20))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(1, 1, 1)
-                                .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel19)
-                                        .addComponent(jLabel21))
-                                .addGap(18, 18, 18)
-                                .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
-                                        .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                        .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addComponent(reportClose)
-                                .addContainerGap(14, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(statisticsLayout.createSequentialGroup()
+                                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel19)
+                                                        .addComponent(jLabel21))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(statisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
+                                                        .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                                        .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(reportClose)
+                                                .addGap(14, 14, 14))
+                                        .addGroup(statisticsLayout.createSequentialGroup()
+                                                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(43, Short.MAX_VALUE))))
         );
 
         ticketCodeTxt.setEditable(false);
@@ -2047,8 +2061,9 @@ public class GUI extends javax.swing.JFrame {
 
     private void fyllRapportVisningsTabell(int i) {
         Object[][] tabellInnhold = kontroll.statistikkFilm(i);
-        Object[] kolonnenavn = {"Antall", "% av kapasitet", "Ikke betalt", "Visningsdato"};
+        Object[] kolonnenavn = {"Billetter/plasser", "% av kapasitet", "Ikke betalt", "Visningsdato"};
         reportStatisticsTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+        reportStatisticsTable.getColumnModel().getColumn(3).setPreferredWidth(110);
 
     }
 
@@ -2061,7 +2076,7 @@ public class GUI extends javax.swing.JFrame {
 
     private void fyllKinosalStatistikk(int i) {
         Object[][] tabellInnhold = kontroll.statistikkKinosal(i);
-        Object[] kolonnenavn = {"Film", "% brukte plasser"};
+        Object[] kolonnenavn = {"Film", "Gjennomsnitt %"};
         reportPercentTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
 

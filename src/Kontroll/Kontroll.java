@@ -176,10 +176,10 @@ public class Kontroll {
 
             int prosent = (antallPlasser*100) / kapasitet;
 
-            tabellInnhold[teller][0] = antallBilletter + " billetter / " + antallPlasser + " plasser";
+            tabellInnhold[teller][0] = antallBilletter + "/" + antallPlasser;
             tabellInnhold[teller][1] = prosent + "%";
             tabellInnhold[teller][2] = finnAntallUbetalteBilletter(filmer.get(i).getVisninger().get(n));
-            tabellInnhold[teller][3] = filmer.get(i).getVisninger().get(n).getDato() + ", " + filmer.get(i).getVisninger().get(n).getStartTid();
+            tabellInnhold[teller][3] = filmer.get(i).getVisninger().get(n).getStartTid();
             teller++;
         }
         return tabellInnhold;
