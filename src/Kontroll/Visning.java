@@ -36,45 +36,20 @@ public class Visning implements Comparable<Visning> {
 
 
 
-    public int getIkkeBetalte() {
-        int antall = 0;
-
-        for(int i=0; i<billetter.size(); i++) {
-            if(!billetter.get(i).isErBetalt()) {
-                antall ++;
-            }
-        }
-        return antall;
-    }
 
     public boolean harBilletter() {
         System.out.println(this.billetter.size());
         return this.billetter.size() > 0;
     }
 
-    public int getAntallBilletter() {
-        int antall = 0;
-        for(int i=0; i<billetter.size(); i++) {
-            antall++;
-        }
-        return antall;
-    }
 
-    /**
-     * Legger til en Billett i Visning sin ArrayList over Billetter
-     * @param billettkode
-     * @param erBetalt
-     */
-    public void leggTilBillett(String billettkode, boolean erBetalt) {
-        billetter.add(new Billett(billettkode, this, erBetalt));
-    }
 
     public void leggTilBillett(Billett billett) {
-        billetter.add(billett);
+        this.billetter.add(billett);
     }
 
     public void fjernBillett(Billett billett) {
-        billetter.remove(billett);
+        this.billetter.remove(billett);
     }
 
     public ArrayList<Billett> getBilletter() {
@@ -90,7 +65,7 @@ public class Visning implements Comparable<Visning> {
     }
 
     public Film getFilm() {
-        return film;
+        return this.film;
     }
 
     public void setFilm(Film film) {
@@ -98,7 +73,7 @@ public class Visning implements Comparable<Visning> {
     }
 
     public Kinosal getKinosal() {
-        return kinosal;
+        return this.kinosal;
     }
 
     public void setKinosal(Kinosal kinosal) {
@@ -106,7 +81,7 @@ public class Visning implements Comparable<Visning> {
     }
 
     public Date getDato() {
-        return dato;
+        return this.dato;
     }
 
 
@@ -198,20 +173,14 @@ public class Visning implements Comparable<Visning> {
 
 
     public ArrayList<Plass> finnLedigePlasser() {
-
-        ArrayList<Plass> plasser = kinosal.getPlasser();
+        System.out.println("FINN LEDIGE PLASSER");
+        ArrayList<Plass> plasser = new ArrayList<Plass>(this.kinosal.getPlasser());
         ArrayList<Billett> billetter = this.billetter;
 
-        Iterator itr_plass = plasser.iterator();
-        Iterator itr_billett = billetter.iterator();
 
-        while(itr_plass.hasNext()) {
-            Plass plass = (Plass) itr_plass.next();
-            while (itr_billett.hasNext()) {
-                Billett billett = (Billett) itr_billett.next();
-                if(billett.harPlass(plass)) {
-                    plasser.remove(plass);
-                }
+        for (Billett billett:billetter) {
+            for(Plass plass: billett.getPlasser()) {
+                plasser.remove(plass);
             }
         }
         return plasser;
