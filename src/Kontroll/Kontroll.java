@@ -563,35 +563,43 @@ public class Kontroll {
     public Object[][] statistikkKinosal(int i) {
         int rader = visninger.size();
         Object[][] tabellInnhold = new Object[rader][2];
-
+        int kapasitet = kinosaler.get(i).getPlasser().size();
         int teller = 0;
 
         for(int f=0; f<filmer.size(); f++) {
             boolean erVist = false;
             int antallVisninger = 0;
-            int gjennomsnitt = 0;
-            int iProsent = 0;
-            int antallBruktePlasser = 0;
-            int samletProsent = 0;
+            double iProsent = 0;
+            double kumulativProsent = 0;
+            double totaltProsent = 0;
+            double antallPlasser = 0;
 
             for(int v=0; v<filmer.get(f).getVisninger().size(); v++) {
                 if(filmer.get(f).getVisninger().get(v).getKinosal().equals(kinosaler.get(i))) {
+                    antallPlasser = 0;
                     erVist = true;
                     antallVisninger++;
-                    antallBruktePlasser = 0;
+                    System.out.println("Antall visninger for " + filmer.get(f).getFilmnavn() + " så langt: " + antallVisninger);
 
                     for (int b=0; b<filmer.get(f).getVisninger().get(v).getBilletter().size(); b++) {
-                        antallBruktePlasser += filmer.get(f).getVisninger().get(v).getBilletter().get(b).getAntallPlasser();
-                        iProsent = antallBruktePlasser / filmer.get(f).getVisninger().get(v).getKinosal().getAntallPlasser();
-                        samletProsent += iProsent;
+                        antallPlasser += filmer.get(f).getVisninger().get(v).getBilletter().get(b).getAntallPlasser();
+
                     }
+
+                    iProsent = antallPlasser/kapasitet;
+                    kumulativProsent += iProsent;
+
+
                 }
             }
 
+
             if(erVist) {
-                samletProsent *= 100;
+                kumulativProsent *= 100;
+                totaltProsent = kumulativProsent / antallVisninger;
+                System.out.println("Samlet prosent: " + kumulativProsent);
                 tabellInnhold[teller][0] = filmer.get(f).getFilmnavn();
-                tabellInnhold[teller][1] = samletProsent / antallVisninger + "%";
+                tabellInnhold[teller][1] = String.format("%.0f", totaltProsent) + "%";
                 teller++;
             }
 
