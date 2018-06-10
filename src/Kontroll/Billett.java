@@ -41,7 +41,12 @@ public class Billett implements Comparable<Billett>{
     }
 
     public boolean harPlass(Plass plass) {
-        return this.plasser.contains(plass);
+        for (Plass p:this.plasser) {
+            if(p.equals(plass)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String getBillettkode() {
