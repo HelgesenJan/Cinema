@@ -3,17 +3,17 @@ package Kontroll;
 public class Bruker {
 
     private String brukernavn;
-    private int pin;
+    private String pin;
     private boolean erPlanlegger;
 
-    public Bruker(String brukernavn, int pin, boolean erPlanlegger) {
+    public Bruker(String brukernavn, String pin, boolean erPlanlegger) {
         this.brukernavn = brukernavn;
         this.pin = pin;
         this.erPlanlegger = erPlanlegger;
     }
 
-    public boolean passordRiktig(String brukernavn, int pin) {
-        if(this.brukernavn == brukernavn && this.pin == pin) {
+    public boolean riktigPin(String pin) {
+        if(this.pin.equals(pin)) {
             return true;
         } else {
             return false;
@@ -28,7 +28,7 @@ public class Bruker {
         return brukernavn;
     }
 
-    public int getPin() {
+    public String getPin() {
         return pin;
     }
 

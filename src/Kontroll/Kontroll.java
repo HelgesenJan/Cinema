@@ -153,6 +153,16 @@ public class Kontroll {
         this.visninger.add(visning);
 
     }
+
+    public Bruker finnBruker(String brukernavn) {
+        for (Bruker bruker:this.brukere) {
+            if(bruker.getBrukernavn().equals(brukernavn)) {
+                return bruker;
+            }
+        }
+        return null;
+    }
+
     public Kino finnKino(String kinonavn) {
         Kino dummy = new Kino(kinonavn);
         int indeks = Collections.binarySearch(kinoer, dummy);
@@ -249,7 +259,7 @@ public class Kontroll {
         System.out.println("test");
         while(brukere.next()) {
             String brukernavn = brukere.getString("l_brukernavn");
-            int pinkode = brukere.getInt("l_pinkode");
+            String pinkode = brukere.getString("l_pinkode");
             boolean erPlanlegger = brukere.getBoolean("l_erPlanlegger");
 
             Bruker bruker = new Bruker(brukernavn,pinkode,erPlanlegger);

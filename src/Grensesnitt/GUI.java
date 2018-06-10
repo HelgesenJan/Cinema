@@ -19,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 import java.util.Iterator;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import static javax.swing.JOptionPane.*;
 
@@ -33,6 +32,8 @@ public class GUI extends javax.swing.JFrame {
     private Kino _KINO = null;
     private Billett _BILLETT = null;
     private Visning _VISNING = null;
+
+    private Loginn loginnType;
 
     /**
      * Creates new form GUI
@@ -2111,6 +2112,7 @@ public class GUI extends javax.swing.JFrame {
      */
 
     private void openAdminActionPerformed(java.awt.event.ActionEvent evt) {
+        loginnType = Loginn.PLANLEGGER;
         login.setVisible(true);
         login.pack();
     }
@@ -2121,6 +2123,7 @@ public class GUI extends javax.swing.JFrame {
      */
 
     private void openAttendantActionPerformed(java.awt.event.ActionEvent evt) {
+        loginnType = Loginn.KINOBETJENT;
         login.setVisible(true);
         login.pack();
         fyllFilmReservasjonsTabell(true);
@@ -2131,16 +2134,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void commitLoginActionPerformed(java.awt.event.ActionEvent evt) {
-        login.setVisible(false);
-
-        if(login_opphav.equals("Kinoadministrator")){
-            adminPlanner.setVisible(true);
-            adminPlanner.pack();
-        }else{
-            cinemaStaff.setVisible(true);
-            cinemaStaff.pack();
-
-        }
+        innlogging();
     }
 
     /**
@@ -2337,7 +2331,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     private void fieldPasswordActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        innlogging();
     }
 
     private void reserveDropdownRowActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2805,6 +2799,57 @@ public class GUI extends javax.swing.JFrame {
             System.out.println(filmNr + ", " + filmNavn + " er lagt til");
         }
         System.out.println(kontroll.getFilmer());
+    }
+
+
+    private void innlogging() {
+
+        //Hent ut brukernavn og pin
+        String brukernavn = fieldUsername.getText();
+        String pin = fieldPassword.getText();
+
+        //Sjekk om det er fyllt ut
+        if(brukernavn.equals("") || pin.equals("")) {
+            JOptionPane.showMessageDialog(login, "Du må fylle ut brukernavn og pin");
+            return;
+        }
+
+        //Forsøk å hent ut bruker objekt
+        Bruker bruker = kontroll.finnBruker(brukernavn);
+
+        //Sjekk om brukernavn og pin er riktig
+        if(bruker != null && bruker.riktigPin(pin)) {
+            System.out.println("Riktig");
+            switch (loginnType){
+                case KINOBETJENT:
+                    cinemaStaff.pack();
+                    cinemaStaff.setVisible(true);
+                    nullstillLogin();
+                    break;
+                case PLANLEGGER:
+                    if(bruker.erPlanlegger()) {
+                        adminPlanner.pack();
+                        adminPlanner.setVisible(true);
+                        nullstillLogin();
+                    } else {
+                        JOptionPane.showMessageDialog(login, "Du har ikke adgang til planleggingsdelen!");
+                    }
+                    break;
+            }
+        } else {
+            //Skyldes feil pin eller feil brukernavn
+            JOptionPane.showMessageDialog(login, "Feil brukernavn eller passord.");
+        }
+    }
+
+    /**
+     * Fjerner brukernavn og passord og gjør login usynlig
+     * Denne kalles bare når brukeravn og passord er riktig
+     */
+    public void nullstillLogin() {
+        fieldUsername.setText("");
+        fieldPassword.setText("");
+        login.setVisible(false);
     }
 
     /**
