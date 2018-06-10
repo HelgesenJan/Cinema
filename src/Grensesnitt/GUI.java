@@ -208,7 +208,6 @@ public class GUI extends javax.swing.JFrame {
         //reserveDropdownSeat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         reserveDropdownSeat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reserveDropdownSeatActionPerformed(evt);
             }
         });
 
@@ -229,7 +228,6 @@ public class GUI extends javax.swing.JFrame {
         fieldReserveTicketPrice.setEditable(false);
         fieldReserveTicketPrice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldReserveTicketPriceActionPerformed(evt);
             }
         });
 
@@ -301,7 +299,6 @@ public class GUI extends javax.swing.JFrame {
         fieldReservePriceSum.setEditable(false);
         fieldReservePriceSum.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldReservePriceSumActionPerformed(evt);
             }
         });
 
@@ -461,7 +458,6 @@ public class GUI extends javax.swing.JFrame {
 
         fieldUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldUsernameActionPerformed(evt);
             }
         });
 
@@ -583,7 +579,6 @@ public class GUI extends javax.swing.JFrame {
         //staffDropdownSeat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
         staffDropdownSeat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                staffDropdownSeatActionPerformed(evt);
             }
         });
 
@@ -633,7 +628,6 @@ public class GUI extends javax.swing.JFrame {
         staffPriceAmount.setEditable(false);
         staffPriceAmount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                staffPriceAmountActionPerformed(evt);
             }
         });
 
@@ -642,7 +636,6 @@ public class GUI extends javax.swing.JFrame {
         staffInsertTicketCode.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         staffInsertTicketCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                staffInsertTicketCodeActionPerformed(evt);
             }
         });
 
@@ -833,7 +826,6 @@ public class GUI extends javax.swing.JFrame {
         reportClose.setText("Lukk");
         reportClose.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                reportCloseMouseClicked(evt);
             }
         });
         reportClose.addActionListener(new java.awt.event.ActionListener() {
@@ -866,7 +858,6 @@ public class GUI extends javax.swing.JFrame {
         reportStatisticsTable.getTableHeader().setReorderingAllowed(false);
         reportStatisticsTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                reportStatisticsTableMouseClicked(evt);
             }
         });
         jScrollPane6.setViewportView(reportStatisticsTable);
@@ -1005,14 +996,12 @@ public class GUI extends javax.swing.JFrame {
         ticketCodeTxt.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         ticketCodeTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ticketCodeTxtActionPerformed(evt);
             }
         });
 
         seatCountTxt.setEditable(false);
         seatCountTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                seatCountTxtActionPerformed(evt);
             }
         });
 
@@ -1022,7 +1011,6 @@ public class GUI extends javax.swing.JFrame {
         totalTxt.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         totalTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                totalTxtActionPerformed(evt);
             }
         });
 
@@ -1031,7 +1019,6 @@ public class GUI extends javax.swing.JFrame {
         titleTxt.setEditable(false);
         titleTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                titleTxtActionPerformed(evt);
             }
         });
 
@@ -1044,7 +1031,6 @@ public class GUI extends javax.swing.JFrame {
         jLabel25.setVisible(false);
         seatsTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                seatsTxtActionPerformed(evt);
             }
         });
 
@@ -1076,7 +1062,6 @@ public class GUI extends javax.swing.JFrame {
         dateTxt.setEditable(false);
         dateTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dateTxtActionPerformed(evt);
             }
         });
 
@@ -1086,7 +1071,6 @@ public class GUI extends javax.swing.JFrame {
         timeTxt.setEditable(false);
         timeTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                timeTxtActionPerformed(evt);
             }
         });
 
@@ -1264,13 +1248,11 @@ public class GUI extends javax.swing.JFrame {
         //adminTheaterDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         adminTheaterDropdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminTheaterDropdownActionPerformed(evt);
             }
         });
 
         adminMovieTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminMovieTxtActionPerformed(evt);
             }
         });
 
@@ -1300,13 +1282,11 @@ public class GUI extends javax.swing.JFrame {
         //adminTitleDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         adminTitleDropdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminTitleDropdownActionPerformed(evt);
             }
         });
 
         adminPriceTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminPriceTxtActionPerformed(evt);
             }
         });
 
@@ -1329,12 +1309,10 @@ public class GUI extends javax.swing.JFrame {
 
         adminChangeNameList.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                adminChangeNameListItemStateChanged(evt);
             }
         });
         adminChangeNameList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminChangeNameListActionPerformed(evt);
             }
         });
 
@@ -1683,7 +1661,6 @@ public class GUI extends javax.swing.JFrame {
         openAdmin.setText("Kinoadministrator");
         openAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                openAdminMouseClicked(evt);
             }
         });
         openAdmin.addActionListener(new java.awt.event.ActionListener() {
@@ -1695,7 +1672,6 @@ public class GUI extends javax.swing.JFrame {
         openAttendant.setText("Kinobetjent");
         openAttendant.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                openAttendantMouseClicked(evt);
             }
         });
         openAttendant.addActionListener(new java.awt.event.ActionListener() {
@@ -1745,16 +1721,6 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
-
-
-
-    private void adminChangeNameListActionPerformed(ActionEvent evt) {
-
-    }
-
-    private void adminChangeNameListItemStateChanged(ItemEvent evt) {
-
-    }
 
     /**
      * Kalles ved endring av navn på film.
@@ -1985,9 +1951,6 @@ public class GUI extends javax.swing.JFrame {
         reserveMovieTableSelected(null);
     }
 
-    private void fieldReservePriceSumActionPerformed(ActionEvent evt) {
-
-    }
 
     /**
      * Avslutt knapp er trykke,
@@ -2072,9 +2035,6 @@ public class GUI extends javax.swing.JFrame {
     }
 
 
-
-
-
     /**
      * Fyller ut tabellen med filmer for rapporter
      */
@@ -2129,9 +2089,6 @@ public class GUI extends javax.swing.JFrame {
         fyllFilmReservasjonsTabell(true);
     }
 
-    private void reserveAddTicketActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
 
     private void commitLoginActionPerformed(java.awt.event.ActionEvent evt) {
         innlogging();
@@ -2269,10 +2226,6 @@ public class GUI extends javax.swing.JFrame {
         confirmation.pack();
     }
 
-    private void reserveRemoveTicketActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
     /**
      * Avslutt knapp blir trykket, spør om database skal bli lagret.
      * @param evt
@@ -2310,44 +2263,8 @@ public class GUI extends javax.swing.JFrame {
         staffMovieTableSelected(null);
     }
 
-    private void staffPriceAmountActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void staffDropdownRowActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void staffDropdownSeatActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void staffInsertTicketCodeActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fieldUsernameActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
     private void fieldPasswordActionPerformed(java.awt.event.ActionEvent evt) {
         innlogging();
-    }
-
-    private void reserveDropdownRowActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void reserveDropdownSeatActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fieldReserveTicketPriceActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fieldReservePriceAverageActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
     }
 
     /**
@@ -2370,9 +2287,6 @@ public class GUI extends javax.swing.JFrame {
 
     }
 
-    private void reportCloseMouseClicked(java.awt.event.MouseEvent evt) {
-
-    }
 
     /**
      * En kinosal i rapport blir valg, fyll ut kinosal statistikk.
@@ -2406,37 +2320,6 @@ public class GUI extends javax.swing.JFrame {
         statistics.setVisible(false);
     }
 
-    private String login_opphav = null;
-
-    private void openAdminMouseClicked(java.awt.event.MouseEvent evt) {
-        JButton button = (JButton) evt.getSource();
-        login_opphav = button.getActionCommand();
-    }
-
-    private void openAttendantMouseClicked(java.awt.event.MouseEvent evt) {
-        JButton button = (JButton) evt.getSource();
-        login_opphav = button.getActionCommand();
-    }
-
-    private void ticketCodeTxtActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void seatCountTxtActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void totalTxtActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void titleTxtActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void seatsTxtActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
 
     /**
      * Bekreft en billett fra billetbestilling og legg til i billeter.
@@ -2450,10 +2333,6 @@ public class GUI extends javax.swing.JFrame {
         confirmWindowClose.setEnabled(true);
     }
 
-    private void timeTxtActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
     /**
      * Lukk bekreft vindu
      * @param evt
@@ -2461,10 +2340,6 @@ public class GUI extends javax.swing.JFrame {
 
     private void cancelConfirmationWindowActionPerformed(java.awt.event.ActionEvent evt) {
         confirmation.setVisible(false);
-    }
-
-    private void adminMovieTxtActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
     }
 
     /**
@@ -2505,31 +2380,6 @@ public class GUI extends javax.swing.JFrame {
         opprettFilm();
         //Oppdater film liste
         hentFilmTitler();
-    }
-
-    private void adminCinemaDropdownActionPerformed(java.awt.event.ActionEvent evt) {
-
-    }
-
-
-    private void adminTheaterDropdownActionPerformed(java.awt.event.ActionEvent evt) {
-
-    }
-
-    private void adminPriceTxtActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void adminTitleDropdownActionPerformed(java.awt.event.ActionEvent evt) {
-
-    }
-
-    private void adminDateDropdownActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void adminTimeDropdownActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
     }
 
     /**
@@ -2579,7 +2429,6 @@ public class GUI extends javax.swing.JFrame {
         adminSettings.setVisible(false);
     }
 
-
     /**
      * Åpne rapport vindu
      * @param evt
@@ -2599,10 +2448,6 @@ public class GUI extends javax.swing.JFrame {
 
     private void planningCloseActionPerformed(java.awt.event.ActionEvent evt) {
         adminPlanner.setVisible(false);
-    }
-
-    private void dateTxtActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
     }
 
     /**
@@ -2663,21 +2508,6 @@ public class GUI extends javax.swing.JFrame {
         }
     }
 
-
-
-    private void adminTheaterDropdownItemStateChanged(java.awt.event.ItemEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void adminTitleDropdownItemStateChanged(java.awt.event.ItemEvent evt) {
-        // TODO add your handling code here:
-    }
-
-
-
-    private void reportStatisticsTableMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
 
     /**
      * Kalles når en visning blir endret.

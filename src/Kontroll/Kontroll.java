@@ -1,6 +1,5 @@
 package Kontroll;
 
-
 import java.io.*;
 import java.sql.*;
 import java.text.ParseException;
@@ -8,9 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
-
 public class Kontroll {
 
+    // Enum. Soterer etter tid eller alfabetisk. Hvis den er en verdi, så sorterer den etter nummeret
     public static Sortering sortering = Sortering.VERDI;
 
     //Singleton
@@ -26,7 +25,7 @@ public class Kontroll {
     private ResultSet resultat;
     private Statement stmt;
 
-    //Lister med objekter
+    //ArrayLister med objekter
     private ArrayList<Kino> kinoer = new ArrayList<>();
     private ArrayList<Kinosal> kinosaler = new ArrayList<>();
     private ArrayList<Film> filmer = new ArrayList<>();
@@ -45,18 +44,42 @@ public class Kontroll {
     }
 
     /**
-     * Henter en BufferedReader til en fil, for å kunne lese den.
-     * @param filnavn
-     * @return BufferedReader
+     * Genererer en tilfeldig billettkode
+     * Sjekk om billettkoden er duplikat
+     * @return String
      */
+    public String genererBillettkode() {
+        // Bruker et random-objekt for å trekke en tilfeldig posisjon fra bokstaver- og siffer-listene.
+        // Bygger dermed en billettkode bestående av fire karakterer og to sifre
 
-    public BufferedReader leseForbindelse(String filnavn) {
-        try {
-            FileReader filForbindelse = new FileReader(filnavn);
-            BufferedReader leser = new BufferedReader(filForbindelse);
-            return leser;
-        } catch (IOException e) {
-            return null;
+        char[] bokstaver = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        char[] siffer = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+        Random tilfeldigPosisjon = new Random();
+        String billettKode = "";
+
+        for(int b=0; b<4; b++) {
+            int posisjon = tilfeldigPosisjon.nextInt(25) + 0;
+            billettKode = billettKode + bokstaver[posisjon];
+        }
+
+        for(int s=0; s<2; s++) {
+            int posisjon = tilfeldigPosisjon.nextInt(9) + 0;
+            billettKode = billettKode + siffer[posisjon];
+        }
+
+
+        //Sjekk om billettkode er i bruk
+        //Se om man  finner en billet med den billetkoden som er generer
+        Billett billett = finnBillett(billettKode);
+
+        if(billett == null) {
+            //Billettkoden finnes ikke, returner generert kode.
+            return billettKode;
+        } else {
+            System.out.println("billettkode må lages på ny");
+            //generer en ny billettkode fordi den allerede finnes
+            return genererBillettkode();
         }
     }
 
@@ -130,6 +153,201 @@ public class Kontroll {
     }
 
     /**
+     * Regner ut statistikk for en film.
+     * @param i
+     * @return Object[][]
+     */
+    public Object[][] statistikkFilm(int i) {
+        int rader = filmer.get(i).getVisninger().size();
+        Object[][] tabellInnhold = new Object[rader][4];
+
+        int teller = 0;
+        for(int n=0; n<filmer.get(i).getVisninger().size(); n++) {
+
+            int antallBilletter = 0;
+            int antallPlasser = 0;
+            int kapasitet = filmer.get(i).getVisninger().get(n).getKinosal().getAntallPlasser();
+
+
+            for(int a=0; a<filmer.get(i).getVisninger().get(n).getBilletter().size(); a++) {
+                antallPlasser += filmer.get(i).getVisninger().get(n).getBilletter().get(a).getAntallPlasser();
+                antallBilletter++;
+            }
+
+            int prosent = (antallPlasser*100) / kapasitet;
+
+            tabellInnhold[teller][0] = antallBilletter + " billetter / " + antallPlasser + " plasser";
+            tabellInnhold[teller][1] = prosent + "%";
+            tabellInnhold[teller][2] = finnAntallUbetalteBilletter(filmer.get(i).getVisninger().get(n));
+            tabellInnhold[teller][3] = filmer.get(i).getVisninger().get(n).getDato() + ", " + filmer.get(i).getVisninger().get(n).getStartTid();
+            teller++;
+        }
+        return tabellInnhold;
+    }
+
+    /**
+     * Hent ut statistikk over kinosal
+     * @param i
+     * @return Object[][]
+     */
+
+    public Object[][] statistikkKinosal(int i) {
+        int rader = visninger.size();
+        Object[][] tabellInnhold = new Object[rader][2];
+        int kapasitet = kinosaler.get(i).getPlasser().size();
+        int teller = 0;
+
+        for(int f=0; f<filmer.size(); f++) {
+            boolean erVist = false;
+            int antallVisninger = 0;
+            double iProsent = 0;
+            double kumulativProsent = 0;
+            double totaltProsent = 0;
+            double antallPlasser = 0;
+
+            for(int v=0; v<filmer.get(f).getVisninger().size(); v++) {
+                if(filmer.get(f).getVisninger().get(v).getKinosal().equals(kinosaler.get(i))) {
+                    antallPlasser = 0;
+                    erVist = true;
+                    antallVisninger++;
+                    System.out.println("Antall visninger for " + filmer.get(f).getFilmnavn() + " så langt: " + antallVisninger);
+
+                    for (int b=0; b<filmer.get(f).getVisninger().get(v).getBilletter().size(); b++) {
+                        antallPlasser += filmer.get(f).getVisninger().get(v).getBilletter().get(b).getAntallPlasser();
+
+                    }
+
+                    iProsent = antallPlasser/kapasitet;
+                    kumulativProsent += iProsent;
+
+
+                }
+            }
+
+
+            if(erVist) {
+                kumulativProsent *= 100;
+                totaltProsent = kumulativProsent / antallVisninger;
+                System.out.println("Samlet prosent: " + kumulativProsent);
+                tabellInnhold[teller][0] = filmer.get(f).getFilmnavn();
+                tabellInnhold[teller][1] = String.format("%.0f", totaltProsent) + "%";
+                teller++;
+            }
+
+        }
+        return tabellInnhold;
+    }
+
+    /**
+     * Lager en Object-liste over Visninger, som skal vises i tabellen for billettbestilling
+     * @param kino
+     * @param betjent
+     * @return Object[][]
+     */
+
+    public Object[][] lagVisningTabellListe(Kino kino, boolean betjent) {
+        ArrayList<Visning> visninger = filtrerVisninger(kino);
+        int rader = visninger.size();
+        int teller = 0;
+        Object[][] tabellInnhold = new Object[rader][5];
+        for(int i=0; i<visninger.size(); i++) {
+
+            Visning visning = visninger.get(i);
+            if((visning.erhalvtimeFørStart() && !betjent) || (visning.erKommende() && betjent)) {
+                tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
+                tabellInnhold[teller][1] = visninger.get(i).getStartTid();
+                tabellInnhold[teller][2] = visninger.get(i).getKinosal().getKinosalnavn();
+                tabellInnhold[teller][3] = visninger.get(i).getPris();
+                tabellInnhold[teller][4] = visninger.get(i).getVisningsNr();
+                teller++;
+            }
+        }
+
+        return tabellInnhold;
+    }
+
+    /**
+     * Lager en Object-liste over filmer i visninger, som skal vises i tabellen for filmer i rapportering
+     * @return Object[][]
+     */
+    public Object[][] lagFilmTabellListe() {
+        int rader = visninger.size();
+        int teller = 0;
+        Object[][] tabellInnhold = new Object[rader][1];
+        for(int i=0; i<filmer.size(); i++) {
+            tabellInnhold[teller][0] = filmer.get(i).getFilmnavn();
+            teller++;
+        }
+
+        return tabellInnhold;
+    }
+
+    /**
+     * Lager en Object-liste over statistikker i rapporter
+     * @return Object[][]
+     */
+
+    public Object[][] lagVisningerIkkeBestiltListe() {
+        int rader = this.visninger.size();
+        int teller = 0;
+        Object[][] tabellInnhold = new Object[rader][6];
+        for(int i=0; i<visninger.size(); i++) {
+
+            Visning visning = visninger.get(i);
+            if(!visning.harBilletter()) {
+                tabellInnhold[teller][0] = visning.getKinosal().getKino().getKinonavn();
+                tabellInnhold[teller][1] = visning.getFilm().getFilmnavn();
+                tabellInnhold[teller][2] = visning.getKinosal().getKinosalnavn();
+                tabellInnhold[teller][3] = visning.getStartTid();
+                tabellInnhold[teller][4] = visning.getPris();
+                tabellInnhold[teller][5] = visning.getVisningsNr();
+                teller++;
+            }
+        }
+        return tabellInnhold;
+    }
+
+    /**
+     * Returnerer en liste over kinosal og dens kino
+     * @return Object[][]
+     */
+
+    public Object[][] lagKinosalKinoTabellListe() {
+        int rader = kinosaler.size();
+        int teller = 0;
+        Object[][] tabellInnhold = new Object[rader][1];
+        for(int i=0; i<kinosaler.size(); i++) {
+            tabellInnhold[teller][0] = kinosaler.get(i).getKino().getKinonavn() + " - " + kinosaler.get(i).getKinosalnavn();
+            teller++;
+        }
+
+        return tabellInnhold;
+    }
+
+    /**
+     * Filtrer visninger,
+     * Filtrerer etter kino og sorterer etter definert sortering
+     * basert på "Sortering" attributtet (se Visning.compareTo)
+     * @param kino
+     * @return
+     */
+
+    public ArrayList<Visning> filtrerVisninger(Kino kino) {
+        ArrayList<Visning> visninger = new ArrayList<>();
+        Iterator itr = this.visninger.iterator();
+        while (itr.hasNext()) {
+            Visning visning = (Visning) itr.next();
+            System.out.println(visning.toString());
+            if(visning.getKinosal().getKino().getKinonavn().equals(kino.getKinonavn())) {
+                visninger.add(visning);
+            }
+        }
+        //Kjør sortering
+        Collections.sort(visninger);
+        return visninger;
+    }
+
+    /**
      * Opprett en nybillett
      * @param billett
      */
@@ -141,8 +359,6 @@ public class Kontroll {
             System.out.println(b.toString());
         }
     }
-
-
 
     /**
      * Opprett en ny visning
@@ -172,7 +388,6 @@ public class Kontroll {
         this.visninger.add(visning);
 
     }
-
 
     /**
      * Finn en bruker ved å oppgi brukernavn
@@ -299,26 +514,77 @@ public class Kontroll {
     }
 
     /**
-     * Filtrer visninger,
-     * Filtrerer etter kino og sorterer etter definert sortering
-     * basert på "Sortering" attributtet (se Visning.compareTo)
-     * @param kino
-     * @return
+     * Hent en liste over  kinoer
+     * @return ArrayList<Kino>
      */
 
-    public ArrayList<Visning> filtrerVisninger(Kino kino) {
-        ArrayList<Visning> visninger = new ArrayList<>();
-        Iterator itr = this.visninger.iterator();
-        while (itr.hasNext()) {
-            Visning visning = (Visning) itr.next();
-            System.out.println(visning.toString());
-            if(visning.getKinosal().getKino().getKinonavn().equals(kino.getKinonavn())) {
-                visninger.add(visning);
-            }
+    public ArrayList<Kino> getKinoer() {
+        return kinoer;
+    }
+
+    /**
+     * Hent en liste over kinosaler
+     * @return ArrayList<Kinosal>
+     */
+
+    public ArrayList<Kinosal> getKinosaler() {
+        return kinosaler;
+    }
+
+    /**
+     * Hent en liste over filmer
+     * @return ArrayList<Film>
+     */
+
+    public ArrayList<Film> getFilmer() {
+        return filmer;
+    }
+
+    /**
+     * Hent en liste over visninger
+     * @return ArrayList<Visning>
+     */
+
+    public ArrayList<Visning> getVisninger() {
+        return visninger;
+    }
+
+    /**
+     * Opprett et dato objekt pasert på 2 strenger: dato og starttid(klokkeslett)
+     * @param dato
+     * @param startid
+     * @return Date
+     * @throws ParseException
+     */
+    public Date lagDato(String dato, String startid) throws ParseException {
+        SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dato_str = dato + " " + startid + ":00";
+        return datoFormat.parse(dato_str);
+    }
+
+    /**
+     * Legger til en Film i Kontroll sin ArrayListe over Filmer
+     * @param filmnr
+     * @param filmNavn
+     */
+    public void leggTilFilm(int filmnr, String filmNavn) {
+        filmer.add(new Film(filmnr, filmNavn));
+    }
+
+    /**
+     * Henter en BufferedReader til en fil, for å kunne lese den.
+     * @param filnavn
+     * @return BufferedReader
+     */
+
+    public BufferedReader leseForbindelse(String filnavn) {
+        try {
+            FileReader filForbindelse = new FileReader(filnavn);
+            BufferedReader leser = new BufferedReader(filForbindelse);
+            return leser;
+        } catch (IOException e) {
+            return null;
         }
-        //Kjør sortering
-       Collections.sort(visninger);
-       return visninger;
     }
 
     /**
@@ -345,7 +611,7 @@ public class Kontroll {
             this.brukere.add(bruker);
         }
 
-       //Hent ut kinoer
+        //Hent ut kinoer
        /*
 
         */
@@ -359,37 +625,37 @@ public class Kontroll {
             this.kinoer.add(kino);
         }
 
-       //Hent ut kinosal result set
-       ResultSet kinosaler =  runDBQuery("SELECT k_kinosalnr, k_kinonavn, k_kinosalnavn FROM tblkinosal");
+        //Hent ut kinosal result set
+        ResultSet kinosaler =  runDBQuery("SELECT k_kinosalnr, k_kinonavn, k_kinosalnavn FROM tblkinosal");
 
-       //Loop gjennom kinosal resultatet
-       while (kinosaler.next()) {
+        //Loop gjennom kinosal resultatet
+        while (kinosaler.next()) {
 
-           //Opprett kinosal objekt
-           int salnr = kinosaler.getInt("k_kinosalnr");
-           String kinonavn = kinosaler.getString("k_kinonavn");
-           String kinosalnavn = kinosaler.getString("k_kinosalnavn");
+            //Opprett kinosal objekt
+            int salnr = kinosaler.getInt("k_kinosalnr");
+            String kinonavn = kinosaler.getString("k_kinonavn");
+            String kinosalnavn = kinosaler.getString("k_kinosalnavn");
 
-           Kino kino = finnKino(kinonavn);
-           Kinosal sal = new Kinosal(salnr, kino, kinosalnavn);
-           kino.leggTilKinosal(sal);
-           //Legg til sal
-           this.kinosaler.add(sal);
-       }
+            Kino kino = finnKino(kinonavn);
+            Kinosal sal = new Kinosal(salnr, kino, kinosalnavn);
+            kino.leggTilKinosal(sal);
+            //Legg til sal
+            this.kinosaler.add(sal);
+        }
 
-       //Hent ut plasser til kinosaler
-       ResultSet plasser =  runDBQuery("SELECT p_radnr, p_setenr, p_kinosalnr FROM tblplass");
+        //Hent ut plasser til kinosaler
+        ResultSet plasser =  runDBQuery("SELECT p_radnr, p_setenr, p_kinosalnr FROM tblplass");
 
-       while(plasser.next()) {
-           int radnr = plasser.getInt("p_radnr");
-           int setenr = plasser.getInt("p_setenr");
-           int kinosalnr = plasser.getInt("p_kinosalnr");
+        while(plasser.next()) {
+            int radnr = plasser.getInt("p_radnr");
+            int setenr = plasser.getInt("p_setenr");
+            int kinosalnr = plasser.getInt("p_kinosalnr");
 
-           Kinosal sal = finnKinosal(kinosalnr);
-           sal.leggTilPlass(radnr, setenr);
-       }
+            Kinosal sal = finnKinosal(kinosalnr);
+            sal.leggTilPlass(radnr, setenr);
+        }
 
-       //Hent ut filmene
+        //Hent ut filmene
         ResultSet filmer =  runDBQuery("SELECT f_filmnr, f_filmnavn FROM tblfilm");
         while (filmer.next()) {
 
@@ -466,7 +732,6 @@ public class Kontroll {
         db.close();
     }
 
-
     /**
      * Lagre data fra ArrayLister til sine respektive tabeller i databasen.
      * @throws SQLException
@@ -532,21 +797,15 @@ public class Kontroll {
     }
 
     /**
-     * Utfør SQL spørringer som gjør endringer INSERT/UPDATE/DELETE
-     * @param sql String
-     * @return boolean
-     */
-
-    /**
      * Kjøre en INSERT/UPDATE spørring i databasen
      * @param sql
      * @throws SQLException
      */
 
     public void runDBEndring(String sql) throws SQLException {
-            //Kjør spørring
-            stmt = db.createStatement();
-            stmt.executeUpdate(sql);
+        //Kjør spørring
+        stmt = db.createStatement();
+        stmt.executeUpdate(sql);
 
     }
 
@@ -574,47 +833,11 @@ public class Kontroll {
      */
 
     public void opprettDBForbindelse() throws SQLException {
-            db = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db_navn,db_bruker,db_passord);
-            //Set autocommit false, slik at vi kan commite manuelt når alle spørringene er utført
-            db.setAutoCommit(false);
-            System.out.println("Dabase er koblet til!");
+        db = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db_navn,db_bruker,db_passord);
+        //Set autocommit false, slik at vi kan commite manuelt når alle spørringene er utført
+        db.setAutoCommit(false);
+        System.out.println("Dabase er koblet til!");
 
-    }
-
-    /**
-     * Hent en liste over  kinoer
-     * @return ArrayList<Kino>
-     */
-
-    public ArrayList<Kino> getKinoer() {
-        return kinoer;
-    }
-
-    /**
-     * Hent en liste over kinosaler
-     * @return ArrayList<Kinosal>
-     */
-
-    public ArrayList<Kinosal> getKinosaler() {
-        return kinosaler;
-    }
-
-    /**
-     * Hent en liste over filmer
-     * @return ArrayList<Film>
-     */
-
-    public ArrayList<Film> getFilmer() {
-        return filmer;
-    }
-
-    /**
-     * Hent en liste over visninger
-     * @return ArrayList<Visning>
-     */
-
-    public ArrayList<Visning> getVisninger() {
-        return visninger;
     }
 
     /**
@@ -626,246 +849,6 @@ public class Kontroll {
     public static Kontroll getInstance() throws SQLException {
         if(INSTANSE == null) INSTANSE = new Kontroll(); //Opprett ny instanse
         return INSTANSE;
-    }
-
-    /**
-     * Lager en Object-liste over Visninger, som skal vises i tabellen for billettbestilling
-     * @param kino
-     * @param betjent
-     * @return Object[][]
-     */
-
-    public Object[][] lagVisningTabellListe(Kino kino, boolean betjent) {
-        ArrayList<Visning> visninger = filtrerVisninger(kino);
-        int rader = visninger.size();
-        int teller = 0;
-        Object[][] tabellInnhold = new Object[rader][5];
-        for(int i=0; i<visninger.size(); i++) {
-
-            Visning visning = visninger.get(i);
-            if((visning.erhalvtimeFørStart() && !betjent) || (visning.erKommende() && betjent)) {
-                tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
-                tabellInnhold[teller][1] = visninger.get(i).getStartTid();
-                tabellInnhold[teller][2] = visninger.get(i).getKinosal().getKinosalnavn();
-                tabellInnhold[teller][3] = visninger.get(i).getPris();
-                tabellInnhold[teller][4] = visninger.get(i).getVisningsNr();
-                teller++;
-            }
-        }
-
-        return tabellInnhold;
-    }
-
-
-    /**
-     * Regner ut statistikk for en film.
-     * @param i
-     * @return Object[][]
-     */
-    public Object[][] statistikkFilm(int i) {
-        int rader = filmer.get(i).getVisninger().size();
-        Object[][] tabellInnhold = new Object[rader][4];
-
-        int teller = 0;
-        for(int n=0; n<filmer.get(i).getVisninger().size(); n++) {
-
-            int antallBilletter = 0;
-            int antallPlasser = 0;
-            int kapasitet = filmer.get(i).getVisninger().get(n).getKinosal().getAntallPlasser();
-
-
-            for(int a=0; a<filmer.get(i).getVisninger().get(n).getBilletter().size(); a++) {
-                antallPlasser += filmer.get(i).getVisninger().get(n).getBilletter().get(a).getAntallPlasser();
-                antallBilletter++;
-            }
-
-            int prosent = (antallPlasser*100) / kapasitet;
-
-            tabellInnhold[teller][0] = antallBilletter + " billetter / " + antallPlasser + " plasser";
-            tabellInnhold[teller][1] = prosent + "%";
-            tabellInnhold[teller][2] = finnAntallUbetalteBilletter(filmer.get(i).getVisninger().get(n));
-            tabellInnhold[teller][3] = filmer.get(i).getVisninger().get(n).getDato() + ", " + filmer.get(i).getVisninger().get(n).getStartTid();
-            teller++;
-        }
-        return tabellInnhold;
-    }
-
-    /**
-     * Hent ut statistikk over kinosal
-     * @param i
-     * @return Object[][]
-     */
-
-    public Object[][] statistikkKinosal(int i) {
-        int rader = visninger.size();
-        Object[][] tabellInnhold = new Object[rader][2];
-        int kapasitet = kinosaler.get(i).getPlasser().size();
-        int teller = 0;
-
-        for(int f=0; f<filmer.size(); f++) {
-            boolean erVist = false;
-            int antallVisninger = 0;
-            double iProsent = 0;
-            double kumulativProsent = 0;
-            double totaltProsent = 0;
-            double antallPlasser = 0;
-
-            for(int v=0; v<filmer.get(f).getVisninger().size(); v++) {
-                if(filmer.get(f).getVisninger().get(v).getKinosal().equals(kinosaler.get(i))) {
-                    antallPlasser = 0;
-                    erVist = true;
-                    antallVisninger++;
-                    System.out.println("Antall visninger for " + filmer.get(f).getFilmnavn() + " så langt: " + antallVisninger);
-
-                    for (int b=0; b<filmer.get(f).getVisninger().get(v).getBilletter().size(); b++) {
-                        antallPlasser += filmer.get(f).getVisninger().get(v).getBilletter().get(b).getAntallPlasser();
-
-                    }
-
-                    iProsent = antallPlasser/kapasitet;
-                    kumulativProsent += iProsent;
-
-
-                }
-            }
-
-
-            if(erVist) {
-                kumulativProsent *= 100;
-                totaltProsent = kumulativProsent / antallVisninger;
-                System.out.println("Samlet prosent: " + kumulativProsent);
-                tabellInnhold[teller][0] = filmer.get(f).getFilmnavn();
-                tabellInnhold[teller][1] = String.format("%.0f", totaltProsent) + "%";
-                teller++;
-            }
-
-        }
-        return tabellInnhold;
-    }
-
-
-
-    /**
-     * Lager en Object-liste over filmer i visninger, som skal vises i tabellen for filmer i rapportering
-     * @return Object[][]
-     */
-    public Object[][] lagFilmTabellListe() {
-        int rader = visninger.size();
-        int teller = 0;
-        Object[][] tabellInnhold = new Object[rader][1];
-        for(int i=0; i<filmer.size(); i++) {
-            tabellInnhold[teller][0] = filmer.get(i).getFilmnavn();
-            teller++;
-        }
-
-        return tabellInnhold;
-    }
-
-
-    /**
-     * Lager en Object-liste over statistikker i rapporter
-     * @return Object[][]
-     */
-
-
-    public Object[][] lagVisningerIkkeBestiltListe() {
-        int rader = this.visninger.size();
-        int teller = 0;
-        Object[][] tabellInnhold = new Object[rader][6];
-        for(int i=0; i<visninger.size(); i++) {
-
-            Visning visning = visninger.get(i);
-            if(!visning.harBilletter()) {
-                tabellInnhold[teller][0] = visning.getKinosal().getKino().getKinonavn();
-                tabellInnhold[teller][1] = visning.getFilm().getFilmnavn();
-                tabellInnhold[teller][2] = visning.getKinosal().getKinosalnavn();
-                tabellInnhold[teller][3] = visning.getStartTid();
-                tabellInnhold[teller][4] = visning.getPris();
-                tabellInnhold[teller][5] = visning.getVisningsNr();
-                teller++;
-            }
-        }
-        return tabellInnhold;
-    }
-
-    /**
-     * Returnerer en liste over kinosal og dens kino
-     * @return Object[][]
-     */
-
-    public Object[][] lagKinosalKinoTabellListe() {
-        int rader = kinosaler.size();
-        int teller = 0;
-        Object[][] tabellInnhold = new Object[rader][1];
-        for(int i=0; i<kinosaler.size(); i++) {
-            tabellInnhold[teller][0] = kinosaler.get(i).getKino().getKinonavn() + " - " + kinosaler.get(i).getKinosalnavn();
-            teller++;
-        }
-
-        return tabellInnhold;
-    }
-
-
-    /**
-     * Genererer en tilfeldig billettkode
-     * Sjekk om billettkoden er duplikat
-     * @return String
-     */
-    public String genererBillettkode() {
-        // Bruker et random-objekt for å trekke en tilfeldig posisjon fra bokstaver- og siffer-listene.
-        // Bygger dermed en billettkode bestående av fire karakterer og to sifre
-
-        char[] bokstaver = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-        char[] siffer = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-
-        Random tilfeldigPosisjon = new Random();
-        String billettKode = "";
-
-        for(int b=0; b<4; b++) {
-            int posisjon = tilfeldigPosisjon.nextInt(25) + 0;
-            billettKode = billettKode + bokstaver[posisjon];
-        }
-
-        for(int s=0; s<2; s++) {
-            int posisjon = tilfeldigPosisjon.nextInt(9) + 0;
-            billettKode = billettKode + siffer[posisjon];
-        }
-
-
-        //Sjekk om billettkode er i bruk
-        //Se om man  finner en billet med den billetkoden som er generer
-        Billett billett = finnBillett(billettKode);
-
-        if(billett == null) {
-            //Billettkoden finnes ikke, returner generert kode.
-            return billettKode;
-        } else {
-            System.out.println("billettkode må lages på ny");
-            //generer en ny billettkode fordi den allerede finnes
-            return genererBillettkode();
-        }
-    }
-
-    /**
-     * Opprett et dato objekt pasert på 2 strenger: dato og starttid(klokkeslett)
-     * @param dato
-     * @param startid
-     * @return Date
-     * @throws ParseException
-     */
-    public Date lagDato(String dato, String startid) throws ParseException {
-        SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dato_str = dato + " " + startid + ":00";
-        return datoFormat.parse(dato_str);
-    }
-
-    /**
-     * Legger til en Film i Kontroll sin ArrayListe over Filmer
-     * @param filmnr
-     * @param filmNavn
-     */
-    public void leggTilFilm(int filmnr, String filmNavn) {
-        filmer.add(new Film(filmnr, filmNavn));
     }
 
 
