@@ -40,7 +40,7 @@ public class Billett implements Comparable<Billett>{
      */
 
     public int getAntallPlasser() {
-        return plasser.size();
+        return this.plasser.size();
     }
 
     /**
@@ -48,7 +48,7 @@ public class Billett implements Comparable<Billett>{
      * @param plassen
      */
     public void leggTilPlass(Plass plassen) {
-        plasser.add(plassen);
+        this.plasser.add(plassen);
     }
 
     /**
@@ -57,7 +57,7 @@ public class Billett implements Comparable<Billett>{
      */
 
     public String getBillettkode() {
-        return billettkode;
+        return this.billettkode;
     }
 
     /**
@@ -65,7 +65,7 @@ public class Billett implements Comparable<Billett>{
      * @return Visning
      */
     public Visning getVisning() {
-        return visning;
+        return this.visning;
     }
 
     /**
@@ -109,6 +109,7 @@ public class Billett implements Comparable<Billett>{
 
     @Override
     public int compareTo(Billett o) {
+        System.out.println(this.billettkode + " " + o.getBillettkode());
         return kollator.compare(this.billettkode, o.getBillettkode());
     }
 }
