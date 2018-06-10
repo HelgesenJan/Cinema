@@ -472,9 +472,17 @@ public class Kontroll {
      */
 
     public Visning finnVisning(int visningsnr) {
+
+        Sortering gml_sort = this.sortering;
+        this.sortering = Sortering.VERDI;
+
         Collections.sort(visninger);
         Visning dummy = new Visning(visningsnr);
         int indeks = Collections.binarySearch(visninger, dummy);
+
+        //Sett gammel sortering
+        this.sortering = gml_sort;
+
         if(indeks < 0) {
             return null;
         }
