@@ -513,7 +513,7 @@ public class Kontroll {
         for(int i=0; i<visninger.size(); i++) {
 
             Visning visning = visninger.get(i);
-            if(visning.erhalvtimeFørStart()) {
+            if((visning.erhalvtimeFørStart() && !betjent) || (visning.erKommende() && betjent)) {
                 tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
                 tabellInnhold[teller][1] = visninger.get(i).getStartTid();
                 tabellInnhold[teller][2] = visninger.get(i).getKinosal().getKinosalnavn();

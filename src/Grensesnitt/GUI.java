@@ -1882,8 +1882,8 @@ public class GUI extends javax.swing.JFrame {
         int visningsnr = -1;
         try {
             visningsnr = (int) reserveMovieTable.getValueAt(reserveMovieTable.getSelectedRow(), 4);
-        }catch(ArrayIndexOutOfBoundsException ex) {
-            //reserveMovieTable.clearSelection();
+        }catch(Exception ex) {
+            reserveMovieTable.clearSelection();
         }
 
         if(visningsnr != -1 && e != null) {

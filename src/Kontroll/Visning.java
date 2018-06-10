@@ -187,6 +187,7 @@ public class Visning implements Comparable<Visning> {
 
     public boolean erhalvtimeFørStart() {
         Date dato_halvtimefør = new Date();
+
         //Bruk kalender til å hente ut dato objekt en halvtime frem i tid
         kalender.setTime(dato_halvtimefør);
         kalender.add(Calendar.MINUTE, 30); //Legg til 30 minutt
