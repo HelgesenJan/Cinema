@@ -12,18 +12,38 @@ public class Plass {
         this.kinosal = kinosal;
     }
 
+    /**
+     * Returner radnr
+     * @return int
+     */
+
     public int getRadnr() {
         return radnr;
     }
+
+    /**
+     * Returner setenr
+     * @return
+     */
 
     public int getSetenr() {
         return setenr;
     }
 
+    /**
+     * Hent kinosal
+     * @return Kinosal
+     */
+
     public Kinosal getKinosal() {
         return kinosal;
     }
 
+    /**
+     *
+     * @param o
+     * @return boolean
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -36,6 +56,9 @@ public class Plass {
         return getKinosal() != null ? getKinosal().equals(plass.getKinosal()) : plass.getKinosal() == null;
     }
 
+    /**
+     * @return int
+     */
     @Override
     public int hashCode() {
         int result = getRadnr();
@@ -44,6 +67,9 @@ public class Plass {
         return result;
     }
 
+    /**
+     * @return String
+     */
     @Override
     public String toString() {
         return "Plass{" +

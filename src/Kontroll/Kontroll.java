@@ -1,13 +1,8 @@
 package Kontroll;
 
-import com.sun.java.accessibility.util.AccessibilityEventMonitor;
 
-import javax.swing.*;
 import java.io.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.sql.*;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -40,21 +35,20 @@ public class Kontroll {
     private ArrayList<Billett> billetter = new ArrayList<>();
 
 
+    /**
+     * Kontroll konstruktøren laster databasen og setter standard sortering (alfabetisk)
+     * @throws SQLException
+     */
     public Kontroll() throws SQLException {
         lastDatabase();
-
-        Kino kino = finnKino("Tiara");
-        System.out.println(kino);
         sortering = Sortering.ALFABETISK;
-
-        /*
-        System.out.println(visninger.size());
-        for(Visning v : visninger) {
-            System.out.println(v.toString());
-        }
-        */
-
     }
+
+    /**
+     * Henter en BufferedReader til en fil, for å kunne lese den.
+     * @param filnavn
+     * @return BufferedReader
+     */
 
     public BufferedReader leseForbindelse(String filnavn) {
         try {
@@ -65,6 +59,14 @@ public class Kontroll {
             return null;
         }
     }
+
+    /**
+     * Henter ut antall ubetalte billetter fra slettinger.dat
+     * Her brukes leseForbindelse
+     * Brukes i rapportdelen for å telle ubetalte billetter
+     * @param visningen
+     * @return
+     */
 
     public int finnAntallUbetalteBilletter(Visning visningen) {
         int antall = 0;
@@ -90,6 +92,12 @@ public class Kontroll {
         }
     }
 
+    /**
+     * Fjerner ubetalte billetter og setter det inn i "slettinger.dat"
+     * @param visning
+     * @throws IOException
+     */
+
     public void fjernUbetalteBilletter(Visning visning) throws IOException {
 
         /*
@@ -102,7 +110,7 @@ public class Kontroll {
 
         //Gå gjennom bilettlista og sjekk om de er betalt
         for(Billett billett: this.billetter) {
-            if (!billett.isErBetalt() && billett.getVisning().equals(visning)) {
+            if (!billett.erBetalt() && billett.getVisning().equals(visning)) {
                 //visning.fjernBillett(billett);
                 //billetter.remove(billett);
                 fil.append( billett.toString());
@@ -121,6 +129,11 @@ public class Kontroll {
         fil.close();
     }
 
+    /**
+     * Opprett en nybillett
+     * @param billett
+     */
+
     public void nyBillett(Billett billett) {
         billett.getVisning().leggTilBillett(billett);
         billetter.add(billett);
@@ -129,12 +142,18 @@ public class Kontroll {
         }
     }
 
-    public Date lagDato(String dato, String startid) throws ParseException {
-        SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dato_str = dato + " " + startid + ":00";
-        return datoFormat.parse(dato_str);
-    }
 
+
+    /**
+     * Opprett en ny visning
+     * @param kinonavn
+     * @param salnavn
+     * @param pris
+     * @param tittel
+     * @param dagmnd
+     * @param starttid
+     * @throws ParseException
+     */
 
     public void nyVisning(String kinonavn, String salnavn, Double pris, String tittel, String dagmnd, String starttid) throws ParseException {
 
@@ -154,6 +173,13 @@ public class Kontroll {
 
     }
 
+
+    /**
+     * Finn en bruker ved å oppgi brukernavn
+     * @param brukernavn
+     * @return Bruker
+     */
+
     public Bruker finnBruker(String brukernavn) {
         for (Bruker bruker:this.brukere) {
             if(bruker.getBrukernavn().equals(brukernavn)) {
@@ -162,6 +188,12 @@ public class Kontroll {
         }
         return null;
     }
+
+    /**
+     * Finn en kino basert på kinonavn
+     * @param kinonavn
+     * @return Kino
+     */
 
     public Kino finnKino(String kinonavn) {
         Kino dummy = new Kino(kinonavn);
@@ -172,6 +204,12 @@ public class Kontroll {
         return kinoer.get(indeks);
     }
 
+    /**
+     * Finn en kinosal basert på kinosalnr
+     * @param kinosalnr
+     * @return Kinosal
+     */
+
     public Kinosal finnKinosal(int kinosalnr) {
         Kinosal dummy = new Kinosal(kinosalnr);
         int indeks = Collections.binarySearch(kinosaler,dummy);
@@ -180,6 +218,12 @@ public class Kontroll {
         }
         return kinosaler.get(indeks);
     }
+
+    /**
+     * Finn en film basert på filmnr
+     * @param filmnr
+     * @return Film
+     */
 
     public Film finnFilm(int filmnr) {
         Film dummy =new Film(filmnr);
@@ -190,6 +234,12 @@ public class Kontroll {
         return filmer.get(indeks);
     }
 
+    /**
+     * Finn en film basert på filmnavn
+     * @param filmnavn
+     * @return Film
+     */
+
     public Film finnFilm(String filmnavn) {
         for (Film film:this.filmer) {
             if(film.getFilmnavn().equals(filmnavn)) {
@@ -199,7 +249,11 @@ public class Kontroll {
         return null;
     }
 
-
+    /**
+     * Finn en visning basert på visningsnr
+     * @param visningsnr
+     * @return Visning
+     */
 
     public Visning finnVisning(int visningsnr) {
         Visning dummy = new Visning(visningsnr);
@@ -210,6 +264,12 @@ public class Kontroll {
         return visninger.get(indeks);
     }
 
+    /**
+     * Finn en billett basert på billettkoden
+     * @param billettkode
+     * @return Billett
+     */
+
     public Billett finnBillett(String billettkode) {
         Billett dummy = new Billett(billettkode);
         int indeks = Collections.binarySearch(billetter, dummy);
@@ -219,6 +279,13 @@ public class Kontroll {
         return billetter.get(indeks);
     }
 
+    /**
+     * Finn en sal ved å oppgi kinonavn og salnavn
+     * Denne har vi fordi saler kan ha likt navn på flere kinoer
+     * @param kinonavn
+     * @param salnavn
+     * @return Kinosal
+     */
     public Kinosal finnSal(String kinonavn, String salnavn) {
 
         for(Kinosal sal:this.getKinosaler()) {
@@ -230,6 +297,14 @@ public class Kontroll {
         }
         return null;
     }
+
+    /**
+     * Filtrer visninger,
+     * Filtrerer etter kino og sorterer etter definert sortering
+     * basert på "Sortering" attributtet (se Visning.compareTo)
+     * @param kino
+     * @return
+     */
 
     public ArrayList<Visning> filtrerVisninger(Kino kino) {
         ArrayList<Visning> visninger = new ArrayList<>();
@@ -246,7 +321,10 @@ public class Kontroll {
        return visninger;
     }
 
-
+    /**
+     * Last inn data fra tabellene i databasen, og putt dem inn i sine respektive arraylister
+     * @throws SQLException
+     */
 
     public void lastDatabase() throws SQLException {
 
@@ -256,7 +334,7 @@ public class Kontroll {
 
         //Hent ut brukere
         ResultSet brukere =  runDBQuery("SELECT l_brukernavn, l_pinkode, l_erPlanlegger FROM tbllogin");
-        System.out.println("test");
+
         while(brukere.next()) {
             String brukernavn = brukere.getString("l_brukernavn");
             String pinkode = brukere.getString("l_pinkode");
@@ -388,6 +466,12 @@ public class Kontroll {
         db.close();
     }
 
+
+    /**
+     * Lagre data fra ArrayLister til sine respektive tabeller i databasen.
+     * @throws SQLException
+     */
+
     public void lagreDatabase() throws SQLException {
 
         //Opprett DB forbindelse
@@ -426,7 +510,7 @@ public class Kontroll {
                 runDBEndring("INSERT INTO tblbillett(b_billettkode, b_visningsnr, b_erBetalt) VALUES('" +
                         billett.getBillettkode() + "','" +
                         billett.getVisning().getVisningsNr() + "','" +
-                        (billett.isErBetalt() ? 1 : 0) + "')"); //Kommentar: erBetalt blir 1 og !erBetalt blir 0
+                        (billett.erBetalt() ? 1 : 0) + "')"); //Kommentar: erBetalt blir 1 og !erBetalt blir 0
                 for (Plass plass : billett.getPlasser()) {
                     runDBEndring("INSERT INTO tblplassbillett(pb_radnr, pb_setenr, pb_kinosalnr, pb_billettkode) VALUES('" +
                             plass.getRadnr() + "','" +
@@ -453,12 +537,24 @@ public class Kontroll {
      * @return boolean
      */
 
+    /**
+     * Kjøre en INSERT/UPDATE spørring i databasen
+     * @param sql
+     * @throws SQLException
+     */
+
     public void runDBEndring(String sql) throws SQLException {
             //Kjør spørring
             stmt = db.createStatement();
             stmt.executeUpdate(sql);
 
     }
+
+    /**
+     * Kjør en SELECT spørring fra databasen
+     * @param sql
+     * @return
+     */
 
     public ResultSet runDBQuery(String sql) {
         resultat = null; //Nullstill resultat
@@ -472,6 +568,11 @@ public class Kontroll {
         }
     }
 
+    /**
+     * Opprett database forbindelse
+     * @throws SQLException
+     */
+
     public void opprettDBForbindelse() throws SQLException {
             db = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db_navn,db_bruker,db_passord);
             //Set autocommit false, slik at vi kan commite manuelt når alle spørringene er utført
@@ -480,31 +581,47 @@ public class Kontroll {
 
     }
 
+    /**
+     * Hent en liste over  kinoer
+     * @return ArrayList<Kino>
+     */
 
     public ArrayList<Kino> getKinoer() {
         return kinoer;
     }
 
+    /**
+     * Hent en liste over kinosaler
+     * @return ArrayList<Kinosal>
+     */
+
     public ArrayList<Kinosal> getKinosaler() {
         return kinosaler;
     }
+
+    /**
+     * Hent en liste over filmer
+     * @return ArrayList<Film>
+     */
 
     public ArrayList<Film> getFilmer() {
         return filmer;
     }
 
-    public ArrayList<Bruker> getBrukere() {
-        return brukere;
-    }
+    /**
+     * Hent en liste over visninger
+     * @return ArrayList<Visning>
+     */
 
     public ArrayList<Visning> getVisninger() {
         return visninger;
     }
 
-    public ArrayList<Billett> getBilletter() {
-        return billetter;
-    }
-
+    /**
+     * Hent en instans av denne klassen (Singleton)
+     * @return
+     * @throws SQLException
+     */
 
     public static Kontroll getInstance() throws SQLException {
         if(INSTANSE == null) INSTANSE = new Kontroll(); //Opprett ny instanse
@@ -513,8 +630,11 @@ public class Kontroll {
 
     /**
      * Lager en Object-liste over Visninger, som skal vises i tabellen for billettbestilling
-     * @return
+     * @param kino
+     * @param betjent
+     * @return Object[][]
      */
+
     public Object[][] lagVisningTabellListe(Kino kino, boolean betjent) {
         ArrayList<Visning> visninger = filtrerVisninger(kino);
         int rader = visninger.size();
@@ -540,7 +660,7 @@ public class Kontroll {
     /**
      * Regner ut statistikk for en film.
      * @param i
-     * @return
+     * @return Object[][]
      */
     public Object[][] statistikkFilm(int i) {
         int rader = filmer.get(i).getVisninger().size();
@@ -569,6 +689,12 @@ public class Kontroll {
         }
         return tabellInnhold;
     }
+
+    /**
+     * Hent ut statistikk over kinosal
+     * @param i
+     * @return Object[][]
+     */
 
     public Object[][] statistikkKinosal(int i) {
         int rader = visninger.size();
@@ -613,7 +739,7 @@ public class Kontroll {
 
     /**
      * Lager en Object-liste over filmer i visninger, som skal vises i tabellen for filmer i rapportering
-     * @return
+     * @return Object[][]
      */
     public Object[][] lagFilmTabellListe() {
         int rader = visninger.size();
@@ -630,6 +756,7 @@ public class Kontroll {
 
     /**
      * Lager en Object-liste over statistikker i rapporter
+     * @return Object[][]
      */
 
 
@@ -653,6 +780,11 @@ public class Kontroll {
         return tabellInnhold;
     }
 
+    /**
+     * Returnerer en liste over kinosal og dens kino
+     * @return Object[][]
+     */
+
     public Object[][] lagKinosalKinoTabellListe() {
         int rader = kinosaler.size();
         int teller = 0;
@@ -668,7 +800,8 @@ public class Kontroll {
 
     /**
      * Genererer en tilfeldig billettkode
-     * @return
+     * Sjekk om billettkoden er duplikat
+     * @return String
      */
     public String genererBillettkode() {
         // Bruker et random-objekt for å trekke en tilfeldig posisjon fra bokstaver- og siffer-listene.
@@ -703,6 +836,19 @@ public class Kontroll {
             //generer en ny billettkode fordi den allerede finnes
             return genererBillettkode();
         }
+    }
+
+    /**
+     * Opprett et dato objekt pasert på 2 strenger: dato og starttid(klokkeslett)
+     * @param dato
+     * @param startid
+     * @return Date
+     * @throws ParseException
+     */
+    public Date lagDato(String dato, String startid) throws ParseException {
+        SimpleDateFormat datoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dato_str = dato + " " + startid + ":00";
+        return datoFormat.parse(dato_str);
     }
 
     /**

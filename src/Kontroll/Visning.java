@@ -1,13 +1,10 @@
 package Kontroll;
 
-import javax.swing.text.html.HTMLDocument;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Iterator;
+
 
 public class Visning implements Comparable<Visning> {
 
@@ -22,9 +19,24 @@ public class Visning implements Comparable<Visning> {
 
     private ArrayList<Billett> billetter = new ArrayList<>();
 
+
+    /**
+     * Konstruktør for dummy visning, brukes i binær søk
+     * @param visningsNr
+     */
+
     public Visning(int visningsNr) {
         this.visningsNr = visningsNr;
     }
+
+    /**
+     * Ordinær konstruktør
+     * @param visningsNr
+     * @param film
+     * @param kinosal
+     * @param dato
+     * @param pris
+     */
 
     public Visning(int visningsNr, Film film, Kinosal kinosal, Date dato, double pris) {
         this.visningsNr = visningsNr;
@@ -35,7 +47,10 @@ public class Visning implements Comparable<Visning> {
     }
 
 
-
+    /**
+     * Returnerer sann dersom visningen har billetter
+     * @return boolean
+     */
 
     public boolean harBilletter() {
         System.out.println(this.billetter.size());
@@ -43,60 +58,115 @@ public class Visning implements Comparable<Visning> {
     }
 
 
+    /**
+     * Legger til en billet i en visning
+     * @param billett
+     */
 
     public void leggTilBillett(Billett billett) {
         this.billetter.add(billett);
     }
 
+    /**
+     * Fjerner en billet fra visning
+     * @param billett
+     */
     public void fjernBillett(Billett billett) {
         this.billetter.remove(billett);
     }
+
+    /**
+     * Henter liste over billetter i visning
+     * @return ArrayList<Billett>
+     */
 
     public ArrayList<Billett> getBilletter() {
         return billetter;
     }
 
+    /**
+     *  Returner visningsnr
+     * @return visningsnr
+     */
+
     public int getVisningsNr() {
         return visningsNr;
     }
 
-    public void setVisningsNr(int visningsNr) {
-        this.visningsNr = visningsNr;
-    }
 
+    /**
+     * @return film objekt
+     */
     public Film getFilm() {
         return this.film;
     }
+
+    /**
+     * Oppdater film objekt
+     * @param film
+     */
 
     public void setFilm(Film film) {
         this.film = film;
     }
 
+    /**
+     *
+     * @return Kinosal
+     */
+
     public Kinosal getKinosal() {
         return this.kinosal;
     }
 
+    /**
+     * Oppdater kinosal
+     * @param kinosal
+     */
+
     public void setKinosal(Kinosal kinosal) {
         this.kinosal = kinosal;
     }
+
+    /**
+     * Returner dato
+     * @return Date
+     */
 
     public Date getDato() {
         return this.dato;
     }
 
 
-
+    /**
+     * Sett ny dato
+     * @param dato
+     */
     public void setDato(Date dato) {
         this.dato = dato;
     }
 
+    /**
+     * hent pris
+     * @return double
+     */
     public double getPris() {
         return pris;
     }
 
+    /**
+     * Oppdater pris
+     * @param pris
+     */
+
     public void setPris(double pris) {
         this.pris = pris;
     }
+
+    /**
+     * Hent ut dato i dag måned format
+     * @return String
+     */
 
     public String getDagMnd() {
         //Gi kalender dato
@@ -110,6 +180,10 @@ public class Visning implements Comparable<Visning> {
         return år + "-" + mnd + "-" + dag;
     }
 
+    /**
+     * Hent start klokkeslett format
+     * @return String
+     */
 
     public String getStartKlokkeslett(){
         //Gi kalender dato
@@ -121,6 +195,10 @@ public class Visning implements Comparable<Visning> {
         return time + ":" + minutter;
     }
 
+    /**
+     * Hent start tid med dato og klokkeslett
+     * @return String
+     */
     public String getStartTid() {
 
         //Gi kalender dato
@@ -171,12 +249,14 @@ public class Visning implements Comparable<Visning> {
         return dato_halvtimefør.before(this.dato);
     }
 
+    /**
+     * Finner ledige plasser i en visning
+     * @return
+     */
 
     public ArrayList<Plass> finnLedigePlasser() {
-        System.out.println("FINN LEDIGE PLASSER");
         ArrayList<Plass> plasser = new ArrayList<Plass>(this.kinosal.getPlasser());
         ArrayList<Billett> billetter = this.billetter;
-
 
         for (Billett billett:billetter) {
             for(Plass plass: billett.getPlasser()) {
@@ -187,7 +267,10 @@ public class Visning implements Comparable<Visning> {
     }
 
 
-
+    /**
+     *
+     * @return String
+     */
     @Override
     public String toString() {
         return "Visning{" +
@@ -198,6 +281,12 @@ public class Visning implements Comparable<Visning> {
                 ", pris=" + pris +
                 '}';
     }
+
+    /**
+     * Muligheten til sammenligne film(filmavn), tid(dato) eller verdi(visningsnr)
+     * @param o
+     * @return int
+     */
 
     @Override
     public int compareTo(Visning o) {

@@ -2207,10 +2207,10 @@ public class GUI extends javax.swing.JFrame {
         String billettkode = staffInsertTicketCode.getText();
 
         Billett billett = kontroll.finnBillett(billettkode);
-        if(billett != null && !billett.isErBetalt()) {
+        if(billett != null && !billett.erBetalt()) {
             billett.setErBetalt(true);
             JOptionPane.showMessageDialog(cinemaStaff, "Billett " + billettkode + " er merket betalt!");
-        } else if( billett != null && billett.isErBetalt()) {
+        } else if( billett != null && billett.erBetalt()) {
             JOptionPane.showMessageDialog(cinemaStaff, "Billett " + billettkode + " er allerede brukt!");
         } else {
             JOptionPane.showMessageDialog(cinemaStaff, "Ugyldig billettkode!");
@@ -2801,6 +2801,12 @@ public class GUI extends javax.swing.JFrame {
         System.out.println(kontroll.getFilmer());
     }
 
+
+    /**
+     * Utfører innloggingen
+     * Sjekker om brukernavn og pin er riktig
+     * Sjekker om bruker har tilgang til det den prøver å gå innpå
+     */
 
     private void innlogging() {
 

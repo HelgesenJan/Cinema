@@ -19,39 +19,66 @@ public class Film implements Comparable<Film>{
 
     }
 
+
     /**
-     * Oppretter en visning og legger den til i Film sin ArrayListe
-
+     * Legg til visning
+     * @param visning
      */
-  //  public void leggTilVisning(int visningsNr, Film filmen, Kinosal kinosalen, Date dato, Date startTid, Double pris) {
-     //   visninger.add(new Visning(visningsNr, filmen, kinosalen, dato, startTid, pris));
-//    }
-
-    public ArrayList<Visning> getVisninger() {
-        return visninger;
-    }
-
 
     public void leggTilVisning(Visning visning) {
         visninger.add(visning);
     }
 
+    /**
+     * Fjern en visning
+     * @param visning
+     */
+
     public void fjernVisning(Visning visning) {
         this.visninger.remove(visning);
     }
+
+    /**
+     * Hent filmnr
+     * @return int
+     */
 
     public int getFilmnr() {
         return filmnr;
     }
 
+    /**
+     * Hent filmnavn
+     * @return int
+     */
+
     public String getFilmnavn() {
         return filmnavn;
     }
+
+    /**
+     * Oppdater filmavn
+     * @param filmnavn
+     */
 
     public void setFilmnavn(String filmnavn) {
         this.filmnavn = filmnavn;
     }
 
+    /**
+     * Returner liste over visninger
+     * @return
+     */
+    public ArrayList<Visning> getVisninger() {
+        return visninger;
+    }
+
+
+    /**
+     *
+     * @param o
+     * @return int
+     */
     @Override
     public int compareTo(Film o) {
         if(this.filmnr < o.getFilmnr()) {

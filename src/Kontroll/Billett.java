@@ -13,9 +13,20 @@ public class Billett implements Comparable<Billett>{
 
     private ArrayList<Plass> plasser = new ArrayList<>();
 
+    /**
+     * Konstruktør for dummy Billett, brukes i binærsøk
+     * @param billettkode
+     */
     public Billett(String billettkode) {
         this.billettkode = billettkode;
     }
+
+    /**
+     * Ordinær konstruktør
+     * @param billettkode
+     * @param visning
+     * @param erBetalt
+     */
 
     public Billett(String billettkode, Visning visning, boolean erBetalt) {
         this.billettkode = billettkode;
@@ -23,12 +34,12 @@ public class Billett implements Comparable<Billett>{
         this.erBetalt = erBetalt;
     }
 
+    /**
+     * Hent antall plasser
+     * @return int
+     */
+
     public int getAntallPlasser() {
-        /*int antall=0;
-        for(int i=0; i<plasser.size(); i++) {
-            antall++;
-        }
-        return antall;*/
         return plasser.size();
     }
 
@@ -40,43 +51,51 @@ public class Billett implements Comparable<Billett>{
         plasser.add(plassen);
     }
 
-    public boolean harPlass(Plass plass) {
-        for (Plass p:this.plasser) {
-            if(p.equals(plass)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    /**
+     * Hent billettkode
+     * @return String
+     */
 
     public String getBillettkode() {
         return billettkode;
     }
 
-
-    public void setBillettkode(String billettkode) {
-        this.billettkode = billettkode;
-    }
-
+    /**
+     * Hent visning
+     * @return Visning
+     */
     public Visning getVisning() {
         return visning;
     }
 
-    public void setVisning(Visning visning) {
-        this.visning = visning;
-    }
-
-    public boolean isErBetalt() {
+    /**
+     * Returner sann dersom billett er betalt
+     * @return boolean
+     */
+    public boolean erBetalt() {
         return erBetalt;
     }
 
+    /**
+     * Oppdater betalingsstatus
+     * @param erBetalt
+     */
     public void setErBetalt(boolean erBetalt) {
         this.erBetalt = erBetalt;
     }
 
+    /**
+     * Hent liste med plasser
+     * @return ArrayList<Plass>
+     */
+
     public ArrayList<Plass> getPlasser() {
         return this.plasser;
     }
+
+    /**
+     * @return String
+     */
 
     @Override
     public String toString() {

@@ -12,6 +12,12 @@ public class Bruker {
         this.erPlanlegger = erPlanlegger;
     }
 
+    /**
+     * Sjekk om pin til denne bruker er riktig
+     * @param pin
+     * @return boolean
+     */
+
     public boolean riktigPin(String pin) {
         if(this.pin.equals(pin)) {
             return true;
@@ -20,22 +26,27 @@ public class Bruker {
         }
     }
 
+    /**
+     * Sann dersom planlegger
+     * @return boolean
+     */
     public boolean erPlanlegger() {
         return erPlanlegger;
     }
+
+    /**
+     * Hent brukernavn
+     * @return String
+     */
 
     public String getBrukernavn() {
         return brukernavn;
     }
 
-    public String getPin() {
-        return pin;
-    }
-
-    public boolean isErPlanlegger() {
-        return erPlanlegger;
-    }
-
+    /**
+     *
+     * @return String
+     */
     @Override
     public String toString() {
         return "Bruker{" +
