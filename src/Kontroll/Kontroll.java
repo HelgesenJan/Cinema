@@ -513,7 +513,7 @@ public class Kontroll {
         for(int i=0; i<visninger.size(); i++) {
 
             Visning visning = visninger.get(i);
-            if((visning.erhalvtimeFørStart() && !betjent) || (visning.erKommende() && betjent)) {
+            if(visning.erhalvtimeFørStart()) {
                 tabellInnhold[teller][0] = visninger.get(i).getFilm().getFilmnavn();
                 tabellInnhold[teller][1] = visninger.get(i).getStartTid();
                 tabellInnhold[teller][2] = visninger.get(i).getKinosal().getKinosalnavn();
@@ -677,10 +677,11 @@ public class Kontroll {
         //Se om man  finner en billet med den billetkoden som er generer
         Billett billett = finnBillett(billettKode);
 
-        if(billett != null) {
+        if(billett == null) {
             //Billettkoden finnes ikke, returner generert kode.
             return billettKode;
         } else {
+            System.out.println("billettkode må lages på ny");
             //generer en ny billettkode fordi den allerede finnes
             return genererBillettkode();
         }
