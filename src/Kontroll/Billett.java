@@ -24,11 +24,12 @@ public class Billett implements Comparable<Billett>{
     }
 
     public int getAntallPlasser() {
-        int antall=0;
+        /*int antall=0;
         for(int i=0; i<plasser.size(); i++) {
             antall++;
         }
-        return antall;
+        return antall;*/
+        return plasser.size();
     }
 
     /**
