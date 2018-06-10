@@ -2176,7 +2176,7 @@ public class GUI extends javax.swing.JFrame {
      */
 
     private void staffConfirmPaymentActionPerformed(java.awt.event.ActionEvent evt) {
-        String billettkode = staffInsertTicketCode.getText();
+        String billettkode = staffInsertTicketCode.getText().toUpperCase();
 
         Billett billett = kontroll.finnBillett(billettkode);
         if(billett != null && !billett.erBetalt()) {
