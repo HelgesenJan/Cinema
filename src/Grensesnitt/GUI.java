@@ -1,11 +1,5 @@
 package Grensesnitt;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import Kontroll.*;
 
 import java.awt.event.ActionEvent;
@@ -22,10 +16,6 @@ import java.text.ParseException;
 
 import static javax.swing.JOptionPane.*;
 
-/**
- *
- * @author Jan Helge
- */
 public class GUI extends javax.swing.JFrame {
     private static Kontroll kontroll = null;
 
@@ -35,9 +25,7 @@ public class GUI extends javax.swing.JFrame {
 
     private Loginn loginnType;
 
-    /**
-     * Creates new form GUI
-     */
+
     public GUI() {
         initComponents();
     }
@@ -45,6 +33,7 @@ public class GUI extends javax.swing.JFrame {
     /**
      * Generert GUI kode fra Netbeans
      */
+
     private void initComponents() {
 
         ticketReservation = new javax.swing.JDialog();
@@ -463,7 +452,6 @@ public class GUI extends javax.swing.JFrame {
 
         fieldPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldPasswordActionPerformed(evt);
             }
         });
 
@@ -1735,7 +1723,6 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
-
     /**
      * Kalles ved endring av navn på film.
      * @param evt
@@ -1786,7 +1773,7 @@ public class GUI extends javax.swing.JFrame {
         int visningsnr = -1;
         try {
             visningsnr = (int) adminMovieTable.getValueAt(adminMovieTable.getSelectedRow(), 5);
-        }catch(ArrayIndexOutOfBoundsException ex) {
+        }catch(Exception ex) {
             adminMovieTable.clearSelection();
         }
 
@@ -1821,7 +1808,7 @@ public class GUI extends javax.swing.JFrame {
         int visningsnr = -1;
         try {
             visningsnr = (int) staffMovieTable.getValueAt(staffMovieTable.getSelectedRow(), 4);
-        }catch(ArrayIndexOutOfBoundsException ex) {
+        }catch(Exception ex) {
             //reserveMovieTable.clearSelection();
         }
 
@@ -1965,7 +1952,6 @@ public class GUI extends javax.swing.JFrame {
         reserveMovieTableSelected(null);
     }
 
-
     /**
      * Avslutt knapp er trykke,
      * se avslutt()
@@ -2042,12 +2028,13 @@ public class GUI extends javax.swing.JFrame {
 
         if(betjent) {
             staffMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+            staffMovieTable.getColumnModel().getColumn(1).setPreferredWidth(120);
         } else {
             reserveMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
+            reserveMovieTable.getColumnModel().getColumn(1).setPreferredWidth(120);
         }
 
     }
-
 
     /**
      * Fyller ut tabellen med filmer for rapporter
@@ -2059,6 +2046,10 @@ public class GUI extends javax.swing.JFrame {
         reportMovieTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
 
+    /**
+     * Fyller ut tabellen visninger for rapporter
+     * @param i
+     */
     private void fyllRapportVisningsTabell(int i) {
         Object[][] tabellInnhold = kontroll.statistikkFilm(i);
         Object[] kolonnenavn = {"Billetter/plasser", "% av kapasitet", "Ikke betalt", "Visningsdato"};
@@ -2067,19 +2058,26 @@ public class GUI extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Fyller ut tabellen for kinosaler
+     */
+
     private void fyllKinosalTabell(){
         Object[][] tabellInnhold = kontroll.lagKinosalKinoTabellListe();
         Object[] kolonnenavn = {"Kinosal"};
         reportCinemaTheater.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
 
+    /**
+     * Fyller ut tabellen for kinosalsatistikk
+     * @param i
+     */
 
     private void fyllKinosalStatistikk(int i) {
         Object[][] tabellInnhold = kontroll.statistikkKinosal(i);
         Object[] kolonnenavn = {"Film", "Gjennomsnitt %"};
         reportPercentTable.setModel(new DefaultTableModel(tabellInnhold, kolonnenavn));
     }
-
 
     /**
      * Åpne admin vindu
@@ -2104,6 +2102,10 @@ public class GUI extends javax.swing.JFrame {
         fyllFilmReservasjonsTabell(true);
     }
 
+    /**
+     * Utfører login
+     * @param evt
+     */
 
     private void commitLoginActionPerformed(java.awt.event.ActionEvent evt) {
         innlogging();
@@ -2278,10 +2280,6 @@ public class GUI extends javax.swing.JFrame {
         staffMovieTableSelected(null);
     }
 
-    private void fieldPasswordActionPerformed(java.awt.event.ActionEvent evt) {
-        innlogging();
-    }
-
     /**
      * Kalles når en film i rapporten blir trykket på, og fyller ut visnings statistikken.
      * @param evt
@@ -2301,7 +2299,6 @@ public class GUI extends javax.swing.JFrame {
         }
 
     }
-
 
     /**
      * En kinosal i rapport blir valg, fyll ut kinosal statistikk.
@@ -2335,14 +2332,12 @@ public class GUI extends javax.swing.JFrame {
         statistics.setVisible(false);
     }
 
-
     /**
      * Bekreft en billett fra billetbestilling og legg til i billeter.
      * @param evt
      */
 
     private void confirmConfirmWindowActionPerformed(java.awt.event.ActionEvent evt) {
-        //TODO:LEGG TIL BILLETT
         System.out.println(_BILLETT.toString());
         kontroll.nyBillett(_BILLETT);
         confirmConfirmWindow.setEnabled(false);
@@ -2372,6 +2367,11 @@ public class GUI extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Åpner admin-vinduet
+     * @param evt
+     */
+
     private void adminButtonActionPerformed(java.awt.event.ActionEvent evt) {
         try{
             _VISNING = null;
@@ -2379,14 +2379,11 @@ public class GUI extends javax.swing.JFrame {
             adminSettings.pack();
             hentFilmTitler();
             fyllVisningerSomKanEndres();
-            System.out.println("lol");
-            //fyllFilmReservasjonsTabell(false);
         }catch (Exception e){
             e.printStackTrace();
         }
 
     }
-
 
     /**
      * Legg til en film, se opprettFilm()
@@ -2477,6 +2474,10 @@ public class GUI extends javax.swing.JFrame {
         reserveMovieTableSelected(null); //Nullstill setevalg
     }
 
+    /**
+     * Lukker login-vinduet
+     * @param evt
+     */
 
     private void loginCloseActionPerformed(java.awt.event.ActionEvent evt) {
         login.setVisible(false);
@@ -2523,7 +2524,6 @@ public class GUI extends javax.swing.JFrame {
             }
         }
     }
-
 
     /**
      * Kalles når en visning blir endret.
@@ -2600,7 +2600,6 @@ public class GUI extends javax.swing.JFrame {
         }
     }
 
-
     /**
      * Legg til en visning, henter ut data fra GUI og kaller nyVisning i kontroll
      */
@@ -2646,7 +2645,6 @@ public class GUI extends javax.swing.JFrame {
         }
         System.out.println(kontroll.getFilmer());
     }
-
 
     /**
      * Utfører innloggingen
@@ -2718,7 +2716,6 @@ public class GUI extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Main metoden
